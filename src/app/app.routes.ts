@@ -7,6 +7,11 @@ export const routes: Routes = [
   },
 
   {
+    path: 'calculator',
+    loadComponent: () => import('../Features/calculator/calculator.page').then(m => m.CalculatorPage),
+  },
+
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'home'
