@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": false
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -42,9 +43,13 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "aot": true,
+              "extractLicenses": true,
+              "sourceMap": false,
+              "optimization": true
             },
-            "development": {
+            "develop": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -58,11 +63,11 @@
             "production": {
               "buildTarget": "deposit-calculator:build:production"
             },
-            "development": {
-              "buildTarget": "deposit-calculator:build:development"
+            "develop": {
+              "buildTarget": "deposit-calculator:build:develop"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "develop"
         },
         "test": {
           "builder": "@angular/build:unit-test"
