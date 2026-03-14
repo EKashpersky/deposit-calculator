@@ -18,15 +18,12 @@ interface CalculatedDeposit {
 export class CalculatorPage {
   public readonly calculatorForm: FormGroup;
 
-  public readonly ready = signal(false);
-
   public readonly result = signal<CalculatedDeposit>({
     gross: 0
   });
 
   public constructor(private _fb: FormBuilder) {
-    const CAPITALIZATION = 12;
-
+    
     this.calculatorForm = this._fb.group({
       initialDeposit: this._fb.control(0, Validators.min(0)),
       monthlyDeposit: this._fb.control(0, Validators.min(0)),
@@ -35,21 +32,40 @@ export class CalculatorPage {
     });
 
     this.calculatorForm.valueChanges.subscribe((form) => {
-      const { initialDeposit: INDE, annualInterest: ANIN, monthsDuration: MODU } = form;
+      const CAPITALIZATION = 12;
+
+      const {
+        initialDeposit: INDE,
+        annualInterest: ANIN,
+        monthsDuration: MODU,
+        monthlyDeposit: MODE,
+      } = form;
 
       if (ANIN <= 0 || INDE <= 0 || MODU <= 0) {
-        this.ready.set(false);
+        this.result.set({ gross: 0 });
         return;
       }
 
-      const gross = INDE * (1 + ANIN / CAPITALIZATION) ** MODU
+      const monthlyRate = (ANIN / 100) / CAPITALIZATION;
+
+      let gross = 0;
+      if (monthlyRate <= 0) {
+        // No interest case (works even if monthlyDeposit > 0)
+        gross = INDE + MODE * MODU;
+      } else {
+        const power = (1 + monthlyRate) ** MODU;          // reuse for both parts
+
+        const fvInitial       = INDE * power;
+        const fvContributions = MODE * (power - 1) / monthlyRate;   // ← this is the magic line
+
+        gross = fvInitial + fvContributions;
+      }
+
+      gross = +gross.toFixed(2);
 
       this.result.update(() => {
         return { gross };
       });
-
-      this.ready.set(true);
-
     });
   }
 }
