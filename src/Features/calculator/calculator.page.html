@@ -1,7 +1,31 @@
 <div class="p-[20px]">
-  <mat-form-field>
-    <input matInput />
-  </mat-form-field>
+
+  <form [formGroup]="calculatorForm">
+    <mat-form-field >
+      <mat-label>Initial deposit</mat-label>
+      <input matNativeControl type="number" formControlName="initialDeposit" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Monthly deposit</mat-label>
+      <input matInput type="number" formControlName="monthlyDeposit" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Annual interest</mat-label>
+      <input matInput type="number" formControlName="annualInterest" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Months duration</mat-label>
+      <input matInput type="number" formControlName="monthsDuration" />
+    </mat-form-field>
+  </form>
+
+  @if (ready()) {
+    {{ result().gross }}
+  } @else {
+    <p>Enter minimal parameters</p>
+  }
 
 </div>
-
