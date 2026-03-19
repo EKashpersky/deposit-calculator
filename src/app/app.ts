@@ -22,7 +22,6 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
     MatSidenavModule,
     MatMenuModule,
     MatToolbarModule,
-    MatNavList,
     MatButtonModule,
     MatIconModule,
 

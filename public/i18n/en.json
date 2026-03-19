@@ -7,6 +7,15 @@
     "initial_deposit": "Initial deposit",
     "monthly_deposit": "Monthly deposit",
     "annual_interest": "Annual interest",
-    "deposit_duration": "Deposit duration"
+    "deposit_duration": "Deposit duration",
+    "compound_rate": "Compound rate",
+    "interest": "Interest",
+    "compound_rates": [
+      "No compounding",
+      "Annually",
+      "Quarterly",
+      "Half-yearly",
+      "Monthly"
+    ]
   }
 }

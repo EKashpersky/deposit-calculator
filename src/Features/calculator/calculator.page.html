@@ -19,11 +19,31 @@
       <mat-label>{{ 'calculator.deposit_duration' | translate }}</mat-label>
       <input matInput inputmode="numeric" formControlName="monthsDuration" />
     </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{ 'calculator.compound_rate' | translate }}</mat-label>
+      <mat-select formControlName="compoundRate" [value]="compoundRates[0].value">
+        @for (compoundRate of compoundRates; track compoundRate) {
+          <mat-option [value]="compoundRate.value">{{ compoundRate.label | translate }}</mat-option>
+        }
+
+        <!-- <mat-option value="0">{{ 'calculator.no_compounding' | translate }}</mat-option>
+        <mat-option value="1">{{ 'calculator.monthly' | translate }}</mat-option>
+        <mat-option value="3">{{ 'calculator.quarterly' | translate }}</mat-option>
+        <mat-option value="6">{{ 'calculator.half_yearly' | translate }}</mat-option>
+        <mat-option value="12">{{ 'calculator.annually' | translate }}</mat-option> -->
+      </mat-select>
+    </mat-form-field>
   </form>
 
-  @if (result().gross > 0) {
-    {{ result().gross }}
-  } @else {
-    <p>Enter minimal parameters</p>
-  }
+
+  <p class="mat-font-body-md">
+    {{ result().interest | currency:currency:'symbol-narrow' }}
+  </p>
+  <p class="mat-font-body-md">
+    {{ result().gross | currency:currency:'symbol-narrow' }}
+  </p>
+  <p class="mat-font-body-md">
+    {{ result().deposited | currency:currency:'symbol-narrow' }}
+  </p>
 </mat-card>
