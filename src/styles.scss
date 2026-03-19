@@ -2,15 +2,28 @@
 
 @use '@angular/material' as mat;
 
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
 html {
   color-scheme: light dark;
+
   @include mat.theme((
     color: (
       primary: mat.$violet-palette,
       tertiary: mat.$orange-palette,
       theme-type: light,
     ),
-    typography: Roboto,
+    typography: (
+      plain-family: 'Roboto',
+      brand-family: 'Roboto Serif',
+      bold-weight: 900,
+      medium-weight: 500,
+      regular-weight: 300,
+    ),
     density: 0
   ));
 }

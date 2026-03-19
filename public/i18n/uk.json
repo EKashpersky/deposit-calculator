@@ -1,0 +1,12 @@
+{
+  "toolbar": {
+    "deposit_calculator": "Депозитний калькулятор",
+    "language": "Мова"
+  },
+  "calculator": {
+    "initial_deposit": "Початковий депозит",
+    "monthly_deposit": "Щомісячний внесок",
+    "annual_interest": "Річна відсоткова ставка",
+    "deposit_duration": "Термін депозиту"
+  }
+}

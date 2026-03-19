@@ -1,23 +1,22 @@
-<div class="p-[20px]">
-
+<mat-card class="p-[20px] w-min">
   <form [formGroup]="calculatorForm">
-    <mat-form-field >
-      <mat-label>Initial deposit</mat-label>
+    <mat-form-field>
+      <mat-label>{{ 'calculator.initial_deposit' | translate }}</mat-label>
       <input matInput inputmode="numeric" formControlName="initialDeposit" />
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Monthly deposit</mat-label>
+      <mat-label>{{ 'calculator.monthly_deposit' | translate }}</mat-label>
       <input matInput inputmode="numeric" formControlName="monthlyDeposit" />
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Annual interest</mat-label>
+      <mat-label>{{ 'calculator.annual_interest' | translate }}</mat-label>
       <input matInput inputmode="numeric" formControlName="annualInterest" />
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Months duration</mat-label>
+      <mat-label>{{ 'calculator.deposit_duration' | translate }}</mat-label>
       <input matInput inputmode="numeric" formControlName="monthsDuration" />
     </mat-form-field>
   </form>
@@ -27,5 +26,4 @@
   } @else {
     <p>Enter minimal parameters</p>
   }
-
-</div>
+</mat-card>

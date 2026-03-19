@@ -1,1 +1,24 @@
+
+<mat-toolbar class="justify-between">
+  <div class="start">
+    <h1 class="mat-title-medium">
+      {{ 'toolbar.deposit_calculator' | translate }}
+    </h1>
+  </div>
+
+  <div class="end">
+    <button matButton [matMenuTriggerFor]="menu">
+      <mat-icon>translate</mat-icon>
+      <span>{{ 'toolbar.language' | translate }}</span>
+    </button>
+
+    <mat-menu #menu="matMenu">
+      @for (language of languages; track language) {
+        <button mat-menu-item (click)="selectLanguage(language)">{{ language.name }}</button>
+      }
+    </mat-menu>
+  </div>
+</mat-toolbar>
+
 <router-outlet></router-outlet>
+

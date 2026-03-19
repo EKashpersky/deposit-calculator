@@ -1,0 +1,12 @@
+{
+  "toolbar": {
+    "deposit_calculator": "Deposit calculator",
+    "language": "Language"
+  },
+  "calculator": {
+    "initial_deposit": "Initial deposit",
+    "monthly_deposit": "Monthly deposit",
+    "annual_interest": "Annual interest",
+    "deposit_duration": "Deposit duration"
+  }
+}
