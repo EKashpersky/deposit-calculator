@@ -39,16 +39,17 @@
   </p>
 
   <p>
+    <span class="mat-font-title-sd">{{ 'calculator.result.deposited' | translate }}:</span>
+    <span class="mat-font-body-md">
+      {{ result().deposited | currency:currency:'symbol-narrow' }}
+    </span>
+  </p>
+
+  <p>
     <span class="mat-font-title-sd">{{ 'calculator.result.interest' | translate }}:</span>
     <span class="mat-font-body-md">
       {{ result().interest | currency:currency:'symbol-narrow' }}
     </span>
   </p>
 
-  <p>
-    <span class="mat-font-title-sd">{{ 'calculator.result.deposited' | translate }}:</span>
-    <span class="mat-font-body-md">
-      {{ result().deposited | currency:currency:'symbol-narrow' }}
-    </span>
-  </p>
 </mat-card>

@@ -24,9 +24,9 @@ interface CalculatedDeposit {
 
 function calculateDeposit(
   principal: number,
-  duration: number,           // in months
-  annualInterest: number,     // 15 = 15%
-  compoundRate: number,       // ← 12 = monthly (your case), 6 = semi-annual, 4 = quarterly, 1 = yearly
+  duration: number,
+  annualInterest: number,
+  compoundRate: number,
   monthlyDeposit: number = 0
 ) {
   if (duration <= 0 || principal <= 0) {
@@ -36,21 +36,25 @@ function calculateDeposit(
   const annualRate = annualInterest / 100;
   let total: number;
 
-  /// No interest
-  if (annualRate <= 0 || compoundRate <= 0) {
-    total = principal + monthlyDeposit * duration;
+  let fvPrincipal: number;
+  let fvContributions: number;
+
+  if (compoundRate <= 0) {
+    /// Simple interest — linear growth
+    const monthlyRate = annualRate / 12;
+    fvPrincipal     = principal * (1 + monthlyRate * duration);
+    fvContributions = monthlyDeposit * duration * (1 + monthlyRate * (duration - 1) / 2);
   } else {
-
+    /// Compound interest — exponential growth
     const ratePerPeriod = annualRate / compoundRate;
-    const monthlyRate   = Math.pow(1 + ratePerPeriod, compoundRate / 12) - 1;
+    const monthlyRate   = (1 + ratePerPeriod) ** (compoundRate / 12) - 1;
+    const power         = (1 + monthlyRate) ** duration;
 
-    const power = (1 + monthlyRate) ** duration;
-
-    const fvInitial       = principal * power;
-    const fvContributions = monthlyDeposit * (power - 1) / monthlyRate;
-
-    total = fvInitial + fvContributions;
+    fvPrincipal     = principal * power;
+    fvContributions = monthlyDeposit * (power - 1) / monthlyRate;
   }
+
+  total = fvPrincipal + fvContributions;
 
   const deposited = principal + monthlyDeposit * duration;
   const interest  = total - deposited;
