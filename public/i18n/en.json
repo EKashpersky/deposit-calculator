@@ -13,8 +13,8 @@
     "compound_rates": [
       "No compounding",
       "Annually",
-      "Quarterly",
       "Half-yearly",
+      "Quarterly",
       "Monthly"
     ]
   }
