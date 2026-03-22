@@ -10,6 +10,11 @@
     "deposit_duration": "Deposit duration",
     "compound_rate": "Compound rate",
     "interest": "Interest",
+    "result": {
+      "interest": "Interest",
+      "deposited": "Deposited",
+      "gross": "Gross"
+    },
     "compound_rates": [
       "No compounding",
       "Annually",

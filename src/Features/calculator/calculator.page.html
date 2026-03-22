@@ -31,13 +31,24 @@
   </form>
 
 
-  <p class="mat-font-body-md">
-    {{ result().interest | currency:currency:'symbol-narrow' }}
+  <p>
+    <span class="mat-font-title-sd">{{ 'calculator.result.gross' | translate }}:</span>
+    <span class="mat-font-body-md">
+      {{ result().gross | currency:currency:'symbol-narrow' }}
+    </span>
   </p>
-  <p class="mat-font-body-md">
-    {{ result().gross | currency:currency:'symbol-narrow' }}
+
+  <p>
+    <span class="mat-font-title-sd">{{ 'calculator.result.interest' | translate }}:</span>
+    <span class="mat-font-body-md">
+      {{ result().interest | currency:currency:'symbol-narrow' }}
+    </span>
   </p>
-  <p class="mat-font-body-md">
-    {{ result().deposited | currency:currency:'symbol-narrow' }}
+
+  <p>
+    <span class="mat-font-title-sd">{{ 'calculator.result.deposited' | translate }}:</span>
+    <span class="mat-font-body-md">
+      {{ result().deposited | currency:currency:'symbol-narrow' }}
+    </span>
   </p>
 </mat-card>

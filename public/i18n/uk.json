@@ -10,6 +10,11 @@
     "deposit_duration": "Термін депозиту",
     "compound_rate": "Частота капіталізації",
     "interest": "Відсоток",
+    "result": {
+      "interest": "Відсоток",
+      "deposited": "Внесок",
+      "gross": "Брутто"
+    },
     "compound_rates": [
       "Без капіталізації",
       "Щорічно",
