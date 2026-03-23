@@ -12,6 +12,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
@@ -43,6 +44,7 @@ export const COMPOUND_RATES_MAP_FROM_I18N = [ 0, 1, 3, 6, 12, 365.25 ] as const;
     MatButtonToggleModule,
     MatCardModule,
     MatCheckboxModule,
+    MatSlideToggleModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -80,6 +82,7 @@ export class CalculatorPage {
       durationInMonths: this._fb.control(2, Validators.min(0)),
       monthlyDeposit: this._fb.control(0, Validators.min(0)),
       tax: this._fb.control(23, Validators.min(0)),
+      withTaxes: this._fb.control(true),
 
       compoundRate: this._fb.control(4),
     });
@@ -109,6 +112,7 @@ export class CalculatorPage {
       monthlyDeposit,
       compoundRate,
       tax,
+      withTaxes,
     } = this.calculatorForm.value;
 
     if (principal <= 0 || annualRate <= 0 || duration <= 0) {
@@ -118,12 +122,14 @@ export class CalculatorPage {
 
     const compoundRateValue = this.compoundRates[parseInt(compoundRate)].value;
 
+    const taxValue = withTaxes ? parseInt(tax) / 100 : 0;
+
     const depositInput = new DepositInput(
       parseInt(principal),
       parseInt(annualRate) / 100,
       parseInt(duration),
       parseInt(monthlyDeposit),
-      parseInt(tax) / 100,
+      taxValue,
       compoundRateValue,
     );
 

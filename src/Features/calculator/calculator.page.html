@@ -15,6 +15,10 @@
       <input matInput inputmode="numeric" formControlName="annualRate" />
     </mat-form-field>
 
+    <mat-slide-toggle formControlName="withTaxes">
+      Taxed
+    </mat-slide-toggle>
+
     <mat-form-field subscriptSizing="dynamic">
       <mat-label>{{ 'calculator.inputs.tax' | translate }} (%)</mat-label>
       <input matInput inputmode="numeric" formControlName="tax" />
