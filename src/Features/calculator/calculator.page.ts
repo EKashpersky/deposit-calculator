@@ -11,6 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 
@@ -84,6 +85,7 @@ export const COMPOUND_RATES_MAP_FROM_I18N = [ 0, 1, 3, 6, 12 ] as const;
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatSliderModule,
     TranslatePipe,
   ]
 })

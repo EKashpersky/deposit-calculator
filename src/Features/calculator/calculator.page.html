@@ -20,33 +20,32 @@
       <input matInput inputmode="numeric" formControlName="monthsDuration" />
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>{{ 'calculator.compound_rate' | translate }}</mat-label>
-      <mat-select formControlName="compoundRate" [value]="compoundRates[0].value">
-        @for (compoundRate of compoundRates; track compoundRate) {
-          <mat-option [value]="compoundRate.value">{{ compoundRate.label | translate }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+    <div>
+      <mat-label id="compoundRateLabel" class="mat-font-label-lg">{{ 'calculator.compound_rate' | translate }}</mat-label>
+      <mat-slider min="1" max="5" step="1" [showTickMarks]="true" aria-labelledby="compoundRateLabel">
+        <input matSliderThumb formControlName="compoundRate">
+      </mat-slider>
+    </div>
   </form>
 
 
+
   <p>
-    <span class="mat-font-title-sd">{{ 'calculator.result.gross' | translate }}:</span>
+    <span class="mat-font-title-sm">{{ 'calculator.result.gross' | translate }}:</span>
     <span class="mat-font-body-md">
       {{ result().gross | currency:currency:'symbol-narrow' }}
     </span>
   </p>
 
   <p>
-    <span class="mat-font-title-sd">{{ 'calculator.result.deposited' | translate }}:</span>
+    <span class="mat-font-title-sm">{{ 'calculator.result.deposited' | translate }}:</span>
     <span class="mat-font-body-md">
       {{ result().deposited | currency:currency:'symbol-narrow' }}
     </span>
   </p>
 
   <p>
-    <span class="mat-font-title-sd">{{ 'calculator.result.interest' | translate }}:</span>
+    <span class="mat-font-title-sm">{{ 'calculator.result.interest' | translate }}:</span>
     <span class="mat-font-body-md">
       {{ result().interest | currency:currency:'symbol-narrow' }}
     </span>
