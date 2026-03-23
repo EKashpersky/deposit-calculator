@@ -11,7 +11,8 @@
       "deposit_duration": "Deposit duration",
       "compound_rate": "Compound rate",
       "interest": "Interest",
-      "tax": "Tax"
+      "tax": "Tax",
+      "with_taxes": "With taxes"
     },
     "result": {
       "interest": "Interest",

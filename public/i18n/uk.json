@@ -11,7 +11,8 @@
       "deposit_duration": "Термін депозиту",
       "compound_rate": "Частота капіталізації",
       "interest": "Відсоток",
-      "tax": "Податок"
+      "tax": "Податок",
+      "with_taxes": "З оподаткуванням"
     },
     "result": {
       "interest": "Відсоток",
