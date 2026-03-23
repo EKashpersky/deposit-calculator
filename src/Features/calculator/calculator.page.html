@@ -1,17 +1,17 @@
 <mat-card class="w-min relative">
   <form [formGroup]="calculatorForm" class="flex flex-col gap-[12px] p-[20px]">
     <mat-form-field subscriptSizing="dynamic">
-      <mat-label>{{ 'calculator.inputs.initial_deposit' | translate }}</mat-label>
+      <mat-label>{{ 'calculator.inputs.initial_deposit' | translate }} ({{ currencySign }})</mat-label>
       <input matInput inputmode="numeric" formControlName="principal" />
     </mat-form-field>
 
     <mat-form-field subscriptSizing="dynamic">
-      <mat-label>{{ 'calculator.inputs.monthly_deposit' | translate }}</mat-label>
+      <mat-label>{{ 'calculator.inputs.monthly_deposit' | translate }} ({{ currencySign }})</mat-label>
       <input matInput inputmode="numeric" formControlName="monthlyDeposit" />
     </mat-form-field>
 
     <mat-form-field subscriptSizing="dynamic">
-      <mat-label>{{ 'calculator.inputs.annual_interest' | translate }}</mat-label>
+      <mat-label>{{ 'calculator.inputs.annual_interest' | translate }} (%)</mat-label>
       <input matInput inputmode="numeric" formControlName="annualRate" />
     </mat-form-field>
 

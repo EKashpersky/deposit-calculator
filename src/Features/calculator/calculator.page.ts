@@ -1,4 +1,4 @@
-import { CurrencyPipe, getLocaleCurrencyCode } from '@angular/common';
+import { CurrencyPipe, getLocaleCurrencyCode, getLocaleCurrencySymbol } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import {
   FormBuilder,
@@ -55,6 +55,7 @@ export const COMPOUND_RATES_MAP_FROM_I18N = [ 0, 1, 3, 6, 12, 365.25 ] as const;
 export class CalculatorPage {
   public readonly calculatorForm: FormGroup;
   public readonly currency: string;
+  public readonly currencySign: string;
   public readonly compoundRates: { value: number, label: string }[];
   public readonly durationScales: DurationScaleShape[];
 
@@ -66,7 +67,8 @@ export class CalculatorPage {
     private _translate: TranslateService
   ) {
     this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
-
+    this.currencySign = getLocaleCurrencySymbol(this._translate.getCurrentLang())!;
+    
     this.durationScales = [
       new DurationInYears(),
       new DurationInMonths(),
