@@ -1,0 +1,55 @@
+import { DurationScaleShape, InterestResult } from "./duration-scale.model";
+
+
+
+export class DepositInput {
+  public readonly principal: number;
+  public readonly annualRate: number;
+  public readonly durationInMonths: number;
+  public readonly monthlyDeposit: number;
+  public readonly tax: number;
+  public readonly compoundRate: number;
+
+  public constructor(
+    principal: number,
+    annualRate: number,
+    durationInMonths: number,
+    monthlyDeposit: number,
+    tax: number,
+    compoundRate: number,
+  ) {
+    this.principal        = principal;
+    this.annualRate       = annualRate;
+    this.durationInMonths = durationInMonths;
+    this.monthlyDeposit   = monthlyDeposit;
+    this.tax              = tax;
+    this.compoundRate     = compoundRate;
+  }
+}
+
+
+
+
+export function calculateDeposit(
+  durationScale: DurationScaleShape,
+  depositInput: DepositInput,
+) {
+  if (depositInput.compoundRate === 0) {
+    return durationScale.calculateSimpleInterestWithTax(
+      depositInput.principal,
+      depositInput.annualRate,
+      depositInput.durationInMonths,
+      depositInput.monthlyDeposit,
+      depositInput.tax,
+    );
+  }
+
+  return durationScale.calculateCompoundInterestWithTax(
+    depositInput.principal,
+    depositInput.annualRate,
+    depositInput.durationInMonths,
+    depositInput.monthlyDeposit,
+    depositInput.tax,
+    depositInput.compoundRate,
+  );
+}

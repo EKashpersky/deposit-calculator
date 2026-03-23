@@ -1,35 +1,61 @@
-<mat-card class="p-[20px] w-min">
-  <form [formGroup]="calculatorForm">
-    <mat-form-field>
-      <mat-label>{{ 'calculator.initial_deposit' | translate }}</mat-label>
-      <input matInput inputmode="numeric" formControlName="initialDeposit" />
+<mat-card class="w-min relative">
+  <form [formGroup]="calculatorForm" class="flex flex-col gap-[12px] p-[20px]">
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>{{ 'calculator.inputs.initial_deposit' | translate }}</mat-label>
+      <input matInput inputmode="numeric" formControlName="principal" />
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>{{ 'calculator.monthly_deposit' | translate }}</mat-label>
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>{{ 'calculator.inputs.monthly_deposit' | translate }}</mat-label>
       <input matInput inputmode="numeric" formControlName="monthlyDeposit" />
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>{{ 'calculator.annual_interest' | translate }}</mat-label>
-      <input matInput inputmode="numeric" formControlName="annualInterest" />
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>{{ 'calculator.inputs.annual_interest' | translate }}</mat-label>
+      <input matInput inputmode="numeric" formControlName="annualRate" />
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>{{ 'calculator.deposit_duration' | translate }}</mat-label>
-      <input matInput inputmode="numeric" formControlName="monthsDuration" />
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>{{ 'calculator.inputs.tax' | translate }} (%)</mat-label>
+      <input matInput inputmode="numeric" formControlName="tax" />
     </mat-form-field>
+
+
+
+    <div class="flex flex-col gap-[12px] mat-bg-surface-variant mx-[-20px] px-[20px] py-[8px]">
+
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>{{ 'calculator.inputs.deposit_duration' | translate }}</mat-label>
+        <input matInput inputmode="numeric" formControlName="durationInMonths" />
+      </mat-form-field>
+  
+      <mat-button-toggle-group class="w-full" [value]="durationScale().name" (change)="changeDurationScale($event.value)">
+        @for (durationScalex of durationScales; track durationScalex) {
+          <mat-button-toggle class="w-full" [value]="durationScalex.name">
+            {{ 'calculator.duration.' + durationScalex.name | translate }}
+          </mat-button-toggle>
+        }
+      </mat-button-toggle-group>
+    </div>
+
 
     <div>
-      <mat-label id="compoundRateLabel" class="mat-font-label-lg">{{ 'calculator.compound_rate' | translate }}</mat-label>
-      <mat-slider min="1" max="5" step="1" [showTickMarks]="true" aria-labelledby="compoundRateLabel">
+      <mat-label id="compoundRateLabel" class="mat-font-label-lg">{{ 'calculator.inputs.compound_rate' | translate }}</mat-label>
+
+      <div class="flex w-full justify-center">
+        <mat-label class="mat-font-label-md mat-text-secondary">
+          {{ this.compoundRates[calculatorForm.get('compoundRate')?.value].label | translate }}
+        </mat-label>
+      </div>
+
+      <mat-slider [max]="this.compoundRates.length - 1" [showTickMarks]="true" aria-labelledby="compoundRateLabel">
         <input matSliderThumb formControlName="compoundRate">
       </mat-slider>
     </div>
   </form>
+</mat-card>
 
-
-
+<mat-card class="flex flex-col p-[20px] w-full gap-[4px]">
   <p>
     <span class="mat-font-title-sm">{{ 'calculator.result.gross' | translate }}:</span>
     <span class="mat-font-body-md">
@@ -50,5 +76,4 @@
       {{ result().interest | currency:currency:'symbol-narrow' }}
     </span>
   </p>
-
 </mat-card>

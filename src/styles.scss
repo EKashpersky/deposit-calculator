@@ -29,3 +29,9 @@ html {
 
   @include mat.system-classes();
 }
+
+
+
+mat-slider.mat-mdc-slider {
+  display: flex;
+}

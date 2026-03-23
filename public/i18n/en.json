@@ -4,23 +4,31 @@
     "language": "Language"
   },
   "calculator": {
-    "initial_deposit": "Initial deposit",
-    "monthly_deposit": "Monthly deposit",
-    "annual_interest": "Annual interest",
-    "deposit_duration": "Deposit duration",
-    "compound_rate": "Compound rate",
-    "interest": "Interest",
+    "inputs": {
+      "initial_deposit": "Initial deposit",
+      "monthly_deposit": "Monthly deposit",
+      "annual_interest": "Annual interest",
+      "deposit_duration": "Deposit duration",
+      "compound_rate": "Compound rate",
+      "interest": "Interest",
+      "tax": "Tax"
+    },
     "result": {
       "interest": "Interest",
       "deposited": "Deposited",
       "gross": "Gross"
     },
+    "duration": {
+      "years": "Years",
+      "months": "Months"
+    },
     "compound_rates": [
-      "No compounding",
+      "On account",
       "Annually",
       "Half-yearly",
       "Quarterly",
-      "Monthly"
+      "Monthly",
+      "Daily"
     ]
   }
 }

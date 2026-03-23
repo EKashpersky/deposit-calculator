@@ -4,23 +4,31 @@
     "language": "Мова"
   },
   "calculator": {
-    "initial_deposit": "Початковий депозит",
-    "monthly_deposit": "Щомісячний внесок",
-    "annual_interest": "Річна відсоткова ставка",
-    "deposit_duration": "Термін депозиту",
-    "compound_rate": "Частота капіталізації",
-    "interest": "Відсоток",
+    "inputs": {
+      "initial_deposit": "Початковий депозит",
+      "monthly_deposit": "Щомісячний внесок",
+      "annual_interest": "Річна відсоткова ставка",
+      "deposit_duration": "Термін депозиту",
+      "compound_rate": "Частота капіталізації",
+      "interest": "Відсоток",
+      "tax": "Податок"
+    },
     "result": {
       "interest": "Відсоток",
       "deposited": "Внесок",
       "gross": "Брутто"
     },
+    "duration": {
+      "years": "Роки",
+      "months": "Місяці"
+    },
     "compound_rates": [
-      "Без капіталізації",
+      "На рахунок",
       "Щорічно",
       "Щопіврічно",
       "Щоквартально",
-      "Щомісячно"
+      "Щомісячно",
+      "Щоденно"
     ]
   }
 }
