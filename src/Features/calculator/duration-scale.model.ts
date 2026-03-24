@@ -1,12 +1,28 @@
 export class InterestResult {
-  public readonly gross: number;
+  public readonly fvNet: number;
   public readonly interest: number;
   public readonly deposited: number;
+  public readonly taxed: number;
 
-  public constructor(gross: number, interest: number, deposited: number) {
-    this.gross = gross;
+  public static build(
+    fvNet: number,
+    deposited: number,
+    interest: number,
+    taxed: number
+  ): InterestResult {
+    return new InterestResult(fvNet, interest, deposited, taxed);
+  }
+
+  public constructor(
+    fvNet: number,
+    interest: number,
+    deposited: number,
+    taxed: number
+  ) {
+    this.fvNet = fvNet;
     this.interest = interest;
     this.deposited = deposited;
+    this.taxed = taxed;
   }
 }
 
@@ -32,11 +48,14 @@ export interface DurationScaleShape {
 }
 
 
-function buildResult(gross: number, deposited: number): InterestResult {
+function buildResult(gross: number, deposited: number, tax: number): InterestResult {
+  const interest = gross - deposited;
+
   return new InterestResult(
     Number(gross.toFixed(2)),
-    Number((gross - deposited).toFixed(2)),
+    Number(interest.toFixed(2)),
     Number(deposited.toFixed(2)),
+    Number(tax.toFixed(2)),
   );
 }
 
@@ -44,20 +63,23 @@ function buildResult(gross: number, deposited: number): InterestResult {
  * No capitalization — interest is paid out, not added to principal.
  * Each monthly deposit earns simple interest for remaining months.
 **/
-function computeSimple(
-  p: number,
-  r: number,
-  d: number,
-  m: number,
-  tax: number
+function computeSimpleInterest(
+  p: number, /// principal
+  r: number, /// annual interest rate
+  D: number, /// duration in years
+  d: number, /// duration in months
+  m: number, /// monthly deposit
+  t: number, /// tax rate
 ): InterestResult {
-  const rMonthly = r / 12 * (1 - tax);
+  const interest = p * r * D + m * (r / 12) * (d * (d + 1)) / 2;
+  const taxed = interest * t;
+  const donated = d * m;
+  const fvNet = p + donated + interest - taxed;
 
-  const fvPrincipal     = p * (1 + rMonthly * d);
-  const fvContributions = m * d + m * rMonthly * d * (d - 1) / 2;
-
-  return buildResult(fvPrincipal + fvContributions, p + m * d);
+  return InterestResult.build(fvNet, donated, interest, taxed);
 }
+
+
 
 /**
  * Compound interest with tax deducted each compounding period.
@@ -65,25 +87,25 @@ function computeSimple(
  * then applies standard compound + annuity formulas.
 **/
 function computeCompound(
-  p: number,
-  r: number,
-  d: number,
-  m: number,
-  t: number,
-  c: number,
+  p: number, /// principal
+  r: number, /// annual interest rate
+  d: number, /// duration in months
+  m: number, /// monthly deposit
+  t: number, /// tax rate
+  c: number, /// compound frequency
 ): InterestResult {
-  const rPerPeriod    = r / c;
-  const periodsPerMonth = c / 12;
-  const rNet = (1 + rPerPeriod * (1 - t)) ** periodsPerMonth - 1;
+  const rate = Math.pow(1 + r / c, c / 12) - 1;
 
-  const power = (1 + rNet) ** d;
+  const principalGross = p * (1 + rate) ** d;
+  const monthlyGross = m * ((1 + rate) ** d - 1) / rate;
 
-  const fvPrincipal     = p * power;
-  const fvContributions = rNet > 0
-    ? m * (power - 1) / rNet
-    : m * d;
+  const deposited = d * m;
+  const fvGross = principalGross + monthlyGross;
+  const interest = fvGross - (p + deposited);
+  const taxed = interest * t;
+  const fvNet = fvGross - taxed;
 
-  return buildResult(fvPrincipal + fvContributions, p + m * d);
+  return InterestResult.build(fvNet, deposited, interest, taxed);
 }
 
 
@@ -94,7 +116,7 @@ export class DurationInYears implements DurationScaleShape {
   public calculateSimpleInterestWithTax(
     p: number, r: number, d: number, m: number, t: number,
   ): InterestResult {
-    return computeSimple(p, r, d * 12, m, t);
+    return computeSimpleInterest(p, r, d, d * 12, m, t);
   }
 
   public calculateCompoundInterestWithTax(
@@ -110,7 +132,7 @@ export class DurationInMonths implements DurationScaleShape {
   public calculateSimpleInterestWithTax(
     p: number, r: number, d: number, m: number, t: number,
   ): InterestResult {
-    return computeSimple(p, r, d, m, t);
+    return computeSimpleInterest(p, r, d / 12, d, m, t);
   }
 
   public calculateCompoundInterestWithTax(

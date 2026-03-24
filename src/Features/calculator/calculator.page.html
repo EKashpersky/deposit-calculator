@@ -61,9 +61,9 @@
 
 <mat-card class="flex flex-col p-[20px] w-full gap-[4px]">
   <p>
-    <span class="mat-font-title-sm">{{ 'calculator.result.gross' | translate }}:</span>
+    <span class="mat-font-title-sm">{{ 'calculator.result.fvNet' | translate }}:</span>
     <span class="mat-font-body-md">
-      {{ result().gross | currency:currency:'symbol-narrow' }}
+      {{ result().fvNet | currency:currency:'symbol-narrow' }}
     </span>
   </p>
 
@@ -78,6 +78,13 @@
     <span class="mat-font-title-sm">{{ 'calculator.result.interest' | translate }}:</span>
     <span class="mat-font-body-md">
       {{ result().interest | currency:currency:'symbol-narrow' }}
+    </span>
+  </p>
+
+  <p>
+    <span class="mat-font-title-sm">{{ 'calculator.result.taxed' | translate }}:</span>
+    <span class="mat-font-body-md">
+      {{ result().taxed | currency:currency:'symbol-narrow' }}
     </span>
   </p>
 </mat-card>

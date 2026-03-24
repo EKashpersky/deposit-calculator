@@ -17,7 +17,8 @@
     "result": {
       "interest": "Interest",
       "deposited": "Deposited",
-      "gross": "Gross"
+      "fvNet": "Net future value",
+      "taxed": "Taxed"
     },
     "duration": {
       "years": "Years",

@@ -17,7 +17,8 @@
     "result": {
       "interest": "Відсоток",
       "deposited": "Внесок",
-      "gross": "Брутто"
+      "fvNet": "Чиста майбутня вартість",
+      "taxed": "Податок"
     },
     "duration": {
       "years": "Роки",
