@@ -48,16 +48,6 @@ export interface DurationScaleShape {
 }
 
 
-function buildResult(gross: number, deposited: number, tax: number): InterestResult {
-  const interest = gross - deposited;
-
-  return new InterestResult(
-    Number(gross.toFixed(2)),
-    Number(interest.toFixed(2)),
-    Number(deposited.toFixed(2)),
-    Number(tax.toFixed(2)),
-  );
-}
 
 /**
  * No capitalization — interest is paid out, not added to principal.
