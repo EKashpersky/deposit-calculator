@@ -126,7 +126,7 @@ export class CalculatorPage {
 
     const compoundRateValue = this.compoundRates[parseInt(compoundRate)].value;
 
-    const taxValue = withTaxes ? parseInt(tax) / 100 : 0;
+    const taxValue = withTaxes ? parseFloat(tax) / 100 : 0;
 
     const depositInput = new DepositInput(
       parseInt(principal),
