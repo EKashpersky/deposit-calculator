@@ -74,6 +74,8 @@ export class CalculatorPage {
       new DurationInMonths(),
     ];
 
+    /// 
+
     this.compoundRates = COMPOUND_RATES_MAP_FROM_I18N.map((value, i) => {
       return { value, label: `calculator.compound_rates.${i}` };
     });
