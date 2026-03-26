@@ -47,6 +47,7 @@ export interface DurationScaleShape {
     d: number, /// duration (years or months depending on scale)
     m: number, /// monthly deposit
     t: number, /// tax rate (e.g. 0.23 for 23%)
+    n: boolean, /// no first month deposit
   ): InterestResult;
 
   calculateCompoundInterestWithTax(
@@ -56,6 +57,7 @@ export interface DurationScaleShape {
     m: number, /// monthly deposit
     t: number, /// tax rate (e.g. 0.23 for 23%)
     c: number, /// compound frequency per year (1=yearly, 12=monthly, 365.25=daily)
+    n: boolean, /// no first month deposit
   ): InterestResult;
 }
 
@@ -70,15 +72,23 @@ function computeSimpleInterest(
   r: number, /// annual interest rate
   D: number, /// duration in years
   d: number, /// duration in months
-  m: number, /// monthly deposit
+  m: number, /// monthly deposit amount
   t: number, /// tax rate
+  n: boolean, /// no first month deposit
 ): InterestResult {
-  const interest = p * r * D + m * (r / 12) * (d * (d + 1)) / 2;
-  const taxed = interest * t;
-  const deposited = d * m;
-  const fvNet = p + deposited + interest - taxed;
+  /// Amount of months user makes additional deposits
+  const mm = n ? d - 1 : d;
 
-  return InterestResult.build(p, deposited, interest, taxed, fvNet);
+  const principalInterest = p * r * D;
+  const monthlyInterest   = m * (r / 12) * (mm * (mm + 1)) / 2;
+
+  const interest = principalInterest + monthlyInterest;
+  const depositedAmount = mm * m;
+
+  const taxed = interest * t;
+  const fvNet = p + depositedAmount + interest - taxed;
+
+  return InterestResult.build(p, depositedAmount, interest, taxed, fvNet);
 }
 
 
@@ -95,13 +105,17 @@ function computeCompound(
   m: number, /// monthly deposit
   t: number, /// tax rate
   c: number, /// compound frequency
+  n: boolean, /// no first month deposit
 ): InterestResult {
+  /// Amount of months user makes additional deposits
+  const mm = n ? d - 1 : d;
+
   const rate = Math.pow(1 + r / c, c / 12) - 1;
 
   const principalGross = p * (1 + rate) ** d;
-  const monthlyGross = m * ((1 + rate) ** d - 1) / rate;
+  const monthlyGross = m * ((1 + rate) ** mm - 1) / rate;
 
-  const deposited = d * m;
+  const deposited = mm * m;
   const fvGross = principalGross + monthlyGross;
   const interest = fvGross - (p + deposited);
   const taxed = interest * t;
@@ -116,15 +130,15 @@ export class DurationInYears implements DurationScaleShape {
   public readonly name = 'years';
 
   public calculateSimpleInterestWithTax(
-    p: number, r: number, d: number, m: number, t: number,
+    p: number, r: number, d: number, m: number, t: number, n: boolean,
   ): InterestResult {
-    return computeSimpleInterest(p, r, d, d * 12, m, t);
+    return computeSimpleInterest(p, r, d, d * 12, m, t, n);
   }
 
   public calculateCompoundInterestWithTax(
-    p: number, r: number, d: number, m: number, t: number, c: number,
+    p: number, r: number, d: number, m: number, t: number, c: number, n: boolean,
   ): InterestResult {
-    return computeCompound(p, r, d * 12, m, t, c);
+    return computeCompound(p, r, d * 12, m, t, c, n);
   }
 }
 
@@ -132,14 +146,14 @@ export class DurationInMonths implements DurationScaleShape {
   public readonly name = 'months';
 
   public calculateSimpleInterestWithTax(
-    p: number, r: number, d: number, m: number, t: number,
+    p: number, r: number, d: number, m: number, t: number, n: boolean,
   ): InterestResult {
-    return computeSimpleInterest(p, r, d / 12, d, m, t);
+    return computeSimpleInterest(p, r, d / 12, d, m, t, n);
   }
 
   public calculateCompoundInterestWithTax(
-    p: number, r: number, d: number, m: number, t: number, c: number,
+    p: number, r: number, d: number, m: number, t: number, c: number, n: boolean,
   ): InterestResult {
-    return computeCompound(p, r, d, m, t, c);
+    return computeCompound(p, r, d, m, t, c, n);
   }
 }

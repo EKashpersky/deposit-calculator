@@ -12,7 +12,8 @@
       "compound_rate": "Капіталізація",
       "interest": "Відсоток",
       "tax": "Податок",
-      "with_taxes": "З оподаткуванням"
+      "with_taxes": "З оподаткуванням",
+      "no_first_month_deposit": "Не враховувати перший місяць"
     },
     "result": {
       "principal": "Початковий внесок",

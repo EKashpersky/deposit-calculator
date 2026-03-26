@@ -83,6 +83,7 @@ export class CalculatorPage {
       annualRate: this._fb.control(16, Validators.min(0)),
       durationInMonths: this._fb.control(2, Validators.min(0)),
       monthlyDeposit: this._fb.control(0, Validators.min(0)),
+      noFirstMonthDeposit: this._fb.control(false),
       tax: this._fb.control(23, Validators.min(0)),
       withTaxes: this._fb.control(true),
 
@@ -112,6 +113,7 @@ export class CalculatorPage {
       annualRate,
       durationInMonths: duration,
       monthlyDeposit,
+      noFirstMonthDeposit,
       compoundRate,
       tax,
       withTaxes,
@@ -128,11 +130,12 @@ export class CalculatorPage {
 
     const depositInput = new DepositInput(
       parseInt(principal),
-      parseInt(annualRate) / 100,
+      parseFloat(annualRate) / 100,
       parseInt(duration),
       parseInt(monthlyDeposit),
       taxValue,
       compoundRateValue,
+      noFirstMonthDeposit,
     );
 
     const result = calculateDeposit(

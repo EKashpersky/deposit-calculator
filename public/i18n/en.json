@@ -12,7 +12,8 @@
       "compound_rate": "Capitalization",
       "interest": "Interest",
       "tax": "Tax",
-      "with_taxes": "With taxes"
+      "with_taxes": "With taxes",
+      "no_first_month_deposit": "No first month deposit"
     },
     "result": {
       "principal": "Initial deposit",

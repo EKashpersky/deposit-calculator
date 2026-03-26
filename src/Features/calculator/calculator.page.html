@@ -5,10 +5,16 @@
       <input matInput inputmode="numeric" formControlName="principal" />
     </mat-form-field>
 
-    <mat-form-field subscriptSizing="dynamic">
-      <mat-label>{{ 'calculator.inputs.monthly_deposit' | translate }} ({{ currencySign }})</mat-label>
-      <input matInput inputmode="numeric" formControlName="monthlyDeposit" />
-    </mat-form-field>
+    <div class="flex flex-col gap-[8px] pt-[4px] mat-bg-surface-variant mat-corner-sm">
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>{{ 'calculator.inputs.monthly_deposit' | translate }} ({{ currencySign }})</mat-label>
+        <input matInput inputmode="numeric" formControlName="monthlyDeposit" />
+      </mat-form-field>
+
+      <mat-slide-toggle class="mx-[8px] mb-[8px] text-right" formControlName="noFirstMonthDeposit" labelPosition="before">
+        {{ 'calculator.inputs.no_first_month_deposit' | translate }}
+      </mat-slide-toggle>
+    </div>
 
     <mat-form-field subscriptSizing="dynamic">
       <mat-label>{{ 'calculator.inputs.annual_interest' | translate }} (%)</mat-label>

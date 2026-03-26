@@ -9,6 +9,7 @@ export class DepositInput {
   public readonly monthlyDeposit: number;
   public readonly tax: number;
   public readonly compoundRate: number;
+  public readonly noFirstMonthDeposit: boolean;
 
   public constructor(
     principal: number,
@@ -17,6 +18,7 @@ export class DepositInput {
     monthlyDeposit: number,
     tax: number,
     compoundRate: number,
+    noFirstMonthDeposit: boolean,
   ) {
     this.principal        = principal;
     this.annualRate       = annualRate;
@@ -24,6 +26,7 @@ export class DepositInput {
     this.monthlyDeposit   = monthlyDeposit;
     this.tax              = tax;
     this.compoundRate     = compoundRate;
+    this.noFirstMonthDeposit = noFirstMonthDeposit;
   }
 }
 
@@ -41,6 +44,7 @@ export function calculateDeposit(
       depositInput.durationInMonths,
       depositInput.monthlyDeposit,
       depositInput.tax,
+      depositInput.noFirstMonthDeposit,
     );
   }
 
@@ -51,5 +55,6 @@ export function calculateDeposit(
     depositInput.monthlyDeposit,
     depositInput.tax,
     depositInput.compoundRate,
+    depositInput.noFirstMonthDeposit,
   );
 }
