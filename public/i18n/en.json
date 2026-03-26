@@ -9,7 +9,7 @@
       "monthly_deposit": "Monthly deposit",
       "annual_interest": "Annual interest",
       "deposit_duration": "Deposit duration",
-      "compound_rate": "Compound rate",
+      "compound_rate": "Capitalization",
       "interest": "Interest",
       "tax": "Tax",
       "with_taxes": "With taxes"

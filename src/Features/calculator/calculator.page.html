@@ -15,24 +15,24 @@
       <input matInput inputmode="numeric" formControlName="annualRate" />
     </mat-form-field>
 
-    <div class="flex flex-col gap-[8px] mat-bg-surface-variant mx-[-20px] px-[20px] py-[8px]">
+    <div class="flex flex-col gap-[8px] pt-[4px] mat-bg-surface-variant mat-corner-sm">
       <mat-form-field subscriptSizing="dynamic">
         <mat-label>{{ 'calculator.inputs.tax' | translate }} (%)</mat-label>
         <input matInput inputmode="numeric" formControlName="tax" />
       </mat-form-field>
 
-      <mat-slide-toggle formControlName="withTaxes">
+      <mat-slide-toggle class="mx-[8px] mb-[8px]" formControlName="withTaxes">
         {{ 'calculator.inputs.with_taxes' | translate }}
       </mat-slide-toggle>
     </div>
 
-    <div class="flex flex-col gap-[8px] mat-bg-surface-variant mx-[-20px] px-[20px] py-[8px]">
+    <div class="flex flex-col gap-[8px] pt-[4px] mat-bg-surface-variant mat-corner-sm">
       <mat-form-field subscriptSizing="dynamic">
         <mat-label>{{ 'calculator.inputs.deposit_duration' | translate }}</mat-label>
         <input matInput inputmode="numeric" formControlName="durationInMonths" />
       </mat-form-field>
 
-      <mat-button-toggle-group class="w-full" [value]="durationScale().name" (change)="changeDurationScale($event.value)">
+      <mat-button-toggle-group class="mx-[8px] mb-[8px]" [value]="durationScale().name" (change)="changeDurationScale($event.value)">
         @for (durationScalex of durationScales; track durationScalex) {
           <mat-button-toggle class="w-full" [value]="durationScalex.name">
             {{ 'calculator.duration.' + durationScalex.name | translate }}
@@ -41,17 +41,23 @@
       </mat-button-toggle-group>
     </div>
 
-    <div class="flex flex-col gap-[8px] mat-bg-surface-variant mx-[-20px] px-[20px] py-[8px]">
-      <mat-label id="compoundRateLabel" class="mat-font-label-lg">{{ 'calculator.inputs.compound_rate' | translate }}</mat-label>
+    <div class="flex flex-col gap-[8px] p-[8px] mat-bg-surface-variant mat-corner-sm">
+      <div class="flex flex-row justify-between items-baseline mx-[8px] mb-[8px]">
+        <mat-label id="compoundRateLabel" class="mat-font-label-lg">
+          {{ 'calculator.inputs.compound_rate' | translate }}
+        </mat-label>
 
-      <div class="flex w-full justify-center">
         <mat-label class="mat-font-label-md mat-text-secondary">
           {{ this.compoundRates[calculatorForm.get('compoundRate')?.value].label | translate }}
         </mat-label>
       </div>
 
-      <mat-slider [max]="this.compoundRates.length - 1" [showTickMarks]="true" aria-labelledby="compoundRateLabel">
-        <input matSliderThumb formControlName="compoundRate">
+      <mat-slider
+        [max]="this.compoundRates.length - 1"
+        [showTickMarks]="true"
+        aria-labelledby="compoundRateLabel"
+      >
+        <input matSliderThumb formControlName="compoundRate" class="mat-bg-primary-container">
       </mat-slider>
     </div>
   </form>
