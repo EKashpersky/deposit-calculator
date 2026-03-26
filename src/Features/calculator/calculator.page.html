@@ -21,7 +21,7 @@
         <input matInput inputmode="numeric" formControlName="tax" />
       </mat-form-field>
 
-      <mat-slide-toggle class="mx-[8px] mb-[8px]" formControlName="withTaxes">
+      <mat-slide-toggle class="mx-[8px] mb-[8px] text-right" formControlName="withTaxes" labelPosition="before">
         {{ 'calculator.inputs.with_taxes' | translate }}
       </mat-slide-toggle>
     </div>
@@ -42,7 +42,7 @@
     </div>
 
     <div class="flex flex-col gap-[8px] p-[8px] mat-bg-surface-variant mat-corner-sm">
-      <div class="flex flex-row justify-between items-baseline mx-[8px] mb-[8px]">
+      <div class="flex flex-row justify-between items-baseline mx-[4px] mb-[4px]">
         <mat-label id="compoundRateLabel" class="mat-font-label-lg">
           {{ 'calculator.inputs.compound_rate' | translate }}
         </mat-label>
