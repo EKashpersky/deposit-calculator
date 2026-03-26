@@ -15,10 +15,11 @@
       "with_taxes": "With taxes"
     },
     "result": {
+      "principal": "Initial deposit",
+      "deposited": "Deposited amount",
       "interest": "Interest",
-      "deposited": "Deposited",
-      "fvNet": "Net future value",
-      "taxed": "Taxed"
+      "taxed": "Taxed",
+      "net": "Net future value"
     },
     "duration": {
       "years": "Years",

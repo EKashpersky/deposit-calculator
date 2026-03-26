@@ -31,7 +31,7 @@
         <mat-label>{{ 'calculator.inputs.deposit_duration' | translate }}</mat-label>
         <input matInput inputmode="numeric" formControlName="durationInMonths" />
       </mat-form-field>
-  
+
       <mat-button-toggle-group class="w-full" [value]="durationScale().name" (change)="changeDurationScale($event.value)">
         @for (durationScalex of durationScales; track durationScalex) {
           <mat-button-toggle class="w-full" [value]="durationScalex.name">
@@ -41,7 +41,7 @@
       </mat-button-toggle-group>
     </div>
 
-    <div>
+    <div class="flex flex-col gap-[8px] mat-bg-surface-variant mx-[-20px] px-[20px] py-[8px]">
       <mat-label id="compoundRateLabel" class="mat-font-label-lg">{{ 'calculator.inputs.compound_rate' | translate }}</mat-label>
 
       <div class="flex w-full justify-center">
@@ -59,9 +59,9 @@
 
 <mat-card class="flex flex-col p-[20px] w-full gap-[4px]">
   <p>
-    <span class="mat-font-title-sm">{{ 'calculator.result.fvNet' | translate }}:</span>
+    <span class="mat-font-title-sm">{{ 'calculator.result.principal' | translate }}:</span>
     <span class="mat-font-body-md">
-      {{ result().fvNet | currency:currency:'symbol-narrow' }}
+      {{ result().principal | currency:currency:'symbol-narrow' }}
     </span>
   </p>
 
@@ -83,6 +83,13 @@
     <span class="mat-font-title-sm">{{ 'calculator.result.taxed' | translate }}:</span>
     <span class="mat-font-body-md">
       {{ result().taxed | currency:currency:'symbol-narrow' }}
+    </span>
+  </p>
+
+  <p>
+    <span class="mat-font-title-sm">{{ 'calculator.result.net' | translate }}:</span>
+    <span class="mat-font-body-md">
+      {{ result().net | currency:currency:'symbol-narrow' }}
     </span>
   </p>
 </mat-card>

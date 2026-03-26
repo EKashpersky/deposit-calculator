@@ -1,28 +1,40 @@
 export class InterestResult {
-  public readonly fvNet: number;
-  public readonly interest: number;
+  private static readonly EMPTY_INTEREST_RESULT = new InterestResult(0, 0, 0, 0, 0);
+
+
+
+  public readonly principal: number;
   public readonly deposited: number;
+  public readonly interest: number;
   public readonly taxed: number;
+  public readonly net: number;
+
+  public static empty(): InterestResult {
+    return InterestResult.EMPTY_INTEREST_RESULT;
+  }
 
   public static build(
-    fvNet: number,
+    principal: number,
     deposited: number,
     interest: number,
-    taxed: number
+    taxed: number,
+    net: number,
   ): InterestResult {
-    return new InterestResult(fvNet, interest, deposited, taxed);
+    return new InterestResult(principal, deposited, interest, taxed, net);
   }
 
   public constructor(
-    fvNet: number,
-    interest: number,
+    principal: number,
     deposited: number,
-    taxed: number
+    interest: number,
+    taxed: number,
+    fvNet: number,
   ) {
-    this.fvNet = fvNet;
-    this.interest = interest;
+    this.principal = principal;
     this.deposited = deposited;
+    this.interest = interest;
     this.taxed = taxed;
+    this.net = fvNet;
   }
 }
 
@@ -63,10 +75,10 @@ function computeSimpleInterest(
 ): InterestResult {
   const interest = p * r * D + m * (r / 12) * (d * (d + 1)) / 2;
   const taxed = interest * t;
-  const donated = d * m;
-  const fvNet = p + donated + interest - taxed;
+  const deposited = d * m;
+  const fvNet = p + deposited + interest - taxed;
 
-  return InterestResult.build(fvNet, donated, interest, taxed);
+  return InterestResult.build(p, deposited, interest, taxed, fvNet);
 }
 
 
@@ -95,7 +107,7 @@ function computeCompound(
   const taxed = interest * t;
   const fvNet = fvGross - taxed;
 
-  return InterestResult.build(fvNet, deposited, interest, taxed);
+  return InterestResult.build(p, deposited, interest, taxed, fvNet);
 }
 
 

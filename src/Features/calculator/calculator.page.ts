@@ -60,7 +60,7 @@ export class CalculatorPage {
   public readonly durationScales: DurationScaleShape[];
 
   public readonly durationScale = signal<DurationScaleShape>(new DurationInYears());
-  public readonly result = signal<InterestResult>(new InterestResult(0, 0, 0, 0));
+  public readonly result = signal<InterestResult>(InterestResult.empty());
 
   public constructor(
     private _fb: FormBuilder,
@@ -118,7 +118,7 @@ export class CalculatorPage {
     } = this.calculatorForm.value;
 
     if (principal <= 0 || annualRate <= 0 || duration <= 0) {
-      this.result.set(new InterestResult(0, 0, 0, 0));
+      this.result.set(InterestResult.empty());
       return;
     }
 
