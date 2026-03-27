@@ -80,7 +80,7 @@ function computeSimpleInterest(
   const mm = n ? d - 1 : d;
 
   const principalInterest = p * r * D;
-  const monthlyInterest   = m * (r / 12) * (mm * (mm + 1)) / 2;
+  const monthlyInterest   = m * (r / 12) * (mm * (mm - 1)) / 2;
 
   const interest = principalInterest + monthlyInterest;
   const depositedAmount = mm * m;
