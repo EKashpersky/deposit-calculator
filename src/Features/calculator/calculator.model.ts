@@ -1,11 +1,12 @@
-import { DurationScaleShape, InterestResult } from "./duration-scale.model";
+import { computeCompound, computeSimpleInterest } from './duration-scale.model';
+import { Duration } from './duration.model';
 
 
 
 export class DepositInput {
   public readonly principal: number;
   public readonly annualRate: number;
-  public readonly durationInMonths: number;
+  public readonly duration: Duration;
   public readonly monthlyDeposit: number;
   public readonly tax: number;
   public readonly compoundRate: number;
@@ -14,7 +15,7 @@ export class DepositInput {
   public constructor(
     principal: number,
     annualRate: number,
-    durationInMonths: number,
+    duration: Duration,
     monthlyDeposit: number,
     tax: number,
     compoundRate: number,
@@ -22,7 +23,7 @@ export class DepositInput {
   ) {
     this.principal        = principal;
     this.annualRate       = annualRate;
-    this.durationInMonths = durationInMonths;
+    this.duration         = duration;
     this.monthlyDeposit   = monthlyDeposit;
     this.tax              = tax;
     this.compoundRate     = compoundRate;
@@ -33,25 +34,23 @@ export class DepositInput {
 
 
 
-export function calculateDeposit(
-  durationScale: DurationScaleShape,
-  depositInput: DepositInput,
-) {
+export function calculateDeposit(depositInput: DepositInput) {
   if (depositInput.compoundRate === 0) {
-    return durationScale.calculateSimpleInterestWithTax(
+    return computeSimpleInterest(
       depositInput.principal,
       depositInput.annualRate,
-      depositInput.durationInMonths,
+      depositInput.duration.durationInYears(),
+      depositInput.duration.durationInMonths(),
       depositInput.monthlyDeposit,
       depositInput.tax,
       depositInput.noFirstMonthDeposit,
     );
   }
 
-  return durationScale.calculateCompoundInterestWithTax(
+  return computeCompound(
     depositInput.principal,
     depositInput.annualRate,
-    depositInput.durationInMonths,
+    depositInput.duration.durationInMonths(),
     depositInput.monthlyDeposit,
     depositInput.tax,
     depositInput.compoundRate,

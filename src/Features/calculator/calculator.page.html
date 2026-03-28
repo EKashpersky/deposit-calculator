@@ -38,12 +38,14 @@
         <input matInput inputmode="numeric" formControlName="durationInMonths" />
       </mat-form-field>
 
-      <mat-button-toggle-group class="mx-[8px] mb-[8px]" [value]="durationScale().name" (change)="changeDurationScale($event.value)">
-        @for (durationScalex of durationScales; track durationScalex) {
-          <mat-button-toggle class="w-full" [value]="durationScalex.name">
-            {{ 'calculator.duration.' + durationScalex.name | translate }}
-          </mat-button-toggle>
-        }
+      <mat-button-toggle-group class="mx-[8px] mb-[8px]" [value]="duration().scale()" (change)="changeDurationScale($event.value)">
+        <mat-button-toggle class="w-full" value='months'>
+          {{ 'calculator.duration.months' | translate }}
+        </mat-button-toggle>
+
+        <mat-button-toggle class="w-full" value='years'>
+          {{ 'calculator.duration.years' | translate }}
+        </mat-button-toggle>
       </mat-button-toggle-group>
     </div>
 

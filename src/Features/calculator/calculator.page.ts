@@ -1,4 +1,8 @@
-import { CurrencyPipe, getLocaleCurrencyCode, getLocaleCurrencySymbol } from '@angular/common';
+import {
+  CurrencyPipe,
+  getLocaleCurrencyCode,
+  getLocaleCurrencySymbol
+} from '@angular/common';
 import { Component, signal } from '@angular/core';
 import {
   FormBuilder,
@@ -9,6 +13,7 @@ import {
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,12 +22,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { calculateDeposit, DepositInput } from './calculator.model';
-import {
-  DurationInMonths,
-  DurationInYears,
-  DurationScaleShape,
-  InterestResult
-} from './duration-scale.model';
+import { InterestResult } from './duration-scale.model';
+import { Duration } from './duration.model';
 
 
 
@@ -50,6 +51,7 @@ export const COMPOUND_RATES_MAP_FROM_I18N = [ 0, 1, 3, 6, 12, 365.25 ] as const;
     MatSelectModule,
     MatSliderModule,
     TranslatePipe,
+    MatDividerModule,
   ]
 })
 export class CalculatorPage {
@@ -57,9 +59,8 @@ export class CalculatorPage {
   public readonly currency: string;
   public readonly currencySign: string;
   public readonly compoundRates: { value: number, label: string }[];
-  public readonly durationScales: DurationScaleShape[];
 
-  public readonly durationScale = signal<DurationScaleShape>(new DurationInYears());
+  public readonly duration = signal(new Duration('months', 18));
   public readonly result = signal<InterestResult>(InterestResult.empty());
 
   public constructor(
@@ -69,11 +70,6 @@ export class CalculatorPage {
     this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
     this.currencySign = getLocaleCurrencySymbol(this._translate.getCurrentLang())!;
 
-    this.durationScales = [
-      new DurationInYears(),
-      new DurationInMonths(),
-    ];
-
     this.compoundRates = COMPOUND_RATES_MAP_FROM_I18N.map((value, i) => {
       return { value, label: `calculator.compound_rates.${i}` };
     });
@@ -81,12 +77,14 @@ export class CalculatorPage {
     this.calculatorForm = this._fb.group({
       principal: this._fb.control(10000, Validators.min(0)),
       annualRate: this._fb.control(16, Validators.min(0)),
-      durationInMonths: this._fb.control(2, Validators.min(0)),
+
       monthlyDeposit: this._fb.control(0, Validators.min(0)),
-      noFirstMonthDeposit: this._fb.control(false),
+      noFirstMonthDeposit: this._fb.control(true),
+
       tax: this._fb.control(23, Validators.min(0)),
       withTaxes: this._fb.control(true),
 
+      durationInMonths: this._fb.control(2, Validators.min(0)),
       compoundRate: this._fb.control(4),
     });
 
@@ -98,11 +96,11 @@ export class CalculatorPage {
   }
 
   public changeDurationScale(durationScale: 'years' | 'months') {
-    this.durationScale.set(this.durationScales.find(
-      durationScalex => durationScalex.name === durationScale
-    )!);
+    this.duration.update(duration => duration.withDurationScale(durationScale));
 
-    this._recalculateResult();
+    this.calculatorForm.get('durationInMonths')!.setValue(
+      this.duration().duration()
+    );
   }
 
 
@@ -111,12 +109,12 @@ export class CalculatorPage {
     const {
       principal,
       annualRate,
-      durationInMonths: duration,
       monthlyDeposit,
-      noFirstMonthDeposit,
-      compoundRate,
       tax,
       withTaxes,
+      compoundRate,
+      durationInMonths: duration,
+      noFirstMonthDeposit,
     } = this.calculatorForm.value;
 
     if (principal <= 0 || annualRate <= 0 || duration <= 0) {
@@ -131,7 +129,7 @@ export class CalculatorPage {
     const depositInput = new DepositInput(
       parseInt(principal),
       parseFloat(annualRate) / 100,
-      parseInt(duration),
+      this.duration(),
       parseInt(monthlyDeposit),
       taxValue,
       compoundRateValue,
@@ -139,7 +137,6 @@ export class CalculatorPage {
     );
 
     const result = calculateDeposit(
-      this.durationScale(),
       depositInput
     );
 
