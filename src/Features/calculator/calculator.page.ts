@@ -60,7 +60,7 @@ export class CalculatorPage {
   public readonly currencySign: string;
   public readonly compoundRates: { value: number, label: string }[];
 
-  public readonly duration = signal(new Duration('months', 18));
+  public readonly duration = signal(new Duration('months', 24));
   public readonly result = signal<InterestResult>(InterestResult.empty());
 
   public constructor(
@@ -84,23 +84,32 @@ export class CalculatorPage {
       tax: this._fb.control(23, Validators.min(0)),
       withTaxes: this._fb.control(true),
 
-      durationInMonths: this._fb.control(2, Validators.min(0)),
+      duration: this._fb.group({
+        value: this._fb.control(this.duration().duration(), Validators.min(0)),
+        scale: this._fb.control(this.duration().scale(), Validators.required),
+      }),
+
       compoundRate: this._fb.control(4),
     });
 
+    this.calculatorForm.get('duration')!.valueChanges.subscribe(group => {
+      this.duration.update(
+        duration => duration.update(group.value, group.scale)
+      );
+
+      this.calculatorForm.get('duration')!.get('value')!.setValue(
+        this.duration().duration(),
+        { emitEvent: false, emitModelToViewChange: true, }
+      );
+    });
+
+    /// Re-calculate result when form values changes
     this.calculatorForm.valueChanges.subscribe(() => {
       this._recalculateResult();
     });
 
+    /// Initial calculation
     this._recalculateResult();
-  }
-
-  public changeDurationScale(durationScale: 'years' | 'months') {
-    this.duration.update(duration => duration.withDurationScale(durationScale));
-
-    this.calculatorForm.get('durationInMonths')!.setValue(
-      this.duration().duration()
-    );
   }
 
 
@@ -136,9 +145,7 @@ export class CalculatorPage {
       noFirstMonthDeposit,
     );
 
-    const result = calculateDeposit(
-      depositInput
-    );
+    const result = calculateDeposit(depositInput);
 
     this.result.set(result);
   }

@@ -32,13 +32,13 @@
       </mat-slide-toggle>
     </div>
 
-    <div class="flex flex-col gap-[8px] pt-[4px] mat-bg-surface-variant mat-corner-sm">
+    <div class="flex flex-col gap-[8px] pt-[4px] mat-bg-surface-variant mat-corner-sm" formGroupName="duration">
       <mat-form-field subscriptSizing="dynamic">
         <mat-label>{{ 'calculator.inputs.deposit_duration' | translate }}</mat-label>
-        <input matInput inputmode="numeric" formControlName="durationInMonths" />
+        <input matInput inputmode="numeric" formControlName="value" />
       </mat-form-field>
 
-      <mat-button-toggle-group class="mx-[8px] mb-[8px]" [value]="duration().scale()" (change)="changeDurationScale($event.value)">
+      <mat-button-toggle-group formControlName="scale" class="mx-[8px] mb-[8px]">
         <mat-button-toggle class="w-full" value='months'>
           {{ 'calculator.duration.months' | translate }}
         </mat-button-toggle>

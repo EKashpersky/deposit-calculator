@@ -1,3 +1,5 @@
+import { round } from "../../utils/round";
+
 export class Duration {
   private _scale: 'years' | 'months';
   private _duration: number;
@@ -9,9 +11,9 @@ export class Duration {
 
   public withDurationScale(scale: 'years' | 'months') {
     if (this._scale === 'months' && scale === 'years') {
-      this._duration = this._duration / 12;
+      this._duration = round(this._duration / 12);
     } else if (this._scale === 'years' && scale === 'months') {
-      this._duration = this._duration * 12;
+      this._duration = round(this._duration * 12);
     }
 
     this._scale = scale;
@@ -25,6 +27,13 @@ export class Duration {
     return this;
   }
 
+  public update(durationValue: number, durationScale: 'years' | 'months') {
+    this.withDuration(durationValue);
+    this.withDurationScale(durationScale);
+
+    return this;
+  }
+
   public duration() {
     return this._duration
   }
@@ -34,10 +43,10 @@ export class Duration {
   }
 
   public durationInMonths() {
-    return this._scale === 'years' ? this._duration * 12 : this._duration;
+    return this._scale === 'years' ? round(this._duration * 12) : this._duration;
   }
-  
+
   public durationInYears() {
-    return this._scale === 'years' ? this._duration : this._duration / 12;
+    return this._scale === 'years' ? this._duration : round(this._duration / 12);
   }
 }
