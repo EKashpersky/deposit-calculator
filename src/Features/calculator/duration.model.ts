@@ -1,4 +1,6 @@
-import { round } from "../../utils/round";
+import { round } from '../../utils/round';
+
+
 
 export class Duration {
   private _scale: 'years' | 'months';

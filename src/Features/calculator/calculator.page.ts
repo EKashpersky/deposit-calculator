@@ -3,7 +3,7 @@ import {
   getLocaleCurrencyCode,
   getLocaleCurrencySymbol
 } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -22,14 +22,12 @@ import { MatSliderModule } from '@angular/material/slider';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { calculateDeposit } from './calculator.model';
+import { CompoundRate } from './compound-rate.enum';
 import { DepositInput } from './deposit-input.model';
-import { InterestResult } from './duration-scale.model';
+import { DepositResult } from './deposit-result.model';
 import { Duration } from './duration.model';
 
 
-
-
-export const COMPOUND_RATES_MAP_FROM_I18N = [ 0, 1, 3, 6, 12, 365.25 ] as const;
 
 @Component({
   selector: 'page-calculator',
@@ -53,7 +51,9 @@ export const COMPOUND_RATES_MAP_FROM_I18N = [ 0, 1, 3, 6, 12, 365.25 ] as const;
     MatSliderModule,
     TranslatePipe,
     MatDividerModule,
-  ]
+  ],
+
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalculatorPage {
   public readonly calculatorForm: FormGroup;
@@ -62,18 +62,27 @@ export class CalculatorPage {
   public readonly compoundRates: { value: number, label: string }[];
 
   public readonly duration = signal(new Duration('months', 24));
-  public readonly result = signal<InterestResult>(InterestResult.empty());
+  public readonly result = signal<DepositResult>(DepositResult.empty());
 
   public constructor(
     private _fb: FormBuilder,
     private _translate: TranslateService
   ) {
-    this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
-    this.currencySign = getLocaleCurrencySymbol(this._translate.getCurrentLang())!;
+    const COMPOUND_RATES_MAP_FROM_I18N = [
+      CompoundRate.NO_COMPOUND,
+      CompoundRate.ANNUALLY,
+      CompoundRate.HALF_YEARLY,
+      CompoundRate.QUARTERLY,
+      CompoundRate.MONTHLY,
+      CompoundRate.DAILY
+    ] as const;
 
     this.compoundRates = COMPOUND_RATES_MAP_FROM_I18N.map((value, i) => {
       return { value, label: `calculator.compound_rates.${i}` };
     });
+
+    this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
+    this.currencySign = getLocaleCurrencySymbol(this._translate.getCurrentLang())!;
 
     this.calculatorForm = this._fb.group({
       principal: this._fb.control(10000, Validators.min(0)),
@@ -128,7 +137,7 @@ export class CalculatorPage {
     } = this.calculatorForm.value;
 
     if (principal <= 0 || annualRate <= 0 || duration <= 0) {
-      this.result.set(InterestResult.empty());
+      this.result.set(DepositResult.empty());
       return;
     }
 
