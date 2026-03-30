@@ -2,6 +2,9 @@
 
 @use '@angular/material' as mat;
 
+@import 'md3-expressive-polyfill.scss';
+
+
 html, body {
   height: 100%;
   width: 100%;
@@ -39,4 +42,10 @@ html {
 
 mat-slider.mat-mdc-slider {
   display: flex;
+}
+
+* {
+  // transition-property: width;
+  // transition-duration:        var(--mat-motion-standard-fast-spatial-duration);
+  // transition-timing-function: var(--mat-motion-standard-fast-spatial-cb);
 }

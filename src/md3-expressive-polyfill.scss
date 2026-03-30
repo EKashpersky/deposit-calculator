@@ -1,0 +1,61 @@
+/// Initial gathered data from Material Design 3:
+
+// md.sys.motion.spring.fast.spatial
+// md.sys.motion.spring.fast.effects
+// md.sys.motion.spring.default.spatial
+// md.sys.motion.spring.default.effects
+// md.sys.motion.spring.slow.spatial
+// md.sys.motion.spring.slow.effects
+
+// Expressive fast spatial    0.42, 1.67, 0.21, 0.90. Duration =  350ms
+// Expressive default spatial 0.38, 1.21, 0.22, 1.00. Duration =  500ms
+// Expressive slow spatial    0.39, 1.29, 0.35, 0.98. Duration =  650ms
+// Expressive fast effects    0.31, 0.94, 0.34, 1.00. Duration =  150ms
+// Expressive default effects 0.34, 0.80, 0.34, 1.00. Duration =  200ms
+// Expressive slow effects    0.34, 0.88, 0.34, 1.00. Duration =  300ms
+
+// Standard fast spatial      0.27, 1.06, 0.18, 1.00. Duration =  350ms
+// Standard default spatial   0.27, 1.06, 0.18, 1.00. Duration =  500ms
+// Standard slow spatial      0.27, 1.06, 0.18, 1.00. Duration =  750ms
+// Standard fast effects      0.31, 0.94, 0.34, 1.00. Duration =  150ms
+// Standard default effects   0.34, 0.80, 0.34, 1.00. Duration =  200ms
+// Standard slow effects      0.34, 0.88, 0.34, 1.00. Duration =  300ms
+
+/// variable naming convention:
+/// --mat-motion-<type>-<style>-<effect>
+
+
+
+:root {
+  // Standard spatial
+  --mat-motion-standard-fast-spatial-cb: cubic-bezier(0.27, 1.06, 0.18, 1.00);
+  --mat-motion-standard-fast-spatial-duration: 350ms;
+  --mat-motion-standard-default-spatial-cb: cubic-bezier(0.27, 1.06, 0.18, 1.00);
+  --mat-motion-standard-default-spatial-duration: 500ms;
+  --mat-motion-standard-slow-spatial-cb: cubic-bezier(0.27, 1.06, 0.18, 1.00);
+  --mat-motion-standard-slow-spatial-duration: 750ms;
+
+  // Standard effects
+  --mat-motion-standard-fast-effects-cb: cubic-bezier(0.31, 0.94, 0.34, 1.00);
+  --mat-motion-standard-fast-effects-duration: 150ms;
+  --mat-motion-standard-default-effects-cb: cubic-bezier(0.34, 0.80, 0.34, 1.00);
+  --mat-motion-standard-default-effects-duration: 200ms;
+  --mat-motion-standard-slow-effects-cb: cubic-bezier(0.34, 0.88, 0.34, 1.00);
+  --mat-motion-standard-slow-effects-duration: 300ms;
+
+  // Expressive spatial
+  --mat-motion-expressive-fast-spatial-cb: cubic-bezier(0.42, 1.67, 0.21, 0.90);
+  --mat-motion-expressive-fast-spatial-duration: 350ms;
+  --mat-motion-expressive-default-spatial-cb: cubic-bezier(0.38, 1.21, 0.22, 1.00);
+  --mat-motion-expressive-default-spatial-duration: 500ms;
+  --mat-motion-expressive-slow-spatial-cb: cubic-bezier(0.39, 1.29, 0.35, 0.98);
+  --mat-motion-expressive-slow-spatial-duration: 650ms;
+
+  // Expressive effects
+  --mat-motion-expressive-fast-effects-cb: cubic-bezier(0.31, 0.94, 0.34, 1.00);
+  --mat-motion-expressive-fast-effects-duration: 150ms;
+  --mat-motion-expressive-default-effects-cb: cubic-bezier(0.34, 0.80, 0.34, 1.00);
+  --mat-motion-expressive-default-effects-duration: 200ms;
+  --mat-motion-expressive-slow-effects-cb: cubic-bezier(0.34, 0.88, 0.34, 1.00);
+  --mat-motion-expressive-slow-effects-duration: 300ms;
+}
