@@ -21,7 +21,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
-import { calculateDeposit, DepositInput } from './calculator.model';
+import { calculateDeposit } from './calculator.model';
+import { DepositInput } from './deposit-input.model';
 import { InterestResult } from './duration-scale.model';
 import { Duration } from './duration.model';
 

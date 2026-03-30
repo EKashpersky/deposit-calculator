@@ -1,5 +1,5 @@
 export class InterestResult {
-  private static readonly EMPTY_INTEREST_RESULT = new InterestResult(0, 0, 0, 0, 0);
+  private static readonly _EMPTY_RESULT = new InterestResult(0, 0, 0, 0, 0);
 
 
 
@@ -10,7 +10,7 @@ export class InterestResult {
   public readonly net: number;
 
   public static empty(): InterestResult {
-    return InterestResult.EMPTY_INTEREST_RESULT;
+    return InterestResult._EMPTY_RESULT;
   }
 
   public static build(
@@ -23,7 +23,7 @@ export class InterestResult {
     return new InterestResult(principal, deposited, interest, taxed, net);
   }
 
-  public constructor(
+  private constructor(
     principal: number,
     deposited: number,
     interest: number,
