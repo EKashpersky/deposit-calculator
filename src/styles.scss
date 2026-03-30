@@ -2,7 +2,7 @@
 
 @use '@angular/material' as mat;
 
-@import 'md3-expressive-polyfill.scss';
+@use 'md3-expressive-polyfill.scss';
 
 
 html, body {
@@ -23,9 +23,9 @@ html {
     typography: (
       plain-family: 'Geologica',
       brand-family: 'Geologica',
-      bold-weight: 900,
-      medium-weight: 500,
-      regular-weight: 300,
+      bold-weight: 800,
+      medium-weight: 400,
+      regular-weight: 200,
     ),
     density: 0
   ));
