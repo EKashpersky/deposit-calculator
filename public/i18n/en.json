@@ -3,6 +3,10 @@
     "deposit_calculator": "Deposit calculator",
     "language": "Language"
   },
+  "dashboard": {
+    "add_deposit": "Add deposit",
+    "deposits": "Deposits"
+  },
   "calculator": {
     "inputs": {
       "initial_deposit": "Initial deposit",

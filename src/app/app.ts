@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { MatNavList } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -40,8 +39,6 @@ export class App {
 
   public constructor(private _translate: TranslateService) {
     this.menuOpened = false;
-
-    
 
     this.languages = SUPPORTED_LANGUAGES;
   }

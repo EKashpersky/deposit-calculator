@@ -3,6 +3,10 @@
     "deposit_calculator": "Депозитний калькулятор",
     "language": "Мова"
   },
+  "dashboard": {
+    "add_deposit": "Додати депозит",
+    "deposits": "Депозити"
+  },
   "calculator": {
     "inputs": {
       "initial_deposit": "Початковий депозит",

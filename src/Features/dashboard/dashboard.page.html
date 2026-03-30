@@ -1,35 +1,44 @@
+<div class="flex flex-col p-[16px] gap-[24px]">
 
+  <h1 class="mat-font-headline-lg">{{ 'dashboard.deposits' | translate }}:</h1>
+  
+  @for (deposit of deposits(); track deposit.name()) {
+    <mat-card appearance="filled" matRipple class="flex flex-row cursor-pointer select-none">
+      <div>
+        <mat-card-header>
+          <mat-card-title>
+            <span class="mat-font-headline-lg">{{ deposit.name() }}</span>
+          </mat-card-title>
+        </mat-card-header>
 
-<div class="flex p-[16px] gap-[24px]">
-  <mat-card appearance="filled" matRipple class="cursor-pointer select-none">
-    <div>
-      <mat-card-header>
-        <mat-card-title>
-          <span class="mat-font-headline-lg">Deposit name</span>
-        </mat-card-title>
-      </mat-card-header>
+        <mat-card-content>
+          <p class="mat-font-body-md">
+            <span>
+              {{ deposit.principal() }} for {{ deposit.durationValue() }} {{ deposit.durationScale() }}
+            </span>
 
-      <mat-card-content>
-        <p class="mat-font-body-md">
-          <span>20k for 1 year</span>
-          <span>at 16% interest</span>
-          <span>2k monthly payment</span>
-        </p>
+            <span>
+              at {{ deposit.annualRate() * 100 }}% interest
+            </span>
 
-        <!-- <p>20k for 1 year at 16% interest</p> -->
-      </mat-card-content>
-    </div>
-  </mat-card>
+            <span>
+              {{ deposit.monthlyDeposit() }} monthly payment
+            </span>
+          </p>
+        </mat-card-content>
+      </div>
+    </mat-card>
+  }
 
   <mat-card class="flex flex-col items-center justify-center cursor-pointer select-none" appearance="outlined" matRipple>
     <div>
       <mat-card-header>
-        <button routerLink="/calculator" class="mat-font-headline-md cursor-pointer select-none">
+        <button routerLink="/calculator" class="flex items-center mat-font-headline-md cursor-pointer select-none">
           <span>{{ 'dashboard.add_deposit' | translate }}</span>
           <mat-icon>add2</mat-icon>
         </button>
       </mat-card-header>
-  
+
       <mat-card-content></mat-card-content>
     </div>
   </mat-card>
