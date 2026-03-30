@@ -75,7 +75,7 @@
   <p>
     <span class="mat-font-title-sm">{{ 'calculator.result.principal' | translate }}:</span>
     <span class="mat-font-body-md">
-      {{ result().principal | currency:currency:'symbol-narrow' }}
+      {{ calculatorForm.get('principal')?.value | currency:currency:'symbol-narrow' }}
     </span>
   </p>
 

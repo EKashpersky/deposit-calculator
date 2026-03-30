@@ -54,7 +54,7 @@ function computeSimpleInterest(
   const taxed = interest * t;
   const fvNet = p + depositedAmount + interest - taxed;
 
-  return DepositResult.build(p, depositedAmount, interest, taxed, fvNet);
+  return DepositResult.build(depositedAmount, interest, taxed, fvNet);
 }
 
 /**
@@ -85,5 +85,5 @@ function computeCompoundInterest(
   const taxed     = interest * t;
   const fvNet     = fvGross - taxed;
 
-  return DepositResult.build(p, deposited, interest, taxed, fvNet);
+  return DepositResult.build(deposited, interest, taxed, fvNet);
 }
