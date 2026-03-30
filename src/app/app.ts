@@ -4,11 +4,10 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterOutlet } from '@angular/router';
-
-import { LanguageShape, SUPPORTED_LANGUAGES } from '../config/supported-languages';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
+import { LanguageShape, SUPPORTED_LANGUAGES } from '../config/supported-languages';
 
 
 
@@ -18,11 +17,12 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
   imports: [
     RouterOutlet,
 
-    MatSidenavModule,
-    MatMenuModule,
-    MatToolbarModule,
     MatButtonModule,
     MatIconModule,
+    MatMenuModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    RouterLink,
 
     TranslatePipe,
   ],

@@ -3,7 +3,7 @@
   <h1 class="mat-font-headline-md">{{ 'dashboard.deposits' | translate }}:</h1>
 
   <mat-list class="flex! flex-col gap-[12px]">
-    @for (deposit of deposits(); track deposit.name()) {
+    @for (deposit of deposits(); track $index) {
       <mat-list-item class="h-auto! p-0!">
         <mat-card appearance="filled" matRipple class="cursor-pointer select-none">
           <div class="flex flex-col gap-[12px]">
