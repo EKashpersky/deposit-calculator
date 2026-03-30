@@ -1,3 +1,4 @@
+import { round } from '../../utils/round';
 import { DepositInput } from './deposit-input.model';
 import { DepositResult } from './deposit-result.model';
 
@@ -41,6 +42,21 @@ export class DepositModel {
     return this._input.monthlyDeposit;
   }
 
-  
 
+
+  public deposited(): number {
+    return this._result.deposited;
+  }
+
+  public interest(): number {
+    return round(this._result.interest);
+  }
+
+  public taxed(): number {
+    return round(this._result.taxed);
+  }
+
+  public net() {
+    return round(this._result.net);
+  }
 }

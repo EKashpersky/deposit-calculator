@@ -1,17 +1,18 @@
+import { CurrencyPipe, getLocaleCurrencyCode, PercentPipe } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import { RouterLink } from "@angular/router";
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
+import { calculateDeposit } from '../calculator/calculator.model';
+import { CompoundRate } from '../calculator/compound-rate.enum';
 import { DepositInput } from '../calculator/deposit-input.model';
 import { DepositModel } from '../calculator/deposit.model';
 import { Duration } from '../calculator/duration.model';
-import { CompoundRate } from '../calculator/compound-rate.enum';
-import { calculateDeposit } from '../calculator/calculator.model';
-
 
 
 
@@ -19,27 +20,33 @@ import { calculateDeposit } from '../calculator/calculator.model';
   selector: 'page-dashboard',
   templateUrl: './dashboard.page.html',
   imports: [
+    CurrencyPipe,
     RouterLink,
+    PercentPipe,
 
-    MatIconModule,
     MatButtonModule,
     MatCardModule,
+    MatIconModule,
+    MatListModule,
     MatRippleModule,
-
     TranslatePipe
   ],
 })
 export class DashboardPage {
-  public pageName = signal('Dashboard page!');
-
   public deposits = signal<DepositModel[]>([]);
 
-  public constructor() {
+  public readonly currency: string;
+
+  public constructor(
+    private _translate: TranslateService
+  ) {
+    this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
+
     const depositInput = new DepositInput(
       10000,
       0.16,
       new Duration('months', 12),
-      0,
+      100,
       0.23,
       CompoundRate.MONTHLY,
       true
@@ -53,11 +60,7 @@ export class DashboardPage {
       depositResult
     );
 
-    this.deposits.set([
-      deposit
-    ]);
+    this.deposits.set([ deposit, deposit, deposit ]);
   }
-
-
 
 }

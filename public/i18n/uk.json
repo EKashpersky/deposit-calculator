@@ -5,7 +5,18 @@
   },
   "dashboard": {
     "add_deposit": "Додати депозит",
-    "deposits": "Депозити"
+    "deposits": "Депозити",
+    "deposit": {
+      "name": "Назва",
+      "principal": "Початковий внесок",
+      "duration": "Термін депозиту",
+      "annual_rate": "Річна ставка",
+      "monthly_payment": "Щомісячний внесок",
+      "total_deposited": "Сума поповнень",
+      "taxed": "Податок",
+      "interest": "Відсоток",
+      "net": "Чиста майбутня вартість"
+    }
   },
   "calculator": {
     "inputs": {
