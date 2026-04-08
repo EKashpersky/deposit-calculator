@@ -1,5 +1,4 @@
-import { DepositInput } from './deposit-input.model';
-import { DepositResult } from './deposit-result.model';
+import { DepositInput, DepositResult } from './model';
 
 
 

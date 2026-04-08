@@ -9,10 +9,12 @@ import { RouterLink } from "@angular/router";
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { calculateDeposit } from '../calculator/calculator.model';
-import { CompoundRate } from '../calculator/compound-rate.enum';
-import { DepositInput } from '../calculator/deposit-input.model';
-import { DepositModel } from '../calculator/deposit.model';
-import { Duration } from '../calculator/duration.model';
+import {
+  CompoundRate,
+  DepositInput,
+  Duration,
+  DepositModel
+} from '../calculator/model';
 
 
 

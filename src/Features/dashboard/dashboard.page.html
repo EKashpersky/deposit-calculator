@@ -5,8 +5,7 @@
   <mat-list class="flex! flex-col gap-[12px]">
     @for (deposit of deposits(); track $index) {
       <mat-list-item class="h-auto! p-0!">
-        <mat-card appearance="filled" matRipple class="cursor-pointer select-none">
-          <div class="flex flex-col gap-[12px]">
+        <mat-card appearance="filled" matRipple class="flex flex-col gap-[12px] cursor-pointer select-none">
             <mat-card-header class="flex flex-col">
               <p class="mat-font-body-md">{{ 'dashboard.deposit.name' | translate }}:</p>
               <p class="mat-font-headline-lg">{{ deposit.name() }}</p>
@@ -53,7 +52,8 @@
                 <p class="mat-font-title-md">{{ deposit.net() | currency:currency:'symbol-narrow' }}</p>
               </div>
             </mat-card-content>
-          </div>
+
+            <mat-card-footer></mat-card-footer>
         </mat-card>
       </mat-list-item>
     }

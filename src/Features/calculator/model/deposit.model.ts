@@ -1,4 +1,4 @@
-import { round } from '../../utils/round';
+import { round } from '../../../utils/round';
 import { DepositInput } from './deposit-input.model';
 import { DepositResult } from './deposit-result.model';
 

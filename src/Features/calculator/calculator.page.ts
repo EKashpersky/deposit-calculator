@@ -22,10 +22,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { calculateDeposit } from './calculator.model';
-import { CompoundRate } from './compound-rate.enum';
-import { DepositInput } from './deposit-input.model';
-import { DepositResult } from './deposit-result.model';
-import { Duration } from './duration.model';
+import { CompoundRate, DepositInput, Duration, DepositResult } from './model';
 
 
 
@@ -39,8 +36,8 @@ import { Duration } from './duration.model';
 
   imports: [
     ReactiveFormsModule,
-
     CurrencyPipe,
+
     MatButtonToggleModule,
     MatCardModule,
     MatCheckboxModule,
@@ -66,7 +63,7 @@ export class CalculatorPage {
 
   public constructor(
     private _fb: FormBuilder,
-    private _translate: TranslateService
+    private _translate: TranslateService,
   ) {
     const COMPOUND_RATES_MAP_FROM_I18N = [
       CompoundRate.NO_COMPOUND,
