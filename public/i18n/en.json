@@ -7,7 +7,7 @@
     "add_deposit": "Add deposit",
     "deposits": "Deposits",
     "deposit": {
-      "name": "Name",
+      "name": "Deposit name",
       "principal": "Initial deposit",
       "duration": "Deposit duration",
       "annual_rate": "Annual interest rate",
