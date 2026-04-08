@@ -1,0 +1,1 @@
+npx depcruise --include-only $1 --config ./scripts/dependency-cruiser.js --output-type dot ./src | dot -T svg > dependency-graph.svg
