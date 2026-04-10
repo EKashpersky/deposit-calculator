@@ -18,7 +18,10 @@ export class DepositResolver implements Resolve<DepositModel> {
   public constructor() {}
 
   public resolve(route: ActivatedRouteSnapshot): MaybeAsync<DepositModel | RedirectCommand> {
-    const depositName = route.paramMap.get('id')!;
+    const depositName = route.paramMap.get('name')!;
+    if (depositName === null) {
+      return new RedirectCommand(inject(Router).parseUrl('dashboard'));
+    }
 
     return inject(DepositsManagerService).fromName(depositName)
     .then(deposit => {

@@ -9,7 +9,10 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { routes } from './app.routes';
 import { appStartup } from './app-startup';
-import { DepositsStorageService } from '../Shared/deposits/deposits-storage.service';
+import {
+  DepositsManagerService,
+  DepositsStorageService
+} from '@shared/deposits';
 
 
 
@@ -25,6 +28,7 @@ export const appConfig: ApplicationConfig = {
         useHttpBackend: true,
       })
     }),
-    DepositsStorageService
+    DepositsStorageService,
+    DepositsManagerService
   ]
 };

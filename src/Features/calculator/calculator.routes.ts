@@ -3,6 +3,7 @@ import { inject } from '@angular/core';
 
 import { CalculatorPage } from './calculator.page';
 import { DepositResolver } from './deposit.resolver';
+import { DepositsManagerService } from '@shared/deposits';
 
 
 
@@ -12,10 +13,10 @@ export const CALCULATOR_ROUTES = [
     component: CalculatorPage,
   },
   {
-    path: ':id',
+    path: ':name',
     component: CalculatorPage,
 
-    providers: [ DepositResolver ],
+    providers: [ DepositResolver, DepositsManagerService ],
 
     resolve: {
       calculator: (route: ActivatedRouteSnapshot) => inject(DepositResolver).resolve(route),

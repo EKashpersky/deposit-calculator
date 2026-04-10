@@ -36,9 +36,7 @@ import { calculateDeposit } from '../calculator';
     TranslatePipe
   ],
 
-  providers: [
-    DepositsManagerService
-  ],
+  providers: [ DepositsManagerService ],
 })
 export class DashboardPage {
   private _depositsManager = inject(DepositsManagerService);
@@ -61,7 +59,7 @@ export class DashboardPage {
   private _mockDeposits(): DepositModel[] {
     const depositInput = new DepositInput(
       10000,
-      0.16,
+      0.12,
       new Duration('months', 12),
       100,
       0.23,

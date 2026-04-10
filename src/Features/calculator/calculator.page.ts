@@ -3,7 +3,12 @@ import {
   getLocaleCurrencyCode,
   getLocaleCurrencySymbol
 } from '@angular/common';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -19,16 +24,28 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
+import { ActivatedRoute } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { filter, map, take } from 'rxjs';
+
+import { DepositsManagerService } from '@shared/deposits';
 
 import { calculateDeposit } from './calculator.model';
-import { CompoundRate, DepositInput, Duration, DepositResult } from './model';
+import {
+  CompoundRate,
+  DepositInput,
+  DepositModel,
+  DepositResult,
+  Duration
+} from './model';
 
 
 
 @Component({
   selector: 'page-calculator',
   templateUrl: 'calculator.page.html',
+
+  providers: [ DepositsManagerService ],
 
   host: {
     class: 'flex flex-row gap-[16px] p-[24px]'
@@ -60,6 +77,8 @@ export class CalculatorPage {
 
   public readonly duration = signal(new Duration('months', 24));
   public readonly result = signal<DepositResult>(DepositResult.empty());
+
+
 
   public constructor(
     private _fb: FormBuilder,
@@ -117,6 +136,36 @@ export class CalculatorPage {
 
     /// Initial calculation
     this._recalculateResult();
+
+
+
+    inject(ActivatedRoute).data.pipe(
+      filter(x => Boolean(x?.['calculator'])),
+      take(1),
+      map(x => x['calculator'] as DepositModel)
+    ).subscribe(data => {
+      this.duration.set(data.input().duration);
+      this.result.set(data.result());
+
+      const input = data.input();
+
+      const mappedCompoundIndex = this.compoundRates.findIndex(
+        x => x.value === input.compoundRate
+      )!;
+
+      this.calculatorForm.patchValue({
+        principal: input.principal,
+        annualRate: input.annualRate,
+        monthlyDeposit: input.monthlyDeposit,
+        tax: input.tax,
+        withTaxes: input.noFirstMonthDeposit,
+        compoundRate: mappedCompoundIndex,
+        duration: {
+          value: input.duration.duration(),
+          scale: input.duration.scale(),
+        },
+      }, { emitEvent: true });
+    });
   }
 
 
