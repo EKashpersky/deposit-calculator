@@ -1,4 +1,5 @@
-import { round } from '../../../utils/round';
+import { round } from '@utils/round';
+
 import { DepositInput } from './deposit-input.model';
 import { DepositResult } from './deposit-result.model';
 
@@ -16,6 +17,14 @@ export class DepositModel {
     this._name = name;
     this._input = input;
     this._result = result;
+  }
+
+  public input() {
+    return this._input;
+  }
+
+  public result() {
+    return this._result;
   }
 
   public name(): string {

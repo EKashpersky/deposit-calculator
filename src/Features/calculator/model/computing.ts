@@ -1,3 +1,7 @@
+import { round } from '@utils/round';
+
+
+
 export class InterestResult {
   private static readonly _EMPTY_RESULT = new InterestResult(0, 0, 0, 0, 0);
 
@@ -63,7 +67,13 @@ export function computeSimpleInterest(
   const taxed = interest * t;
   const fvNet = p + depositedAmount + interest - taxed;
 
-  return InterestResult.build(p, depositedAmount, interest, taxed, fvNet);
+  return InterestResult.build(
+    p,
+    round(depositedAmount),
+    round(interest),
+    round(taxed),
+    round(fvNet)
+  );
 }
 
 /**
@@ -94,5 +104,11 @@ export function computeCompound(
   const taxed     = interest * t;
   const fvNet     = fvGross - taxed;
 
-  return InterestResult.build(p, deposited, interest, taxed, fvNet);
+  return InterestResult.build(
+    p,
+    round(deposited),
+    round(interest),
+    round(taxed),
+    round(fvNet)
+  );
 }

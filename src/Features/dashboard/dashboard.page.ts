@@ -1,5 +1,5 @@
 import { CurrencyPipe, getLocaleCurrencyCode, PercentPipe } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
@@ -8,13 +8,15 @@ import { MatListModule } from '@angular/material/list';
 import { RouterLink } from "@angular/router";
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
-import { calculateDeposit } from '../calculator/calculator.model';
+import { DepositsManagerService } from '@shared/deposits';
+
 import {
   CompoundRate,
   DepositInput,
+  DepositModel,
   Duration,
-  DepositModel
 } from '../calculator/model';
+import { calculateDeposit } from '../calculator';
 
 
 
@@ -33,17 +35,30 @@ import {
     MatRippleModule,
     TranslatePipe
   ],
+
+  providers: [
+    DepositsManagerService
+  ],
 })
 export class DashboardPage {
-  public deposits = signal<DepositModel[]>([]);
+  private _depositsManager = inject(DepositsManagerService);
+  public deposits = this._depositsManager.deposits;
 
   public readonly currency: string;
 
   public constructor(
-    private _translate: TranslateService
+    private _translate: TranslateService,
   ) {
     this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
 
+    if (this.deposits().length === 0) {
+      this._depositsManager.addDeposits(this._mockDeposits());
+    }
+  }
+
+
+
+  private _mockDeposits(): DepositModel[] {
     const depositInput = new DepositInput(
       10000,
       0.16,
@@ -56,13 +71,12 @@ export class DashboardPage {
 
     const depositResult = calculateDeposit(depositInput);
 
-    const deposit = new DepositModel(
-      'Deposit 1',
-      depositInput,
-      depositResult
-    );
-
-    this.deposits.set([ deposit, deposit, deposit ]);
+    return [0, 1, 2].map(i => {
+      return new DepositModel(
+        `Deposit ${i}`,
+        depositInput,
+        depositResult
+      );
+    });
   }
-
 }

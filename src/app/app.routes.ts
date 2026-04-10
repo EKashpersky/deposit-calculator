@@ -10,7 +10,8 @@ export const routes: Routes = [
 
   {
     path: 'calculator',
-    loadComponent: () => import('../Features/calculator/calculator.page').then(m => m.CalculatorPage),
+    loadChildren: () => import('../Features/calculator/calculator.routes')
+      .then(m => m.CALCULATOR_ROUTES),
   },
 
   {
