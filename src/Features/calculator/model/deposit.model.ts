@@ -19,6 +19,10 @@ export class DepositModel {
     this._result = result;
   }
 
+  public setName(name: string) {
+    this._name = name;
+  }
+
   public input() {
     return this._input;
   }

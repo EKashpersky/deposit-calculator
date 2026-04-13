@@ -6,6 +6,10 @@
   "dashboard": {
     "add_deposit": "Додати депозит",
     "deposits": "Депозити",
+    "edit_deposit": {
+      "save": "Зберегти",
+      "cancel": "Скасувати"
+    },
     "deposit": {
       "name": "Назва вкладу",
       "principal": "Початковий внесок",

@@ -29,6 +29,6 @@ export const appConfig: ApplicationConfig = {
       })
     }),
     DepositsStorageService,
-    DepositsManagerService
+    DepositsManagerService,
   ]
 };

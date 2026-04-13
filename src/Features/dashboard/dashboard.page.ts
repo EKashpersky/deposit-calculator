@@ -17,6 +17,9 @@ import {
   Duration,
 } from '../calculator/model';
 import { calculateDeposit } from '../calculator';
+import { MatDialog } from '@angular/material/dialog';
+import { DepositNameComponent } from './deposit-name.component';
+import { filter, take } from 'rxjs';
 
 
 
@@ -35,8 +38,6 @@ import { calculateDeposit } from '../calculator';
     MatRippleModule,
     TranslatePipe
   ],
-
-  providers: [ DepositsManagerService ],
 })
 export class DashboardPage {
   private _depositsManager = inject(DepositsManagerService);
@@ -46,12 +47,38 @@ export class DashboardPage {
 
   public constructor(
     private _translate: TranslateService,
+    private _dialog: MatDialog,
   ) {
     this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
 
     if (this.deposits().length === 0) {
       this._depositsManager.addDeposits(this._mockDeposits());
     }
+  }
+
+  /// Edit deposit name
+  public editDeposit(event: Event, deposit: DepositModel) {
+    const dialog = this._dialog.open(DepositNameComponent, {
+      data: deposit.name(),
+    });
+
+    dialog.afterClosed().pipe(take(1), filter(Boolean)).subscribe(depositName => {
+      this._depositsManager.renameDeposit(depositName, deposit);
+    });
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    return false;
+  }
+
+  public removeDeposit(event: Event, deposit: DepositModel) {
+    this._depositsManager.removeDeposit(deposit.name());
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    return false;
   }
 
 

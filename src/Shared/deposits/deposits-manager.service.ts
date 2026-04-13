@@ -11,25 +11,26 @@ export class DepositsManagerService {
   private _deposits = signal<DepositModel[]>([]);
   public deposits = this._deposits.asReadonly();
 
-  public constructor(private _depositStorage: DepositsStorageService) {
-    /// Load the deposits into the signal
-    this._depositStorage.getItems().then(deposits => {
-      this._deposits.set(deposits);
-    });
-  }
+  public constructor(private _depositStorage: DepositsStorageService) {}
 
   public fromName(name: string) {
     return this._depositStorage.getItem(name);
   }
 
   public getUserDeposits() {
-    return this._depositStorage.getItems();
+    return this._depositStorage.getItems().then(deposits => {
+      if (deposits.length > 0) {
+        this._deposits.set(deposits);
+      }
+
+      return deposits;
+    });
   }
 
   public removeDeposit(name: string) {
     this._depositStorage.removeItem(name);
     this._deposits.update(prev =>
-      prev.filter(deposit => deposit.name() === name)
+      prev.filter(deposit => deposit.name() !== name)
     );
   }
 
@@ -41,5 +42,11 @@ export class DepositsManagerService {
   public addDeposits(deposits: DepositModel[]) {
     this._depositStorage.setItems(deposits);
     this._deposits.update(prev => (prev.push(...deposits), prev));
+  }
+
+  public renameDeposit(newName: string, deposit: DepositModel) {
+    this.removeDeposit(deposit.name());
+    deposit.setName(newName);
+    this.addDeposit(deposit);
   }
 }

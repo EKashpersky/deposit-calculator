@@ -11,17 +11,24 @@
           class="flex flex-col gap-[12px] cursor-pointer select-none"
           [routerLink]="['/calculator/', deposit.name()]"
         >
-          <mat-card-header class="flex flex-col">
-            <p class="mat-font-body-md">{{ 'dashboard.deposit.name' | translate }}:</p>
-            <p class="mat-font-headline-lg">{{ deposit.name() }}</p>
+          <mat-card-header class="flex flex-row justify-between">
+            <mat-card-title-group>
+              <mat-card-subtitle>{{ 'dashboard.deposit.name' | translate }}:</mat-card-subtitle>
+              <mat-card-title>{{ deposit.name() }}</mat-card-title>
+            </mat-card-title-group>
+
+            <div class="flex">
+              <button class="" mat-icon-button (click)="editDeposit($event, deposit)">
+                <mat-icon class="mat-text-on-surface-variant">edit</mat-icon>
+              </button>
+
+              <button class="" mat-icon-button (click)="removeDeposit($event, deposit)">
+                <mat-icon class="mat-text-on-surface-variant">delete</mat-icon>
+              </button>
+            </div>
           </mat-card-header>
 
           <mat-card-content class="flex! flex-row justify-between text-right">
-            <div class="flex flex-col">
-              <p class="mat-font-body-md">{{ 'dashboard.deposit.principal' | translate }}:</p>
-              <p class="mat-font-title-md">{{ deposit.principal() | currency:currency:'symbol-narrow' }}</p>
-            </div>
-
             <div class="flex flex-col">
               <p class="mat-font-body-md">{{ 'dashboard.deposit.duration' | translate }}:</p>
               <p class="mat-font-title-md">{{ deposit.durationValue() }} {{ deposit.durationScale() }}</p>
@@ -33,10 +40,17 @@
             </div>
 
             <div class="flex flex-col">
+              <p class="mat-font-body-md">{{ 'dashboard.deposit.principal' | translate }}:</p>
+              <p class="mat-font-title-md">{{ deposit.principal() | currency:currency:'symbol-narrow' }}</p>
+            </div>
+
+            <div class="flex flex-col">
               <p class="mat-font-body-md">{{ 'dashboard.deposit.monthly_payment' | translate }}:</p>
               <p class="mat-font-title-md">{{ deposit.monthlyDeposit() | currency:currency:'symbol-narrow' }}</p>
             </div>
+          </mat-card-content>
 
+          <mat-card-footer class="flex! flex-row justify-between text-right p-[16px] pt-[0px]">
             <div class="flex flex-col">
               <p class="mat-font-body-md">{{ 'dashboard.deposit.total_deposited' | translate }}:</p>
               <p class="mat-font-title-md">{{ deposit.deposited() | currency:currency:'symbol-narrow' }}</p>
@@ -56,9 +70,7 @@
               <p class="mat-font-body-md">{{ 'dashboard.deposit.net' | translate }}:</p>
               <p class="mat-font-title-md">{{ deposit.net() | currency:currency:'symbol-narrow' }}</p>
             </div>
-          </mat-card-content>
-
-          <mat-card-footer></mat-card-footer>
+          </mat-card-footer>
         </mat-card>
       </mat-list-item>
     }

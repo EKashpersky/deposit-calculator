@@ -6,6 +6,10 @@
   "dashboard": {
     "add_deposit": "Add deposit",
     "deposits": "Deposits",
+    "edit_deposit": {
+      "save": "Save",
+      "cancel": "Cancel"
+    },
     "deposit": {
       "name": "Deposit name",
       "principal": "Initial deposit",
