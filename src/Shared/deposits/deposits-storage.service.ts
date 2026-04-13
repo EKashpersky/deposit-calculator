@@ -32,7 +32,7 @@ export class DepositsStorageService {
 
   public getItem(name: string): Promise<DepositModel | null> {
     return this._storage.getItem<DepositPOJO>(name).then(item => {
-      return item ? DepositSerializer.deserialize(item) : null;
+      return item ? DepositSerializer.deserialize(name, item) : null;
     });
   }
 
@@ -41,7 +41,7 @@ export class DepositsStorageService {
       keys => this._storage.getItems<DepositPOJO>(keys)
     ).then(items =>
       items.map(
-        item => item && DepositSerializer.deserialize(item.value!) || null
+        item => item && DepositSerializer.deserialize(item.key, item.value!) || null
       )
     );
   }
@@ -57,7 +57,7 @@ export class DepositsStorageService {
       deposit = DepositSerializer.serialize(depositx);
 
       return {
-        key: deposit.name,
+        key: depositx.name(),
         value: deposit,
       };
     });

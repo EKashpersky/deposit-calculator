@@ -23,7 +23,6 @@ export interface DepositResultPOJO {
 
 
 export interface DepositPOJO {
-  readonly name: string;
   readonly input: DepositInputPOJO;
   readonly result: DepositResultPOJO;
 }

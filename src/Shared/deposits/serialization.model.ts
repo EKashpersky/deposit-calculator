@@ -9,9 +9,9 @@ import { DepositPOJO } from './storage.models';
 
 
 export class DepositSerializer {
-  public static deserialize(deposit: DepositPOJO): DepositModel {
+  public static deserialize(name: string, deposit: DepositPOJO): DepositModel {
     return new DepositModel(
-      deposit.name,
+      name,
       new DepositInput(
         deposit.input.principal,
         deposit.input.annualRate,
@@ -27,7 +27,6 @@ export class DepositSerializer {
 
   public static serialize(deposit: DepositModel): DepositPOJO {
     return {
-      name: deposit.name(),
       input: {
         principal: deposit.input().principal,
         annualRate: deposit.input().annualRate,
