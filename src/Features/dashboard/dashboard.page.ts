@@ -3,23 +3,23 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterLink } from "@angular/router";
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { firstValueFrom } from 'rxjs';
 
 import { DepositsManagerService } from '@shared/deposits';
 
+import { calculateDeposit } from '../calculator';
 import {
   CompoundRate,
   DepositInput,
   DepositModel,
   Duration,
 } from '../calculator/model';
-import { calculateDeposit } from '../calculator';
-import { MatDialog } from '@angular/material/dialog';
 import { DepositNameComponent } from './deposit-name.component';
-import { filter, take } from 'rxjs';
 
 
 
@@ -58,16 +58,27 @@ export class DashboardPage {
 
   /// Edit deposit name
   public editDeposit(event: Event, deposit: DepositModel) {
-    const dialog = this._dialog.open(DepositNameComponent, {
-      data: deposit.name(),
-    });
-
-    dialog.afterClosed().pipe(take(1), filter(Boolean)).subscribe(depositName => {
-      this._depositsManager.renameDeposit(depositName, deposit);
-    });
-
     event.preventDefault();
     event.stopImmediatePropagation();
+
+    this._depositsManager.getUserDeposits().then(deposits => {
+      return deposits.map(deposit => deposit.name());
+    }).then(depositsNames => {
+      return this._dialog.open(DepositNameComponent, {
+        data: {
+          i18nTitle: 'dashboard.deposit_dialog.edit_title',
+          i18nAction: 'dashboard.deposit_dialog.edit',
+          depositName: deposit.name(),
+          depositsNames,
+        },
+      });
+    }).then(dialog => {
+      return firstValueFrom(dialog.afterClosed());
+    }).then((depositName: string) => {
+      if (depositName) {
+        this._depositsManager.renameDeposit(depositName, deposit);
+      }
+    });
 
     return false;
   }

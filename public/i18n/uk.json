@@ -6,9 +6,15 @@
   "dashboard": {
     "add_deposit": "Додати депозит",
     "deposits": "Депозити",
-    "edit_deposit": {
-      "save": "Зберегти",
-      "cancel": "Скасувати"
+    "deposit_dialog": {
+      "create_title": "Створити депозит",
+      "edit_title": "Редагувати депозит",
+
+      "create": "Створити",
+      "edit": "Редагувати",
+      "cancel": "Скасувати",
+
+      "not_unique": "Назва має бути унікальною"
     },
     "deposit": {
       "name": "Назва вкладу",

@@ -6,9 +6,15 @@
   "dashboard": {
     "add_deposit": "Add deposit",
     "deposits": "Deposits",
-    "edit_deposit": {
-      "save": "Save",
-      "cancel": "Cancel"
+    "deposit_dialog": {
+      "create_title": "Create deposit",
+      "edit_title": "Edit deposit",
+
+      "create": "Create",
+      "edit": "Edit",
+      "cancel": "Cancel",
+
+      "not_unique": "Name must be unique"
     },
     "deposit": {
       "name": "Deposit name",

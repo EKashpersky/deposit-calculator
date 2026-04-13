@@ -46,8 +46,8 @@ export class DepositsStorageService {
     );
   }
 
-  public setItem(deposit: DepositModel) {
-    this._storage.setItem(deposit.name(), DepositSerializer.serialize(deposit));
+  public setItem(name: string, deposit: DepositModel) {
+    this._storage.setItem(name, DepositSerializer.serialize(deposit));
   }
 
   public setItems(deposits: DepositModel[]) {

@@ -35,7 +35,7 @@ export class DepositsManagerService {
   }
 
   public addDeposit(deposit: DepositModel) {
-    this._depositStorage.setItem(deposit);
+    this._depositStorage.setItem(deposit.name(), deposit);
     this._deposits.update(prev => (prev.push(deposit), prev));
   }
 
@@ -45,8 +45,14 @@ export class DepositsManagerService {
   }
 
   public renameDeposit(newName: string, deposit: DepositModel) {
-    this.removeDeposit(deposit.name());
-    deposit.setName(newName);
-    this.addDeposit(deposit);
+    const oldName = deposit.name();
+
+    this._deposits.update(deposits => {
+      deposits.find(d => d.name() === oldName)!.setName(newName)
+      return [...deposits];
+    });
+
+    this._depositStorage.removeItem(oldName);
+    this._depositStorage.setItem(newName, deposit);
   }
 }
