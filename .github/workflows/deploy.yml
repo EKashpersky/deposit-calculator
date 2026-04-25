@@ -41,7 +41,7 @@ jobs:
         run: npm run build -- --configuration=production --base-href="/${{ github.event.repository.name }}/"
 
       - name: Set-up 404 page
-        run: cd dist/deposit-calculator/browser/index.html dist/deposit-calculator/browser/404.html
+        run: copy dist/deposit-calculator/browser/index.html dist/deposit-calculator/browser/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
