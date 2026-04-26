@@ -1,0 +1,23 @@
+@use '../../md3-expressive-polyfill' as *;
+
+
+
+.fade-out {
+  animation-name: fade-out;
+  animation-fill-mode: both;
+  @include animation('default', 'spatial', 'standard');
+}
+
+@keyframes fade-out {
+  from {
+    height: 220px;
+    padding-bottom: 12px;
+    opacity: 1;
+  }
+
+  to {
+    height: 0px;
+    padding-bottom: 0px;
+    opacity: 0;
+  }
+}

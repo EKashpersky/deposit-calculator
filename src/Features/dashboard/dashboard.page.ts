@@ -26,6 +26,7 @@ import { DepositNameComponent } from './deposit-name.component';
 @Component({
   selector: 'page-dashboard',
   templateUrl: './dashboard.page.html',
+  styleUrl: './dashboard.page.scss',
   imports: [
     CurrencyPipe,
     RouterLink,

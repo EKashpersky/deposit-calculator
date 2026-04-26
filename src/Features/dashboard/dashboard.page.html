@@ -2,9 +2,10 @@
 
   <h1 class="mat-font-headline-md">{{ 'dashboard.deposits' | translate }}:</h1>
 
-  <mat-list class="flex! flex-col gap-[12px]">
-    @for (deposit of deposits(); track $index) {
-      <mat-list-item class="h-auto! p-0!">
+  <div class="card-list flex flex-col transition">
+    @for (deposit of deposits(); track deposit.name()) {
+
+      <div class="mat-card-wrapper pb-[24px] box-border h-[220px]" animate.leave="fade-out">
         <mat-card
           appearance="filled"
           matRipple
@@ -72,25 +73,28 @@
             </div>
           </mat-card-footer>
         </mat-card>
-      </mat-list-item>
+      </div>
     }
-  </mat-list>
 
-  <mat-card
-    class="flex flex-col items-center justify-center cursor-pointer select-none"
-    appearance="outlined"
-    matRipple
-    routerLink="/calculator"
-  >
-    <div>
-      <mat-card-header>
-        <button class="flex items-center mat-font-headline-md cursor-pointer select-none">
-          <span>{{ 'dashboard.add_deposit' | translate }}</span>
-          <mat-icon>add2</mat-icon>
-        </button>
-      </mat-card-header>
+    <mat-card
+      class="flex flex-col items-center justify-center cursor-pointer select-none"
+      appearance="outlined"
+      matRipple
+      routerLink="/calculator"
+    >
+      <div>
+        <mat-card-header>
+          <button class="flex items-center mat-font-headline-md cursor-pointer select-none">
+            <span>{{ 'dashboard.add_deposit' | translate }}</span>
+            <mat-icon>add2</mat-icon>
+          </button>
+        </mat-card-header>
+  
+        <mat-card-content></mat-card-content>
+      </div>
+    </mat-card>
+  </div>
 
-      <mat-card-content></mat-card-content>
-    </div>
-  </mat-card>
+
+
 </div>

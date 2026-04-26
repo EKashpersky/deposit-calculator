@@ -22,40 +22,55 @@
 // Standard slow effects      0.34, 0.88, 0.34, 1.00. Duration =  300ms
 
 /// variable naming convention:
-/// --mat-motion-<type>-<style>-<effect>
-
-
+/// --mat-motion-<speed>-<type>-<personality>
+/// <speed>       - fast, default, slow
+/// <type>        - spatial, effects
+/// <personality> - standard, expressive
 
 :root {
-  // Standard spatial
-  --mat-motion-standard-fast-spatial-cb: cubic-bezier(0.27, 1.06, 0.18, 1.00);
-  --mat-motion-standard-fast-spatial-duration: 350ms;
-  --mat-motion-standard-default-spatial-cb: cubic-bezier(0.27, 1.06, 0.18, 1.00);
-  --mat-motion-standard-default-spatial-duration: 500ms;
-  --mat-motion-standard-slow-spatial-cb: cubic-bezier(0.27, 1.06, 0.18, 1.00);
-  --mat-motion-standard-slow-spatial-duration: 750ms;
+  // Fast spatial
+  --mat-motion-fast-spatial-standard-duration: 350ms;
+  --mat-motion-fast-spatial-standard-cb: cubic-bezier(0.27, 1.06, 0.18, 1.00);
+  --mat-motion-fast-spatial-expressive-duration: 350ms;
+  --mat-motion-fast-spatial-expressive-cb: cubic-bezier(0.42, 1.67, 0.21, 0.90);
 
-  // Standard effects
-  --mat-motion-standard-fast-effects-cb: cubic-bezier(0.31, 0.94, 0.34, 1.00);
-  --mat-motion-standard-fast-effects-duration: 150ms;
-  --mat-motion-standard-default-effects-cb: cubic-bezier(0.34, 0.80, 0.34, 1.00);
-  --mat-motion-standard-default-effects-duration: 200ms;
-  --mat-motion-standard-slow-effects-cb: cubic-bezier(0.34, 0.88, 0.34, 1.00);
-  --mat-motion-standard-slow-effects-duration: 300ms;
+  // Fast effects
+  --mat-motion-fast-effects-standard-duration: 150ms;
+  --mat-motion-fast-effects-standard-cb: cubic-bezier(0.31, 0.94, 0.34, 1.00);
+  --mat-motion-fast-effects-expressive-duration: 150ms;
+  --mat-motion-fast-effects-expressive-cb: cubic-bezier(0.31, 0.94, 0.34, 1.00);
 
-  // Expressive spatial
-  --mat-motion-expressive-fast-spatial-cb: cubic-bezier(0.42, 1.67, 0.21, 0.90);
-  --mat-motion-expressive-fast-spatial-duration: 350ms;
-  --mat-motion-expressive-default-spatial-cb: cubic-bezier(0.38, 1.21, 0.22, 1.00);
-  --mat-motion-expressive-default-spatial-duration: 500ms;
-  --mat-motion-expressive-slow-spatial-cb: cubic-bezier(0.39, 1.29, 0.35, 0.98);
-  --mat-motion-expressive-slow-spatial-duration: 650ms;
+  // Default spatial
+  --mat-motion-default-spatial-standard-duration: 500ms;
+  --mat-motion-default-spatial-standard-cb: cubic-bezier(0.27, 1.06, 0.18, 1.00);
+  --mat-motion-default-spatial-expressive-duration: 500ms;
+  --mat-motion-default-spatial-expressive-cb: cubic-bezier(0.38, 1.21, 0.22, 1.00);
 
-  // Expressive effects
-  --mat-motion-expressive-fast-effects-cb: cubic-bezier(0.31, 0.94, 0.34, 1.00);
-  --mat-motion-expressive-fast-effects-duration: 150ms;
-  --mat-motion-expressive-default-effects-cb: cubic-bezier(0.34, 0.80, 0.34, 1.00);
-  --mat-motion-expressive-default-effects-duration: 200ms;
-  --mat-motion-expressive-slow-effects-cb: cubic-bezier(0.34, 0.88, 0.34, 1.00);
-  --mat-motion-expressive-slow-effects-duration: 300ms;
+  // Default effects
+  --mat-motion-default-effects-standard-duration: 200ms;
+  --mat-motion-default-effects-standard-cb: cubic-bezier(0.34, 0.80, 0.34, 1.00);
+  --mat-motion-default-effects-expressive-duration: 200ms;
+  --mat-motion-default-effects-expressive-cb: cubic-bezier(0.34, 0.80, 0.34, 1.00);
+
+  // Slow spatial
+  --mat-motion-slow-spatial-standard-duration: 750ms;
+  --mat-motion-slow-spatial-standard-cb: cubic-bezier(0.27, 1.06, 0.18, 1.00);
+  --mat-motion-slow-spatial-expressive-duration: 650ms;
+  --mat-motion-slow-spatial-expressive-cb: cubic-bezier(0.39, 1.29, 0.35, 0.98);
+
+  // Slow effects
+  --mat-motion-slow-effects-standard-duration: 300ms;
+  --mat-motion-slow-effects-standard-cb: cubic-bezier(0.34, 0.88, 0.34, 1.00);
+  --mat-motion-slow-effects-expressive-duration: 300ms;
+  --mat-motion-slow-effects-expressive-cb: cubic-bezier(0.34, 0.88, 0.34, 1.00);
+}
+
+@mixin animation($speed: 'fast', $type: 'spatial', $personality: 'standard') {
+  animation-duration: var(--mat-motion-#{$speed}-#{$type}-#{$personality}-duration);
+  animation-timing-function: var(--mat-motion-#{$speed}-#{$type}-#{$personality}-cb);
+}
+
+@mixin transition($speed: 'fast', $type: 'spatial', $personality: 'standard') {
+  transition-duration: var(--mat-motion-#{$speed}-#{$type}-#{$personality}-duration);
+  transition-timing-function: var(--mat-motion-#{$speed}-#{$type}-#{$personality}-cb);
 }
