@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
-  FormControl,
+  FormGroup,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
@@ -39,27 +39,31 @@ class InstantErrorStateMatcher implements ErrorStateMatcher {
   selector: 'deposit-name',
   template: `
     <h2 mat-dialog-title>{{ i18nTitle | translate }}</h2>
-    <mat-dialog-content>
-      <mat-form-field class="w-full">
-        <mat-label>{{ 'dashboard.deposit.name' | translate }}</mat-label>
-        <input
-          matInput
-          [formControl]="name"
-          cdkFocusInitial
-          [errorStateMatcher]="errorStateMatcher"
-        />
 
-        @if (name.hasError('notUnique')) {
-          <mat-error>{{ 'dashboard.deposit_dialog.not_unique' | translate }}</mat-error>
-        } @else if (name.hasError('required')) {
-          <mat-error>{{ 'dashboard.deposit_dialog.required' | translate }}</mat-error>
-        }
-      </mat-form-field>
-    </mat-dialog-content>
-    <mat-dialog-actions align="start">
-      <button matButton="filled" [mat-dialog-close] (click)="save()" [disabled]="name.invalid">{{ i18nAction | translate }}</button>
-      <button matButton [mat-dialog-close]>{{ 'dashboard.deposit_dialog.cancel' | translate }}</button>
-    </mat-dialog-actions>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <mat-dialog-content>
+        <mat-form-field class="w-full">
+          <mat-label>{{ 'dashboard.deposit.name' | translate }}</mat-label>
+          <input
+            matInput
+            formControlName="name"
+            cdkFocusInitial
+            [errorStateMatcher]="errorStateMatcher"
+          />
+
+          @if (form.get('name')!.hasError('notUnique')) {
+            <mat-error>{{ 'dashboard.deposit_dialog.not_unique' | translate }}</mat-error>
+          } @else if (form.get('name')!.hasError('required')) {
+            <mat-error>{{ 'dashboard.deposit_dialog.required' | translate }}</mat-error>
+          }
+        </mat-form-field>
+      </mat-dialog-content>
+
+      <mat-dialog-actions align="start">
+        <button matButton="filled" [mat-dialog-close] (click)="save()" [disabled]="form.invalid">{{ i18nAction | translate }}</button>
+        <button matButton [mat-dialog-close]>{{ 'dashboard.deposit_dialog.cancel' | translate }}</button>
+      </mat-dialog-actions>
+    </form>
   `,
 
   imports: [
@@ -76,7 +80,7 @@ export class DepositNameComponent {
   public readonly i18nTitle: string;
   public readonly i18nAction: string; /// Create or Edit action
 
-  public readonly name: FormControl;
+  public readonly form: FormGroup;
   public readonly errorStateMatcher: ErrorStateMatcher;
   public readonly depositNames: string[];
 
@@ -90,15 +94,19 @@ export class DepositNameComponent {
 
     this.depositNames = data.depositsNames;
 
-    this.name = inject(FormBuilder).control(data.depositName, {
-      validators: Validators.compose([
-        validatorUnique(this.depositNames, data.depositName),
-        Validators.required
-      ])
+    const fb = inject(FormBuilder);
+
+    this.form = fb.group({
+      name: fb.control(data.depositName, {
+        validators: Validators.compose([
+          validatorUnique(this.depositNames, data.depositName),
+          Validators.required
+        ])
+      })
     });
   }
 
   public save() {
-    this._dialogRef.close(this.name.value);
+    this._dialogRef.close(this.form.value.name);
   }
 }
