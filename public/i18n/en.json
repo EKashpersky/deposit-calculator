@@ -14,7 +14,8 @@
       "edit": "Edit",
       "cancel": "Cancel",
 
-      "not_unique": "Name must be unique"
+      "not_unique": "Name must be unique",
+      "required": "Name is required"
     },
     "deposit": {
       "name": "Deposit name",

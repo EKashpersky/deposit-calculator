@@ -3,7 +3,8 @@ import {
   AbstractControl,
   FormBuilder,
   FormControl,
-  ReactiveFormsModule
+  ReactiveFormsModule,
+  Validators
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -50,11 +51,13 @@ class InstantErrorStateMatcher implements ErrorStateMatcher {
 
         @if (name.hasError('notUnique')) {
           <mat-error>{{ 'dashboard.deposit_dialog.not_unique' | translate }}</mat-error>
+        } @else if (name.hasError('required')) {
+          <mat-error>{{ 'dashboard.deposit_dialog.required' | translate }}</mat-error>
         }
       </mat-form-field>
     </mat-dialog-content>
     <mat-dialog-actions align="start">
-      <button matButton [mat-dialog-close] (click)="save()" [disabled]="name.invalid">{{ i18nAction | translate }}</button>
+      <button matButton="filled" [mat-dialog-close] (click)="save()" [disabled]="name.invalid">{{ i18nAction | translate }}</button>
       <button matButton [mat-dialog-close]>{{ 'dashboard.deposit_dialog.cancel' | translate }}</button>
     </mat-dialog-actions>
   `,
@@ -88,7 +91,10 @@ export class DepositNameComponent {
     this.depositNames = data.depositsNames;
 
     this.name = inject(FormBuilder).control(data.depositName, {
-      validators: [ validatorUnique(this.depositNames, data.depositName) ]
+      validators: Validators.compose([
+        validatorUnique(this.depositNames, data.depositName),
+        Validators.required
+      ])
     });
   }
 
