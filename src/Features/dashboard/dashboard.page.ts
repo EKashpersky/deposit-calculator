@@ -6,6 +6,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterLink } from "@angular/router";
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
@@ -20,6 +21,7 @@ import {
   Duration,
 } from '../calculator/model';
 import { DepositNameComponent } from './deposit-name.component';
+import { UndoSnackbarComponent } from './undo-snackbar.component';
 
 
 
@@ -31,12 +33,14 @@ import { DepositNameComponent } from './deposit-name.component';
     CurrencyPipe,
     RouterLink,
     PercentPipe,
+    UndoSnackbarComponent,
 
     MatButtonModule,
     MatCardModule,
     MatIconModule,
     MatListModule,
     MatRippleModule,
+    MatSnackBarModule,
     TranslatePipe
   ],
 })
@@ -49,6 +53,7 @@ export class DashboardPage {
   public constructor(
     private _translate: TranslateService,
     private _dialog: MatDialog,
+    private _snack: MatSnackBar,
   ) {
     this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
 
@@ -89,6 +94,18 @@ export class DashboardPage {
 
     event.preventDefault();
     event.stopImmediatePropagation();
+
+    const snackRef = this._snack.openFromComponent(UndoSnackbarComponent, {
+      duration: 5000,
+      data: {
+        i18nTitle: 'dashboard.undo_snackbar',
+        i18nAction: 'common_buttons.restore',
+      }
+    });
+
+    snackRef.onAction().subscribe(() => {
+      console.log('Undo');
+    });
 
     return false;
   }

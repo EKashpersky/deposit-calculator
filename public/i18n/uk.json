@@ -1,4 +1,7 @@
 {
+  "common_buttons": {
+    "restore": "Відновити"
+  },
   "toolbar": {
     "deposit_calculator": "Депозитний калькулятор",
     "language": "Мова"
@@ -6,6 +9,7 @@
   "dashboard": {
     "add_deposit": "Додати депозит",
     "deposits": "Депозити",
+    "undo_snackbar": "Депозит видалений",
     "deposit_dialog": {
       "create_title": "Створити депозит",
       "edit_title": "Редагувати депозит",

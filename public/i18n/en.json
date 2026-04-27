@@ -1,4 +1,7 @@
 {
+  "common_buttons": {
+    "restore": "Restore"
+  },
   "toolbar": {
     "deposit_calculator": "Deposit calculator",
     "language": "Language"
@@ -6,6 +9,7 @@
   "dashboard": {
     "add_deposit": "Add deposit",
     "deposits": "Deposits",
+    "undo_snackbar": "Deposit removed",
     "deposit_dialog": {
       "create_title": "Create deposit",
       "edit_title": "Edit deposit",
