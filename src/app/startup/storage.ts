@@ -12,6 +12,8 @@ export function appStartupSetupStorage() {
   const manager = inject(DepositsManagerService);
 
   return storage.initStorage(DB_NAME, DB_VERSION).then(() => {
-    return manager.getUserDeposits();
+    return storage.getItems();
+  }).then(deposits => {
+    manager.addDepositsBulk(deposits);
   });
 }

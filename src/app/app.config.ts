@@ -7,12 +7,14 @@ import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
-import { routes } from './app.routes';
-import { appStartup } from './app-startup';
 import {
   DepositsManagerService,
   DepositsStorageService
 } from '@shared/deposits';
+import { HistoryService } from '@shared/history';
+
+import { routes } from './app.routes';
+import { appStartup } from './app-startup';
 
 
 
@@ -30,5 +32,7 @@ export const appConfig: ApplicationConfig = {
     }),
     DepositsStorageService,
     DepositsManagerService,
+
+    HistoryService,
   ]
 };
