@@ -127,18 +127,6 @@ export class DashboardPage {
         new DepositModel(depositName, depositInput, depositResult)
       );
       this._history.addAction(addDepositAction);
-
-      this._snackRef = this._snack.openFromComponent(UndoSnackbarComponent, {
-        duration: 5000,
-        data: {
-          i18nTitle: 'dashboard.deposit_dialog.snackbar.deposit_added',
-          i18nAction: 'common_buttons.restore',
-        }
-      });
-
-      this._snackRef.onAction().subscribe(() => {
-        this._history.tryUndo(addDepositAction);
-      });
     });
   }
 
