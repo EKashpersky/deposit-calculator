@@ -4,7 +4,6 @@
 
   <div class="card-list flex flex-col transition">
     @for (deposit of deposits(); track deposit.name()) {
-
       <div class="mat-card-wrapper pb-[24px] box-border h-[220px]" animate.leave="fade-out" animate.enter="fade-in">
         <mat-card
           appearance="filled"
@@ -80,7 +79,7 @@
       class="flex flex-col items-center justify-center cursor-pointer select-none"
       appearance="outlined"
       matRipple
-      routerLink="/calculator"
+      (click)="addDeposit($event)"
     >
       <div>
         <mat-card-header>

@@ -92,7 +92,7 @@ export class DepositNameComponent {
     this.i18nTitle = data.i18nTitle;
     this.i18nAction = data.i18nAction;
 
-    this.depositNames = data.depositsNames;
+    this.depositNames = data.depositNames;
 
     const fb = inject(FormBuilder);
 

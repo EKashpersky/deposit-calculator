@@ -6,10 +6,17 @@
     "deposit_calculator": "Deposit calculator",
     "language": "Language"
   },
+
+  
   "dashboard": {
+    "snackbar": {
+      "deposit_added": "Deposit added",
+      "deposit_removed": "Deposit removed",
+      "deposit_renamed": "Deposit renamed"
+    },
+
     "add_deposit": "Add deposit",
     "deposits": "Deposits",
-    "undo_snackbar": "Deposit removed",
     "deposit_dialog": {
       "create_title": "Create deposit",
       "edit_title": "Edit deposit",

@@ -31,7 +31,7 @@ import { ShortcutsService } from '@shared/shortcuts.service';
   templateUrl: './app.html',
   styleUrl: './app.css',
   host: {
-    class: 'block h-full w-full',
+    class: 'block h-full w-full overflow-scroll',
   }
 })
 export class App {

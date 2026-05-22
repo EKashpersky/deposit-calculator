@@ -31,6 +31,20 @@ import { UndoSnackbarComponent } from './undo-snackbar.component';
 
 
 
+function templateDeposit() {
+  const depositInput = new DepositInput(
+    10000,
+    0.12,
+    new Duration('months', 12),
+    100,
+    0.23,
+    CompoundRate.MONTHLY,
+    true
+  );
+
+  return depositInput;
+}
+
 @Component({
   selector: 'page-dashboard',
   templateUrl: './dashboard.page.html',
@@ -88,6 +102,46 @@ export class DashboardPage {
     this._snackRef = null;
   }
 
+  public addDeposit(event: Event) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+
+    const dialogRef = this._dialog.open(DepositNameComponent, {
+      data: {
+        i18nTitle: 'dashboard.deposit_dialog.create_title',
+        i18nAction: 'dashboard.deposit_dialog.create',
+        depositName: '',
+        depositNames: [],
+      },
+    });
+
+    firstValueFrom(dialogRef.afterClosed()).then(depositName => {
+      if (typeof depositName !== 'string') {
+        return;
+      }
+
+      const depositInput = templateDeposit();
+      const depositResult = calculateDeposit(depositInput);
+      const addDepositAction = this._depositsManager.addDeposit(
+        new DepositModel(depositName, depositInput, depositResult)
+      );
+      this._history.addAction(addDepositAction);
+
+      this._snackRef = this._snack.openFromComponent(UndoSnackbarComponent, {
+        duration: 5000,
+        data: {
+          i18nTitle: 'dashboard.deposit_dialog.snackbar.deposit_added',
+          i18nAction: 'common_buttons.restore',
+        }
+      });
+
+      this._snackRef.onAction().subscribe(() => {
+        this._history.tryUndo(addDepositAction);
+      });
+    });
+  }
+
   /// Edit deposit name
   public editDeposit(event: Event, deposit: DepositModel) {
     event.preventDefault();
@@ -95,13 +149,13 @@ export class DashboardPage {
 
     return Promise.resolve(
       this._depositsManager.deposits().map(deposit => deposit.name())
-    ).then(depositsNames => {
+    ).then(depositNames => {
       return this._dialog.open(DepositNameComponent, {
         data: {
           i18nTitle: 'dashboard.deposit_dialog.edit_title',
           i18nAction: 'dashboard.deposit_dialog.edit',
           depositName: deposit.name(),
-          depositsNames,
+          depositNames,
         },
       });
     }).then(dialog => {
@@ -120,7 +174,7 @@ export class DashboardPage {
       this._snackRef = this._snack.openFromComponent(UndoSnackbarComponent, {
         duration: 5000,
         data: {
-          i18nTitle: 'dashboard.undo_snackbar',
+          i18nTitle: 'dashboard.deposit_dialog.snackbar.deposit_renamed',
           i18nAction: 'common_buttons.restore',
         }
       });
@@ -141,7 +195,7 @@ export class DashboardPage {
     this._snackRef = this._snack.openFromComponent(UndoSnackbarComponent, {
       duration: 5000,
       data: {
-        i18nTitle: 'dashboard.undo_snackbar',
+        i18nTitle: 'dashboard.deposit_dialog.snackbar.deposit_removed',
         i18nAction: 'common_buttons.restore',
       }
     });

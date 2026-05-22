@@ -9,8 +9,14 @@
   "dashboard": {
     "add_deposit": "Додати депозит",
     "deposits": "Депозити",
-    "undo_snackbar": "Депозит видалений",
+
     "deposit_dialog": {
+      "snackbar": {
+        "deposit_added": "Депозит додано",
+        "deposit_removed": "Депозит видалено",
+        "deposit_renamed": "Депозит перейменовано"
+      },
+
       "create_title": "Створити депозит",
       "edit_title": "Редагувати депозит",
 
