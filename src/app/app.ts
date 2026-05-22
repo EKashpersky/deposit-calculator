@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -8,6 +8,8 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { LanguageShape, SUPPORTED_LANGUAGES } from '../config/supported-languages';
+import { HistoryService } from '@shared/history';
+import { ShortcutsService } from '@shared/shortcuts.service';
 
 
 
@@ -37,10 +39,24 @@ export class App {
 
   public languages: LanguageShape[];
 
-  public constructor(private _translate: TranslateService) {
+  public constructor(
+    private _translate: TranslateService,
+    private _history: HistoryService,
+    private _shortcuts: ShortcutsService,
+  ) {
     this.menuOpened = false;
 
     this.languages = SUPPORTED_LANGUAGES;
+
+    effect(() => {
+      this._shortcuts.undo();
+      this._history.undoLast();
+    });
+
+    effect(() => {
+      this._shortcuts.redo();
+      this._history.redoLast();
+    });
   }
 
   public toggleExpand() {

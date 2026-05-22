@@ -26,6 +26,7 @@
     "frame-ticker": "^1.0.3",
     "localspace": "^1.1.1",
     "rxjs": "~7.8.0",
+    "tinykeys": "^4.0.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

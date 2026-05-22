@@ -4,7 +4,7 @@ import { ActionsHistory, CommandShape } from './history.model';
 
 
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class HistoryService {
   private _history: ActionsHistory;
 

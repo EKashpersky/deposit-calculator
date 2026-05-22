@@ -1,18 +1,23 @@
 import { CurrencyPipe, getLocaleCurrencyCode, PercentPipe } from '@angular/common';
-import { Component, computed, inject, Signal } from '@angular/core';
+import { Component, computed, effect, inject, Signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  MatSnackBar,
+  MatSnackBarModule,
+  MatSnackBarRef,
+} from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 
 import { DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
+import { ShortcutsService } from '@shared/shortcuts.service';
 
 import { calculateDeposit } from '../calculator';
 import {
@@ -45,18 +50,20 @@ import { UndoSnackbarComponent } from './undo-snackbar.component';
   ],
 })
 export class DashboardPage {
+  private _snackRef: MatSnackBarRef<UndoSnackbarComponent> | null;
   private _depositsManager = inject(DepositsManagerService);
   public deposits: Signal<DepositModel[]>;
   public readonly currency: string;
+
+
 
   public constructor(
     private _translate: TranslateService,
     private _dialog: MatDialog,
     private _snack: MatSnackBar,
     private _history: HistoryService,
+    private _shortcuts: ShortcutsService,
   ) {
-    this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
-
     const collator = new Intl.Collator(void 0, { usage: 'sort', numeric: true });
     this.deposits = computed(() => {
       return this._depositsManager.deposits().sort(
@@ -67,6 +74,18 @@ export class DashboardPage {
     if (this.deposits().length === 0) {
       this._depositsManager.addDepositsBulk(this._mockDeposits());
     }
+
+    effect(() => {
+      this._shortcuts.undo();
+      if (this._snackRef) {
+        this._snackRef!.dismissWithAction();
+        this._snackRef = null;
+      }
+    });
+
+    this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
+
+    this._snackRef = null;
   }
 
   /// Edit deposit name
@@ -98,7 +117,7 @@ export class DashboardPage {
       );
       this._history.addAction(renameDepositAction);
 
-      const snackRef = this._snack.openFromComponent(UndoSnackbarComponent, {
+      this._snackRef = this._snack.openFromComponent(UndoSnackbarComponent, {
         duration: 5000,
         data: {
           i18nTitle: 'dashboard.undo_snackbar',
@@ -106,7 +125,7 @@ export class DashboardPage {
         }
       });
 
-      snackRef.onAction().subscribe(() => {
+      this._snackRef.onAction().subscribe(() => {
         this._history.tryUndo(renameDepositAction);
       });
     });
@@ -119,7 +138,7 @@ export class DashboardPage {
     const removeDepositAction = this._depositsManager.removeDeposit(deposit);
     this._history.addAction(removeDepositAction);
 
-    const snackRef = this._snack.openFromComponent(UndoSnackbarComponent, {
+    this._snackRef = this._snack.openFromComponent(UndoSnackbarComponent, {
       duration: 5000,
       data: {
         i18nTitle: 'dashboard.undo_snackbar',
@@ -127,7 +146,7 @@ export class DashboardPage {
       }
     });
 
-    snackRef.onAction().subscribe(() => {
+    this._snackRef.onAction().subscribe(() => {
       this._history.tryUndo(removeDepositAction);
     });
 
