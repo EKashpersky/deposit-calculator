@@ -87,9 +87,6 @@ export class DashboardPage {
       );
     });
 
-    if (this.deposits().length === 0) {
-      this._depositsManager.addDepositsBulk(this._mockDeposits());
-    }
 
     effect(() => {
       this._shortcuts.undo();
@@ -98,6 +95,7 @@ export class DashboardPage {
         this._snackRef = null;
       }
     });
+
 
     this._depositBridge.deposit.subscribe((deposit) => {
       if (deposit) {
@@ -205,29 +203,5 @@ export class DashboardPage {
     });
 
     return false;
-  }
-
-
-
-  private _mockDeposits(): DepositModel[] {
-    const depositInput2 = createDepositInput(
-      10000,
-      12,
-      new Duration('months', 12),
-      100,
-      23,
-      CompoundRate.MONTHLY,
-      true
-    );
-
-    const depositResult = calculateDeposit(depositInput2);
-
-    return [0, 1, 2].map(i => {
-      return new DepositModel(
-        `Deposit ${i}`,
-        depositInput2,
-        depositResult
-      );
-    });
   }
 }
