@@ -19,7 +19,7 @@ import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
 
-import { calculateDeposit, createDepositInput } from '../calculator';
+import { calculateDeposit } from '../calculator';
 import {
   CompoundRate,
   DepositInput,
@@ -34,10 +34,10 @@ import { UndoSnackbarComponent } from './undo-snackbar.component';
 function templateDeposit() {
   const depositInput = DepositInput.New(
     10000,
-    0.12,
+    12,
     new Duration('months', 12),
     100,
-    0.23,
+    23,
     CompoundRate.MONTHLY,
     true
   );
