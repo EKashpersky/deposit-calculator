@@ -36,9 +36,13 @@ import {
   DepositInput,
   DepositModel,
   DepositResult,
-  Duration
+  Duration,
 } from './model';
-import { calculateDeposit, createDepositInput } from './calculator.model';
+import {
+  calculateDeposit,
+  createDepositInput,
+  createFlags
+} from './calculator.model';
 
 
 
@@ -174,7 +178,8 @@ export class CalculatorPage {
         annualRate: input.annualRate,
         monthlyDeposit: input.monthlyDeposit,
         tax: input.tax,
-        withTaxes: input.noFirstMonthDeposit,
+        withTaxes: input.isTaxed(),
+        noFirstMonthDeposit: input.isNoFirstMonthDeposit(),
         compoundRate: mappedCompoundIndex,
         duration: {
           value: input.duration.duration(),
@@ -202,8 +207,8 @@ export class CalculatorPage {
       annualRate,
       monthlyDeposit,
       tax,
-      withTaxes,
       compoundRate,
+      withTaxes,
       noFirstMonthDeposit,
     } = this.calculatorForm.value;
 
@@ -218,6 +223,7 @@ export class CalculatorPage {
     }
 
 
+    const flags = createFlags(withTaxes, noFirstMonthDeposit);
 
     this._depositInput = createDepositInput(
       principalValue,
@@ -226,7 +232,7 @@ export class CalculatorPage {
       parseInt(monthlyDeposit),
       taxValue,
       compoundRateValue,
-      noFirstMonthDeposit,
+      flags,
     );
 
     this._depositResult = calculateDeposit(this._depositInput);

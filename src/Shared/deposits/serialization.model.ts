@@ -19,7 +19,7 @@ export class DepositSerializer {
         deposit.input.monthlyDeposit,
         deposit.input.tax,
         deposit.input.compoundRate,
-        deposit.input.noFirstMonthDeposit
+        deposit.input.flags
       ),
       deposit.result
     );
@@ -36,8 +36,8 @@ export class DepositSerializer {
         },
         monthlyDeposit: deposit.input().monthlyDeposit,
         tax: deposit.input().tax,
-        compoundRate: deposit.input().compoundRate, 
-        noFirstMonthDeposit: deposit.input().noFirstMonthDeposit,
+        compoundRate: deposit.input().compoundRate,
+        flags: deposit.input().flags,
       },
       result: deposit.result(),
     }

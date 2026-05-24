@@ -19,7 +19,7 @@ import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
 
-import { calculateDeposit } from '../calculator';
+import { calculateDeposit, createFlags } from '../calculator';
 import {
   CompoundRate,
   DepositInput,
@@ -39,7 +39,7 @@ function templateDeposit() {
     100,
     23,
     CompoundRate.MONTHLY,
-    true
+    createFlags(true, true)
   );
 
   return depositInput;

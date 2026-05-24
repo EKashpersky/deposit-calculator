@@ -1,8 +1,20 @@
 import { round } from '@utils/round';
 
-import { DepositInput, DepositResult, Duration } from './model';
+import {
+  DepositInput,
+  DepositResult,
+  Duration,
+  FLAG_NO_FIRST_MONTH_DEPOSIT,
+  FLAG_TAXED
+} from './model';
 
 
+
+/// (+value) << flag >> 1;
+export function createFlags(taxed: boolean, noFirstMonthDeposit: boolean) {
+  return 0 | (+taxed << FLAG_TAXED >> 1)
+           | (+noFirstMonthDeposit << FLAG_NO_FIRST_MONTH_DEPOSIT >> 1);
+}
 
 export function createDepositInput(
   principal: number,
@@ -11,7 +23,7 @@ export function createDepositInput(
   monthlyDeposit: number,
   tax: number,
   compoundRateValue: number,
-  noFirstMonthDeposit: boolean,
+  flags: number,
 ) {
   return DepositInput.New(
     round(principal),
@@ -20,7 +32,7 @@ export function createDepositInput(
     round(monthlyDeposit),
     tax,
     compoundRateValue,
-    noFirstMonthDeposit,
+    flags,
   );
 }
 
@@ -33,7 +45,7 @@ export function calculateDeposit(depositInput: DepositInput): DepositResult {
       depositInput.duration.durationInMonths(),
       depositInput.monthlyDeposit,
       round(depositInput.tax / 100),
-      depositInput.noFirstMonthDeposit,
+      depositInput.isNoFirstMonthDeposit(),
     );
   }
 
@@ -44,7 +56,7 @@ export function calculateDeposit(depositInput: DepositInput): DepositResult {
     depositInput.monthlyDeposit,
     round(depositInput.tax / 100),
     depositInput.compoundRate,
-    depositInput.noFirstMonthDeposit,
+    depositInput.isNoFirstMonthDeposit(),
   );
 }
 

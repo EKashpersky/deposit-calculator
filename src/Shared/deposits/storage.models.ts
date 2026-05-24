@@ -10,7 +10,7 @@ export interface DepositInputPOJO {
   readonly monthlyDeposit: number;
   readonly tax: number;
   readonly compoundRate: number;
-  readonly noFirstMonthDeposit: boolean;
+  readonly flags: number;
 }
 
 export interface DepositResultPOJO {
