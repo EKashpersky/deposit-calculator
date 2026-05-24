@@ -8,7 +8,7 @@ export class DepositResult {
   public readonly taxed: number;
   public readonly net: number;
 
-  public static empty(): DepositResult {
+  public static Empty(): DepositResult {
     return DepositResult._EMPTY_RESULT;
   }
 

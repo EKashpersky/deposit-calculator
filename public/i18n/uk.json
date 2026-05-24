@@ -1,6 +1,7 @@
 {
   "common_buttons": {
-    "restore": "Відновити"
+    "restore": "Відновити",
+    "save": "Зберегти"
   },
   "toolbar": {
     "deposit_calculator": "Депозитний калькулятор",

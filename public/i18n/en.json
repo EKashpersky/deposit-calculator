@@ -1,6 +1,7 @@
 {
   "common_buttons": {
-    "restore": "Restore"
+    "restore": "Restore",
+    "save": "Save"
   },
   "toolbar": {
     "deposit_calculator": "Deposit calculator",

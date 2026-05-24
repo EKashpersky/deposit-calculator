@@ -16,6 +16,7 @@ import { HistoryService } from '@shared/history';
 import { routes } from './app.routes';
 import { appStartup } from './app-startup';
 import { ShortcutsService } from '@shared/shortcuts.service';
+import { DepositBridgeService } from '@shared/deposits/deposit-bridge.service';
 
 
 
@@ -34,6 +35,7 @@ export const appConfig: ApplicationConfig = {
     DepositsStorageService,
     DepositsManagerService,
 
+    DepositBridgeService,
     HistoryService,
     ShortcutsService,
   ]

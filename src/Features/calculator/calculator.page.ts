@@ -15,6 +15,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -26,11 +27,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { ActivatedRoute } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { filter, map, take } from 'rxjs';
+import { debounceTime, filter, map, take } from 'rxjs';
 
-import { DepositsManagerService } from '@shared/deposits';
+import { DepositBridgeService } from '@shared/deposits';
 
-import { calculateDeposit } from './calculator.model';
 import {
   CompoundRate,
   DepositInput,
@@ -38,14 +38,13 @@ import {
   DepositResult,
   Duration
 } from './model';
+import { calculateDeposit, createDepositInput } from './calculator.model';
 
 
 
 @Component({
   selector: 'page-calculator',
   templateUrl: 'calculator.page.html',
-
-  providers: [ DepositsManagerService ],
 
   host: {
     class: 'flex flex-row gap-[16px] p-[24px]'
@@ -61,6 +60,7 @@ import {
     MatSlideToggleModule,
     MatFormFieldModule,
     MatInputModule,
+    MatButtonModule,
     MatSelectModule,
     MatSliderModule,
     TranslatePipe,
@@ -76,14 +76,26 @@ export class CalculatorPage {
   public readonly compoundRates: { value: number, label: string }[];
 
   public readonly duration = signal(new Duration('months', 24));
-  public readonly result = signal<DepositResult>(DepositResult.empty());
+  public readonly result = signal<DepositResult>(DepositResult.Empty());
+
+  private _depositName: string;
+  private _depositInput: DepositInput;
+  private _depositResult: DepositResult;
 
 
 
   public constructor(
     private _fb: FormBuilder,
     private _translate: TranslateService,
+    private _depositBridge: DepositBridgeService,
   ) {
+    /**
+     * All the boring stuff
+    **/
+    this._depositName = '';
+    this._depositInput  = DepositInput.Empty();
+    this._depositResult = DepositResult.Empty();
+
     const COMPOUND_RATES_MAP_FROM_I18N = [
       CompoundRate.NO_COMPOUND,
       CompoundRate.ANNUALLY,
@@ -100,6 +112,10 @@ export class CalculatorPage {
     this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
     this.currencySign = getLocaleCurrencySymbol(this._translate.getCurrentLang())!;
 
+
+    /**
+     * Form initialisation, along with wiring up recalculation on form update
+    **/
     this.calculatorForm = this._fb.group({
       principal: this._fb.control(10000, Validators.min(0)),
       annualRate: this._fb.control(16, Validators.min(0)),
@@ -129,21 +145,21 @@ export class CalculatorPage {
       );
     });
 
-    /// Re-calculate result when form values changes
-    this.calculatorForm.valueChanges.subscribe(() => {
+    this.calculatorForm.valueChanges.pipe(debounceTime(300)).subscribe(() =>  {
       this._recalculateResult();
     });
 
-    /// Initial calculation
-    this._recalculateResult();
 
-
-
+    /**
+     * Pull up the correct deposit from deposit store to work with
+    **/
     inject(ActivatedRoute).data.pipe(
       filter(x => Boolean(x?.['calculator'])),
       take(1),
       map(x => x['calculator'] as DepositModel)
     ).subscribe(data => {
+      this._depositName = data.name();
+
       this.duration.set(data.input().duration);
       this.result.set(data.result());
 
@@ -168,6 +184,16 @@ export class CalculatorPage {
     });
   }
 
+  public save() {
+    this._depositBridge.updateDeposit(
+      new DepositModel(
+        this._depositName,
+        this._depositInput,
+        this._depositResult
+      )
+    );
+  }
+
 
 
   private _recalculateResult() {
@@ -178,31 +204,33 @@ export class CalculatorPage {
       tax,
       withTaxes,
       compoundRate,
-      durationInMonths: duration,
       noFirstMonthDeposit,
     } = this.calculatorForm.value;
 
-    if (principal <= 0 || annualRate <= 0 || duration <= 0) {
-      this.result.set(DepositResult.empty());
+    const annualRateValue   = parseFloat(annualRate);
+    const compoundRateValue = this.compoundRates[parseInt(compoundRate)].value;
+    const duration          = this.duration();
+    const taxValue          = withTaxes ? parseFloat(tax) : 0;
+    const principalValue    = parseInt(principal);
+    if (principalValue <= 0 || annualRateValue <= 0 || duration.duration() <= 0) {
+      this.result.set(DepositResult.Empty());
       return;
     }
 
-    const compoundRateValue = this.compoundRates[parseInt(compoundRate)].value;
 
-    const taxValue = withTaxes ? parseFloat(tax) / 100 : 0;
 
-    const depositInput = new DepositInput(
-      parseInt(principal),
-      parseFloat(annualRate) / 100,
-      this.duration(),
+    this._depositInput = createDepositInput(
+      principalValue,
+      annualRateValue,
+      duration,
       parseInt(monthlyDeposit),
       taxValue,
       compoundRateValue,
       noFirstMonthDeposit,
     );
 
-    const result = calculateDeposit(depositInput);
+    this._depositResult = calculateDeposit(this._depositInput);
 
-    this.result.set(result);
+    this.result.set(this._depositResult);
   }
 }

@@ -15,11 +15,11 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 
-import { DepositsManagerService } from '@shared/deposits';
+import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
 
-import { calculateDeposit } from '../calculator';
+import { calculateDeposit, createDepositInput } from '../calculator';
 import {
   CompoundRate,
   DepositInput,
@@ -32,7 +32,7 @@ import { UndoSnackbarComponent } from './undo-snackbar.component';
 
 
 function templateDeposit() {
-  const depositInput = new DepositInput(
+  const depositInput = DepositInput.New(
     10000,
     0.12,
     new Duration('months', 12),
@@ -49,6 +49,7 @@ function templateDeposit() {
   selector: 'page-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrl: './dashboard.page.scss',
+
   imports: [
     CurrencyPipe,
     RouterLink,
@@ -77,6 +78,7 @@ export class DashboardPage {
     private _snack: MatSnackBar,
     private _history: HistoryService,
     private _shortcuts: ShortcutsService,
+    private _depositBridge: DepositBridgeService,
   ) {
     const collator = new Intl.Collator(void 0, { usage: 'sort', numeric: true });
     this.deposits = computed(() => {
@@ -94,6 +96,16 @@ export class DashboardPage {
       if (this._snackRef) {
         this._snackRef!.dismissWithAction();
         this._snackRef = null;
+      }
+    });
+
+    this._depositBridge.deposit.subscribe((deposit) => {
+      if (deposit) {
+        const updateDepositAction = this._depositsManager.updateDeposit(
+          deposit
+        );
+
+        this._history.addAction(updateDepositAction);
       }
     });
 
@@ -198,22 +210,22 @@ export class DashboardPage {
 
 
   private _mockDeposits(): DepositModel[] {
-    const depositInput = new DepositInput(
+    const depositInput2 = createDepositInput(
       10000,
-      0.12,
+      12,
       new Duration('months', 12),
       100,
-      0.23,
+      23,
       CompoundRate.MONTHLY,
       true
     );
 
-    const depositResult = calculateDeposit(depositInput);
+    const depositResult = calculateDeposit(depositInput2);
 
     return [0, 1, 2].map(i => {
       return new DepositModel(
         `Deposit ${i}`,
-        depositInput,
+        depositInput2,
         depositResult
       );
     });

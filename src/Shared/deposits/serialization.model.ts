@@ -12,7 +12,7 @@ export class DepositSerializer {
   public static deserialize(name: string, deposit: DepositPOJO): DepositModel {
     return new DepositModel(
       name,
-      new DepositInput(
+      DepositInput.New(
         deposit.input.principal,
         deposit.input.annualRate,
         new Duration(deposit.input.duration.scale, deposit.input.duration.duration),

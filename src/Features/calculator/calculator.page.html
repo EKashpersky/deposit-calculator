@@ -1,4 +1,4 @@
-<mat-card class="w-min relative">
+<mat-card class="w-min min-w-[300px] relative">
   <form [formGroup]="calculatorForm" class="flex flex-col gap-[12px] p-[20px]">
     <mat-form-field subscriptSizing="dynamic">
       <mat-label>{{ 'calculator.inputs.initial_deposit' | translate }} ({{ currencySign }})</mat-label>
@@ -68,6 +68,10 @@
         <input matSliderThumb formControlName="compoundRate" class="mat-bg-primary-container">
       </mat-slider>
     </div>
+
+    <button matButton="filled" class="w-full" (click)="save()">
+      {{ 'common_buttons.save' | translate }}
+    </button>
   </form>
 </mat-card>
 

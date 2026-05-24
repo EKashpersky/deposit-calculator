@@ -1,26 +1,48 @@
-import { DepositInput, DepositResult } from './model';
+import { round } from '@utils/round';
+
+import { DepositInput, DepositResult, Duration } from './model';
 
 
+
+export function createDepositInput(
+  principal: number,
+  annualRate: number,
+  duration: Duration,
+  monthlyDeposit: number,
+  tax: number,
+  compoundRateValue: number,
+  noFirstMonthDeposit: boolean,
+) {
+  return DepositInput.New(
+    round(principal),
+    annualRate,
+    duration,
+    round(monthlyDeposit),
+    tax,
+    compoundRateValue,
+    noFirstMonthDeposit,
+  );
+}
 
 export function calculateDeposit(depositInput: DepositInput): DepositResult {
   if (depositInput.compoundRate === 0) {
     return computeSimpleInterest(
       depositInput.principal,
-      depositInput.annualRate,
+      round(depositInput.annualRate / 100),
       depositInput.duration.durationInYears(),
       depositInput.duration.durationInMonths(),
       depositInput.monthlyDeposit,
-      depositInput.tax,
+      round(depositInput.tax / 100),
       depositInput.noFirstMonthDeposit,
     );
   }
 
   return computeCompoundInterest(
     depositInput.principal,
-    depositInput.annualRate,
+    round(depositInput.annualRate / 100),
     depositInput.duration.durationInMonths(),
     depositInput.monthlyDeposit,
-    depositInput.tax,
+    round(depositInput.tax / 100),
     depositInput.compoundRate,
     depositInput.noFirstMonthDeposit,
   );

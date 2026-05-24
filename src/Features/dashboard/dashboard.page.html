@@ -36,7 +36,7 @@
 
             <div class="flex flex-col">
               <p class="mat-font-body-md">{{ 'dashboard.deposit.annual_rate' | translate }}:</p>
-              <p class="mat-font-title-md">{{ deposit.annualRate() | percent:'1.0-2' }}</p>
+              <p class="mat-font-title-md">{{ deposit.annualRate() / 100 | percent:'1.0-2' }}</p>
             </div>
 
             <div class="flex flex-col">

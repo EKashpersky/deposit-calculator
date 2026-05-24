@@ -5,7 +5,8 @@ import { DepositModel } from '@features/calculator/model';
 import {
   AddDepositCommand,
   RemoveDepositCommand,
-  RenameDepositCommand
+  RenameDepositCommand,
+  UpdateDepositCommand
 } from './commands';
 import { DepositCommandContext } from './deposit-command.context';
 import { DepositsStorageService } from './deposits-storage.service';
@@ -38,12 +39,22 @@ export class DepositsManagerService {
     this._deposits.update(prev => (prev.push(...deposits), prev));
   }
 
+  public findDeposit(name: string) {
+    return this._deposits().find(d => d.name() === name) || null;
+  }
+
   /*============================================================================
    * Undoable actions
    *============================================================================
   */
   public addDeposit(newDeposit: DepositModel) {
     return new AddDepositCommand(this._context, newDeposit);
+  }
+
+  public updateDeposit(newDeposit: DepositModel) {
+    const oldDeposit = this.findDeposit(newDeposit.name())!;
+
+    return new UpdateDepositCommand(this._context, oldDeposit, newDeposit);
   }
 
   public removeDeposit(depositToRemove: DepositModel) {
