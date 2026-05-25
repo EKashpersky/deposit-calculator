@@ -76,38 +76,92 @@
 </mat-card>
 
 <mat-card class="flex flex-col p-[20px] w-full gap-[4px]">
-  <p>
-    <span class="mat-font-title-sm">{{ 'calculator.result.principal' | translate }}:</span>
-    <span class="mat-font-body-md">
-      {{ calculatorForm.get('principal')?.value | currency:currency:'symbol-narrow' }}
-    </span>
-  </p>
+  <div class="flex flex-row gap-[16px]">
 
-  <p>
-    <span class="mat-font-title-sm">{{ 'calculator.result.deposited' | translate }}:</span>
-    <span class="mat-font-body-md">
-      {{ result().deposited | currency:currency:'symbol-narrow' }}
-    </span>
-  </p>
+    <div class="initial">
+      <p>
+        <span class="mat-font-body-lg mat-text-on-surface-variant">
+          {{ 'calculator.result.principal' | translate }}:
+        </span>
+        <span class="mat-font-title-md">
+          {{ calculatorForm.get('principal')?.value | currency:currency:'symbol-narrow' }}
+        </span>
+      </p>
 
-  <p>
-    <span class="mat-font-title-sm">{{ 'calculator.result.interest' | translate }}:</span>
-    <span class="mat-font-body-md">
-      {{ result().interest | currency:currency:'symbol-narrow' }}
-    </span>
-  </p>
+      <p>
+        <span class="mat-font-body-lg mat-text-on-surface-variant">
+          {{ 'calculator.inputs.monthly_deposit' | translate }}:
+        </span>
+        <span class="mat-font-title-md">
+          {{ calculatorForm.get('monthlyDeposit')?.value | currency:currency:'symbol-narrow' }}
+        </span>
+      </p>
 
-  <p>
-    <span class="mat-font-title-sm">{{ 'calculator.result.taxed' | translate }}:</span>
-    <span class="mat-font-body-md">
-      {{ result().taxed | currency:currency:'symbol-narrow' }}
-    </span>
-  </p>
+      <p>
+        <span class="mat-font-body-lg mat-text-on-surface-variant">
+          {{ 'calculator.inputs.annual_interest' | translate }}:
+        </span>
+        <span class="mat-font-title-md">
+          {{ calculatorForm.get('annualRate')?.value / 100 | percent:'1.0-2'}}
+        </span>
+      </p>
 
-  <p>
-    <span class="mat-font-title-sm">{{ 'calculator.result.net' | translate }}:</span>
-    <span class="mat-font-body-md">
-      {{ result().net | currency:currency:'symbol-narrow' }}
-    </span>
-  </p>
+      <p>
+        <span class="mat-font-body-lg mat-text-on-surface-variant">
+          {{ 'calculator.result.taxed' | translate }}:
+        </span>
+        <span class="mat-font-title-md">
+          {{ calculatorForm.get('tax')?.value / 100 | percent:'1.0-2'}}
+        </span>
+      </p>
+    </div>
+
+    <div class="result">
+      <p>
+        <span class="mat-font-body-lg mat-text-on-surface-variant">
+          {{ 'calculator.inputs.deposit_duration' | translate }}:
+        </span>
+        <span class="mat-font-title-md">
+          {{ calculatorForm.get('duration')?.get('value')?.value }} {{ calculatorForm.get('duration')?.get('scale')?.value | translate }}
+        </span>
+      </p>
+
+      <p>
+        <span class="mat-font-body-lg mat-text-on-surface-variant">
+          {{ 'calculator.result.deposited' | translate }}:
+        </span>
+        <span class="mat-font-title-md">
+          {{ result().deposited | currency:currency:'symbol-narrow' }}
+        </span>
+      </p>
+
+      <p>
+        <span class="mat-font-body-lg mat-text-on-surface-variant">
+          {{ 'calculator.result.interest' | translate }}:
+        </span>
+        <span class="mat-font-title-md">
+          {{ result().interest | currency:currency:'symbol-narrow' }}
+        </span>
+      </p>
+
+      <p>
+        <span class="mat-font-body-lg mat-text-on-surface-variant">
+          {{ 'calculator.result.taxed' | translate }}:
+        </span>
+        <span class="mat-font-title-md">
+          {{ result().taxed | currency:currency:'symbol-narrow' }}
+        </span>
+      </p>
+
+      <p>
+        <span class="mat-font-body-lg mat-text-on-surface-variant">
+          {{ 'calculator.result.net' | translate }}:
+        </span>
+        <span class="mat-font-title-md">
+          {{ result().net | currency:currency:'symbol-narrow' }}
+        </span>
+      </p>
+    </div>
+
+  </div>
 </mat-card>

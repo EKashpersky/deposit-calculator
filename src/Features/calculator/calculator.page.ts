@@ -1,7 +1,8 @@
 import {
   CurrencyPipe,
   getLocaleCurrencyCode,
-  getLocaleCurrencySymbol
+  getLocaleCurrencySymbol,
+  PercentPipe
 } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -69,6 +70,7 @@ import {
     MatSliderModule,
     TranslatePipe,
     MatDividerModule,
+    PercentPipe,
   ],
 
   changeDetection: ChangeDetectionStrategy.OnPush,
