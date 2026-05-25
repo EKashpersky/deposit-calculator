@@ -56,7 +56,7 @@
     "result": {
       "principal": "Initial deposit",
       "deposited": "Deposited amount",
-      "interest": "Interest",
+      "interest": "Accrued",
       "taxed": "Taxed",
       "net": "Net future value"
     },
