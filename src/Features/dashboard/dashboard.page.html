@@ -1,6 +1,17 @@
 <div class="flex flex-col p-[16px] gap-[24px]">
 
-  <h1 class="mat-font-headline-md">{{ 'dashboard.deposits' | translate }}:</h1>
+  <div class="flex flex-row justify-between">
+    <h1 class="mat-font-headline-md">{{ 'dashboard.deposits' | translate }}:</h1>
+
+    <button
+      matButton="filled"
+      class="flex cursor-pointer select-none"
+      (click)="addDeposit($event)"
+    >
+      <span class="mat-font-label-lg">{{ 'dashboard.add_deposit' | translate }}</span>
+      <mat-icon>add2</mat-icon>
+    </button>
+  </div>
 
   <div class="card-list flex flex-col transition">
     @for (deposit of deposits(); track deposit.name()) {
@@ -74,26 +85,5 @@
         </mat-card>
       </div>
     }
-
-    <mat-card
-      class="flex flex-col items-center justify-center cursor-pointer select-none"
-      appearance="outlined"
-      matRipple
-      (click)="addDeposit($event)"
-    >
-      <div>
-        <mat-card-header>
-          <button class="flex items-center mat-font-headline-md cursor-pointer select-none">
-            <span>{{ 'dashboard.add_deposit' | translate }}</span>
-            <mat-icon>add2</mat-icon>
-          </button>
-        </mat-card-header>
-  
-        <mat-card-content></mat-card-content>
-      </div>
-    </mat-card>
   </div>
-
-
-
 </div>
