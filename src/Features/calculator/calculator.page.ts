@@ -44,13 +44,14 @@ import {
   createDepositInput,
   createFlags
 } from './calculator.model';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 
 @Component({
   selector: 'page-calculator',
   templateUrl: 'calculator.page.html',
-
+  styleUrl: 'calculator.page.scss',
   host: {
     class: 'flex flex-row gap-[16px] p-[24px]'
   },
@@ -69,6 +70,7 @@ import {
     MatSelectModule,
     MatSliderModule,
     TranslatePipe,
+    MatProgressBarModule,
     MatDividerModule,
     PercentPipe,
   ],
@@ -83,6 +85,8 @@ export class CalculatorPage {
 
   public readonly duration = signal(new Duration('months', 24));
   public readonly result = signal<DepositResult>(DepositResult.Empty());
+
+  public formChanged = signal(false);
 
   private _depositName: string;
   private _depositInput: DepositInput;
@@ -151,8 +155,13 @@ export class CalculatorPage {
       );
     });
 
-    this.calculatorForm.valueChanges.pipe(debounceTime(300)).subscribe(() =>  {
+    this.calculatorForm.valueChanges.subscribe(() => {
+      this.formChanged.set(true);
+    });
+
+    this.calculatorForm.valueChanges.pipe(debounceTime(500)).subscribe(() =>  {
       this._recalculateResult();
+      this.formChanged.set(false);
     });
 
 

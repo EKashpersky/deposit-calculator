@@ -1,0 +1,19 @@
+.fade-in {
+  animation: fade-in-out 0.3s ease-in-out;
+  animation-fill-mode: both;
+}
+
+.fade-out {
+  animation: fade-in-out 0.3s ease-in-out;
+  animation-direction: reverse;
+  animation-fill-mode: both;
+}
+
+@keyframes fade-in-out {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
