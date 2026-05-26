@@ -4,17 +4,9 @@ import {
   DepositInput,
   DepositResult,
   Duration,
-  FLAG_NO_FIRST_MONTH_DEPOSIT,
-  FLAG_TAXED
 } from './model';
 
 
-
-/// (+value) << flag >> 1;
-export function createFlags(taxed: boolean, noFirstMonthDeposit: boolean) {
-  return 0 | (+taxed << FLAG_TAXED >> 1)
-           | (+noFirstMonthDeposit << FLAG_NO_FIRST_MONTH_DEPOSIT >> 1);
-}
 
 export function createDepositInput(
   principal: number,

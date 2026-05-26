@@ -1,10 +1,7 @@
+import { DepositFlags } from './deposit-flags.model';
 import { Duration } from './duration.model';
 
 
-
-
-export const FLAG_TAXED = 1 << 0;
-export const FLAG_NO_FIRST_MONTH_DEPOSIT = 1 << 1;
 
 export class DepositInput {
   public readonly principal: number;      /// 10000
@@ -60,10 +57,10 @@ export class DepositInput {
   }
 
   public isTaxed() {
-    return Boolean(this.flags & FLAG_TAXED);
+    return Boolean(DepositFlags.IsTaxed(this.flags));
   }
 
   public isNoFirstMonthDeposit() {
-    return Boolean(this.flags & FLAG_NO_FIRST_MONTH_DEPOSIT);
+    return Boolean(DepositFlags.IsNoFirstMonthDeposit(this.flags));
   }
 }
