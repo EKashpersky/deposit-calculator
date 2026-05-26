@@ -19,13 +19,14 @@ import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
 
-import { calculateDeposit, createFlags } from '../calculator';
+import { calculateDeposit } from '../calculator';
 import {
+  DepositFlags,
   CompoundRate,
   DepositInput,
   DepositModel,
   Duration,
-} from '../calculator/model';
+} from '@features/calculator/model';
 import { DepositNameComponent } from './deposit-name.component';
 import { UndoSnackbarComponent } from './undo-snackbar.component';
 
@@ -39,7 +40,7 @@ function templateDeposit() {
     100,
     23,
     CompoundRate.MONTHLY,
-    createFlags(true, true)
+    DepositFlags.Create(true, true)
   );
 
   return depositInput;

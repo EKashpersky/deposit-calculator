@@ -23,6 +23,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
@@ -33,18 +34,16 @@ import { debounceTime, filter, map, take } from 'rxjs';
 import { DepositBridgeService } from '@shared/deposits';
 
 import {
+  calculateDeposit,
+  createDepositInput,
+} from './calculator.model';
+import {
   CompoundRate,
   DepositInput,
   DepositModel,
   DepositResult,
   Duration,
 } from './model';
-import {
-  calculateDeposit,
-  createDepositInput,
-  createFlags
-} from './calculator.model';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 
@@ -233,9 +232,6 @@ export class CalculatorPage {
       return;
     }
 
-
-    const flags = createFlags(withTaxes, noFirstMonthDeposit);
-
     this._depositInput = createDepositInput(
       principalValue,
       annualRateValue,
@@ -243,7 +239,8 @@ export class CalculatorPage {
       parseInt(monthlyDeposit),
       taxValue,
       compoundRateValue,
-      flags,
+      withTaxes,
+      noFirstMonthDeposit,
     );
 
     this._depositResult = calculateDeposit(this._depositInput);

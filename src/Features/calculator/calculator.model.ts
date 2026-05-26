@@ -1,6 +1,7 @@
 import { round } from '@utils/round';
 
 import {
+  DepositFlags,
   DepositInput,
   DepositResult,
   Duration,
@@ -15,7 +16,8 @@ export function createDepositInput(
   monthlyDeposit: number,
   tax: number,
   compoundRateValue: number,
-  flags: number,
+  withTaxes: boolean,
+  noFirstMonthDeposit: boolean,
 ) {
   return DepositInput.New(
     round(principal),
@@ -24,7 +26,7 @@ export function createDepositInput(
     round(monthlyDeposit),
     tax,
     compoundRateValue,
-    flags,
+    DepositFlags.Create(withTaxes, noFirstMonthDeposit),
   );
 }
 
