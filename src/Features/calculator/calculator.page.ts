@@ -225,7 +225,7 @@ export class CalculatorPage {
     const annualRateValue   = parseFloat(annualRate);
     const compoundRateValue = this.compoundRates[parseInt(compoundRate)].value;
     const duration          = this.duration();
-    const taxValue          = withTaxes ? parseFloat(tax) : 0;
+    const taxValue          = parseFloat(tax);
     const principalValue    = parseInt(principal);
     if (principalValue <= 0 || annualRateValue <= 0 || duration.duration() <= 0) {
       this.result.set(DepositResult.Empty());
@@ -239,8 +239,8 @@ export class CalculatorPage {
       parseInt(monthlyDeposit),
       taxValue,
       compoundRateValue,
-      withTaxes,
       noFirstMonthDeposit,
+      withTaxes,
     );
 
     this._depositResult = calculateDeposit(this._depositInput);

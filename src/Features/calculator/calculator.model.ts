@@ -16,8 +16,8 @@ export function createDepositInput(
   monthlyDeposit: number,
   tax: number,
   compoundRateValue: number,
-  withTaxes: boolean,
   noFirstMonthDeposit: boolean,
+  isTaxed: boolean,
 ) {
   return DepositInput.New(
     round(principal),
@@ -26,7 +26,7 @@ export function createDepositInput(
     round(monthlyDeposit),
     tax,
     compoundRateValue,
-    DepositFlags.Create(withTaxes, noFirstMonthDeposit),
+    DepositFlags.Create(isTaxed, noFirstMonthDeposit),
   );
 }
 
@@ -40,6 +40,7 @@ export function calculateDeposit(depositInput: DepositInput): DepositResult {
       depositInput.monthlyDeposit,
       round(depositInput.tax / 100),
       depositInput.isNoFirstMonthDeposit(),
+      depositInput.isTaxed()
     );
   }
 
@@ -51,6 +52,7 @@ export function calculateDeposit(depositInput: DepositInput): DepositResult {
     round(depositInput.tax / 100),
     depositInput.compoundRate,
     depositInput.isNoFirstMonthDeposit(),
+    depositInput.isTaxed()
   );
 }
 
@@ -61,25 +63,28 @@ export function calculateDeposit(depositInput: DepositInput): DepositResult {
  * Each monthly deposit earns simple interest for remaining months.
 **/
 function computeSimpleInterest(
-  p: number, /// principal
-  r: number, /// annual interest rate
-  D: number, /// duration in years
-  d: number, /// duration in months
-  m: number, /// monthly deposit amount
-  t: number, /// tax rate
-  n: boolean, /// no first month deposit
+  pn: number, /// principal
+  ra: number, /// annual interest rate
+  dy: number, /// duration in years
+  dm: number, /// duration in months
+  ml: number, /// monthly deposit amount
+  tx: number, /// tax rate
+  nd: boolean, /// no first month deposit
+  td: boolean, /// taxed
 ): DepositResult {
   /// Amount of months user makes additional deposits
-  const mm = n ? d - 1 : d;
+  const mm = nd ? dm - 1 : dm;
+  /// Tax rate
+  const tr = tx * +td;
 
-  const principalInterest = p * r * D;
-  const monthlyInterest   = m * (r / 12) * (mm * (mm - 1)) / 2;
+  const principalInterest = pn * ra * dy;
+  const monthlyInterest   = ml * (ra / 12) * (mm * (mm - 1)) / 2;
 
   const interest = principalInterest + monthlyInterest;
-  const depositedAmount = mm * m;
+  const depositedAmount = mm * ml;
 
-  const taxed = interest * t;
-  const fvNet = p + depositedAmount + interest - taxed;
+  const taxed = interest * tr;
+  const fvNet = pn + depositedAmount + interest - taxed;
 
   return DepositResult.build(depositedAmount, interest, taxed, fvNet);
 }
@@ -90,26 +95,29 @@ function computeSimpleInterest(
  * then applies standard compound + annuity formulas.
 **/
 function computeCompoundInterest(
-  p: number, /// principal
-  r: number, /// annual interest rate
-  d: number, /// duration in months
-  m: number, /// monthly deposit
-  t: number, /// tax rate
-  c: number, /// compound frequency
-  n: boolean, /// no first month deposit
+  pn: number, /// principal
+  ra: number, /// annual interest rate
+  da: number, /// duration in months
+  ml: number, /// monthly deposit
+  tx: number, /// tax percentage
+  cp: number, /// compound frequency
+  nd: boolean, /// no first month deposit
+  td: boolean, /// taxed
 ): DepositResult {
   /// Amount of months user makes additional deposits
-  const mm = n ? d - 1 : d;
+  const mm = nd ? da - 1 : da;
+  /// Tax rate
+  const tr = tx * +td;
 
-  const rate = Math.pow(1 + r / c, c / 12) - 1;
+  const rate = Math.pow(1 + ra / cp, cp / 12) - 1;
 
-  const principalGross = p * (1 + rate) ** d;
-  const monthlyGross = m * ((1 + rate) ** mm - 1) / rate;
+  const principalGross = pn * (1 + rate) ** da;
+  const monthlyGross = ml * ((1 + rate) ** mm - 1) / rate;
 
-  const deposited = mm * m;
+  const deposited = mm * ml;
   const fvGross   = principalGross + monthlyGross;
-  const interest  = fvGross - (p + deposited);
-  const taxed     = interest * t;
+  const interest  = fvGross - (pn + deposited);
+  const taxed     = interest * tr;
   const fvNet     = fvGross - taxed;
 
   return DepositResult.build(deposited, interest, taxed, fvNet);
