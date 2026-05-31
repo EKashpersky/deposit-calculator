@@ -27,7 +27,7 @@ import { OverviewColumnComponent } from './overview-column.component';
   templateUrl: 'calculator-overview.component.html',
 
   host: {
-    class: 'flex flex-row justify-between gap-[16px] h-min'
+    class: 'flex flex-row justify-stretch w-full flex-wrap gap-[16px] h-min'
   },
 })
 export class CalculatorOverviewComponent {

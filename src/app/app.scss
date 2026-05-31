@@ -1,0 +1,25 @@
+@use '../md3-expressive-polyfill' as *;
+
+
+
+mat-sidenav,
+.mat-drawer {
+  background-color: var(--mat-sys-surface-container-low);
+}
+
+.mx-auto {
+  transition-property: width;
+  @include transition('fast', 'spatial', 'standard');
+}
+
+.sm {
+  width: 600px;
+}
+
+.md {
+  width: 800px;
+}
+
+.lg {
+  width: 1200px;
+}

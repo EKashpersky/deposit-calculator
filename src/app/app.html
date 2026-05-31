@@ -1,22 +1,27 @@
 <mat-toolbar class="justify-between p-[24px]">
-  <div class="start">
-    <span class="mat-font-headline-md cursor-pointer select-none" routerLink="/">
-      {{ 'toolbar.deposit_calculator' | translate }}
-    </span>
+  <div class="flex flex-row justify-between mx-auto {{ size() }}">
+    <div class="start">
+      <span class="mat-font-headline-md cursor-pointer select-none" routerLink="/">
+        {{ 'toolbar.deposit_calculator' | translate }}
+      </span>
+    </div>
+
+    <div class="end">
+      <button matButton [matMenuTriggerFor]="menu">
+        <mat-icon>translate</mat-icon>
+        <span>{{ 'toolbar.language' | translate }}</span>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        @for (language of languages; track language) {
+          <button mat-menu-item (click)="selectLanguage(language)">{{ language.name }}</button>
+        }
+      </mat-menu>
+    </div>
   </div>
 
-  <div class="end">
-    <button matButton [matMenuTriggerFor]="menu">
-      <mat-icon>translate</mat-icon>
-      <span>{{ 'toolbar.language' | translate }}</span>
-    </button>
-
-    <mat-menu #menu="matMenu">
-      @for (language of languages; track language) {
-        <button mat-menu-item (click)="selectLanguage(language)">{{ language.name }}</button>
-      }
-    </mat-menu>
-  </div>
 </mat-toolbar>
 
-<router-outlet></router-outlet>
+<div class="mx-auto pt-[20px] {{ size() }}">
+  <router-outlet></router-outlet>
+</div>

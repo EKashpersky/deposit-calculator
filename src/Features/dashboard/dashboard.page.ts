@@ -53,7 +53,7 @@ function templateDeposit() {
   styleUrl: './dashboard.page.scss',
 
   host: {
-    class: 'flex flex-col gap-[20px] pt-[20px] w-[800px] mx-auto'
+    class: 'flex flex-col gap-[20px]'
   },
 
   imports: [
