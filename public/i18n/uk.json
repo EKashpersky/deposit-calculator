@@ -53,6 +53,17 @@
       "no_first_month_deposit": "Не враховувати перший місяць"
     },
     "result": {
+      "inputs": "Вхідні дані",
+      "duration": "Термін",
+      "monthly_deposit": "Щомісячний внесок",
+      "annual_interest": "Річна відсоткова ставка",
+      "tax": "Податок",
+
+      "accrued": "Нараховано",
+      "interest_gross": "Нараховано",
+      "interest_taxed": "Податок",
+      "interest_net": "Чистими",
+
       "principal": "Початковий внесок",
       "deposited": "Сума поповнень",
       "interest": "Нараховано",

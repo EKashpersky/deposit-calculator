@@ -54,6 +54,17 @@
       "no_first_month_deposit": "No first month deposit"
     },
     "result": {
+      "inputs": "Inputs data",
+      "duration": "Duration",
+      "monthly_deposit": "Monthly deposit",
+      "annual_interest": "Annual interest rate",
+      "tax": "Tax",
+
+      "accrued": "Accrued",
+      "interest_gross": "Gross interest",
+      "interest_taxed": "Taxed interest",
+      "interest_net": "Net interest",
+
       "principal": "Initial deposit",
       "deposited": "Deposited amount",
       "interest": "Accrued",
