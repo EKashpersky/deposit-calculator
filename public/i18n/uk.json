@@ -42,6 +42,10 @@
   },
   "calculator": {
     "inputs": {
+      "main_parameters": "Основні параметри",
+      "interest_and_taxes": "Відсотки та податки",
+      "duration_and_capitalization": "Тривалість та капіталізація",
+
       "initial_deposit": "Початковий депозит",
       "monthly_deposit": "Щомісячний внесок",
       "annual_interest": "Річна відсоткова ставка",

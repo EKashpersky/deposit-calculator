@@ -43,6 +43,10 @@
   },
   "calculator": {
     "inputs": {
+      "main_parameters": "Main parameters",
+      "interest_and_taxes": "Interest and taxes",
+      "duration_and_capitalization": "Duration and capitalization",
+
       "initial_deposit": "Initial deposit",
       "monthly_deposit": "Monthly deposit",
       "annual_interest": "Annual interest",

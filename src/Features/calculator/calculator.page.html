@@ -1,7 +1,9 @@
 <form [formGroup]="calculatorForm" class="flex flex-col flex-[2_0_auto] gap-[16px]">
   <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container">
     <mat-card-header class="">
-      <mat-card-subtitle class="mat-text-on-surface-variant">Основні параметри:</mat-card-subtitle>
+      <mat-card-subtitle class="mat-text-on-surface-variant">
+        {{ 'calculator.inputs.main_parameters' | translate }}
+      </mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
@@ -27,7 +29,9 @@
 
   <mat-card appearance="filled" class="mat-bg-surface-container">
     <mat-card-header>
-      <mat-card-subtitle class="mat-text-on-surface-variant">Відсотки та податки:</mat-card-subtitle>
+      <mat-card-subtitle class="mat-text-on-surface-variant">
+        {{ 'calculator.inputs.interest_and_taxes' | translate }}
+      </mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
@@ -52,7 +56,7 @@
   <mat-card appearance="filled" class="mat-bg-surface-container">
     <mat-card-header>
       <mat-card-subtitle class="mat-text-on-surface-variant">
-        Тривалість та капіталізація:
+        {{ 'calculator.inputs.duration_and_capitalization' | translate }}
       </mat-card-subtitle>
     </mat-card-header>
 
