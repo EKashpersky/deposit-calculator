@@ -1,0 +1,11 @@
+/* You can add global styles to this file, and also import other style files */
+
+@use '@angular/material' as mat;
+
+@use 'themes.scss' as *;
+
+
+
+mat-slider.mat-mdc-slider {
+  display: flex;
+}

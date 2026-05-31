@@ -1,15 +1,22 @@
-<mat-toolbar class="justify-between p-[24px]">
+<mat-toolbar class="justify-between">
   <div class="flex flex-row justify-between mx-auto {{ size() }}">
     <div class="start">
-      <span class="mat-font-headline-md cursor-pointer select-none" routerLink="/">
+      <span
+        class="mat-font-headline-md cursor-pointer select-none mat-text-on-surface-variant"
+        routerLink="/"
+      >
         {{ 'toolbar.deposit_calculator' | translate }}
       </span>
     </div>
 
-    <div class="end">
+    <div class="flex flex-row gap-[8px] end">
+      <button matIconButton (click)="toggleTheme()">
+        <mat-icon class="mat-text-on-surface-variant">{{themeIcon()}}</mat-icon>
+      </button>
+
       <button matButton [matMenuTriggerFor]="menu">
-        <mat-icon>translate</mat-icon>
-        <span>{{ 'toolbar.language' | translate }}</span>
+        <mat-icon class="mat-text-on-surface-variant">translate</mat-icon>
+        <span class="mat-text-on-surface-variant">{{ 'toolbar.language' | translate }}</span>
       </button>
 
       <mat-menu #menu="matMenu">
@@ -22,6 +29,6 @@
 
 </mat-toolbar>
 
-<div class="mx-auto pt-[20px] {{ size() }}">
+<div class="mx-auto pt-[24px] {{ size() }}">
   <router-outlet></router-outlet>
 </div>

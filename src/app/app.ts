@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { Component, effect, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, OnInit, Renderer2, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -10,6 +10,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
+import { Theme, ThemeService } from '@shared/theme.service';
 
 import {
   LanguageShape,
@@ -20,7 +21,7 @@ import {
 
 @Component({
   selector: 'app-root',
-  providers: [ MatIconRegistry, BreakpointObserver ],
+  providers: [ MatIconRegistry, BreakpointObserver, ThemeService ],
   imports: [
     RouterOutlet,
 
@@ -44,7 +45,9 @@ export class App implements OnInit {
 
   public languages: LanguageShape[];
 
-  public readonly width = signal(0);
+  public themeIcon = computed(() => {
+    return this._theme.theme() === Theme.Light ? 'dark_mode' : 'light_mode';
+  });
 
   public readonly size = signal<'' | 'sm' | 'md' | 'lg'>('');
 
@@ -52,7 +55,9 @@ export class App implements OnInit {
     private _translate: TranslateService,
     private _history: HistoryService,
     private _shortcuts: ShortcutsService,
-    private _breakpoint: BreakpointObserver
+    private _breakpoint: BreakpointObserver,
+    private _theme: ThemeService,
+    private _renderer: Renderer2,
   ) {
     this.languages = SUPPORTED_LANGUAGES;
 
@@ -70,6 +75,12 @@ export class App implements OnInit {
     effect(() => {
       this._shortcuts.redo();
       this._history.redoLast();
+    });
+
+    effect(() => {
+      this._renderer.removeClass(document.body, this._theme.lastTheme());
+
+      this._renderer.addClass(document.body, this._theme.theme());
     });
   }
 
@@ -100,6 +111,10 @@ export class App implements OnInit {
       }
     }
 
+  }
+
+  public toggleTheme() {
+    this._theme.toggleTheme();
   }
 
   public selectLanguage(language: LanguageShape) {
