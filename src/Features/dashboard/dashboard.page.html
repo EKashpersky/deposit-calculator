@@ -1,17 +1,28 @@
 <div class="flex flex-row justify-between">
   <h1 class="mat-font-headline-md">{{ 'dashboard.deposits' | translate }}:</h1>
 
-  <button
-    matButton="filled"
-    class="flex cursor-pointer select-none"
-    (click)="addDeposit($event)"
-  >
-    <span class="mat-font-label-lg">{{ 'dashboard.add_deposit' | translate }}</span>
-    <mat-icon>add2</mat-icon>
-  </button>
+
+  @if (deposits().length > 0) {
+
+    <button
+      matButton="filled"
+      class="flex cursor-pointer select-none"
+      (click)="addDeposit($event)"
+    >
+      <span class="mat-font-label-lg">{{ 'dashboard.add_deposit' | translate }}</span>
+      <mat-icon>add2</mat-icon>
+    </button>
+  }
+
 </div>
 
 <div class="card-list flex flex-col transition">
+  @if (deposits().length === 0) {
+    <span class="mat-font-body-lg mat-text-disabled" (click)="addDeposit($event)">
+      No deposit exists <a class="mat-text-on-surface-variant cursor-pointer">yet</a>
+    </span>
+  }
+
   @for (deposit of deposits(); track deposit.name()) {
     <div class="mat-card-wrapper pb-[20px] box-border h-[220px]" animate.leave="fade-out" animate.enter="fade-in">
       <mat-card

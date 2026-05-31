@@ -11,6 +11,8 @@
     "add_deposit": "Додати депозит",
     "deposits": "Депозити",
 
+    "no_deposit": "No deposits here <a>yet</a>...",
+
     "deposit_dialog": {
       "snackbar": {
         "deposit_added": "Депозит додано",
