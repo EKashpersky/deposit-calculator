@@ -44,6 +44,7 @@ import {
   DepositResult,
   Duration,
 } from './model';
+import { CalculatorOverviewComponent } from '@features/calculator-overview';
 
 
 
@@ -57,7 +58,6 @@ import {
 
   imports: [
     ReactiveFormsModule,
-    CurrencyPipe,
 
     MatButtonToggleModule,
     MatCardModule,
@@ -71,7 +71,8 @@ import {
     TranslatePipe,
     MatProgressBarModule,
     MatDividerModule,
-    PercentPipe,
+
+    CalculatorOverviewComponent,
   ],
 
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -83,13 +84,18 @@ export class CalculatorPage {
   public readonly compoundRates: { value: number, label: string }[];
 
   public readonly duration = signal(new Duration('months', 24));
-  public readonly result = signal<DepositResult>(DepositResult.Empty());
+
 
   public formChanged = signal(false);
 
   private _depositName: string;
   private _depositInput: DepositInput;
   private _depositResult: DepositResult;
+
+
+
+  private _deposit = signal<DepositModel>(DepositModel.Empty());
+  public readonly deposit = this._deposit.asReadonly();
 
 
 
@@ -175,7 +181,6 @@ export class CalculatorPage {
       this._depositName = data.name();
 
       this.duration.set(data.input().duration);
-      this.result.set(data.result());
 
       const input = data.input();
 
@@ -228,7 +233,7 @@ export class CalculatorPage {
     const taxValue          = parseFloat(tax);
     const principalValue    = parseInt(principal);
     if (principalValue <= 0 || annualRateValue <= 0 || duration.duration() <= 0) {
-      this.result.set(DepositResult.Empty());
+      // this._deposit.set(DepositModel.Empty());
       return;
     }
 
@@ -245,6 +250,12 @@ export class CalculatorPage {
 
     this._depositResult = calculateDeposit(this._depositInput);
 
-    this.result.set(this._depositResult);
+    this._deposit.set(
+      new DepositModel(
+        this._depositName,
+        this._depositInput,
+        this._depositResult
+      )
+    );
   }
 }

@@ -1,0 +1,14 @@
+<div class="mat-font-title-sd mat-text-on-surface-variant p-[16px] pb-[0px]">
+  <ng-content select="[slot='title']" />
+</div>
+
+<mat-divider></mat-divider>
+
+<div class="grid grid-cols-1 p-[16px] pt-[0px] gap-[4px_8px] grid-flow-dense items-baseline">
+  <div class="contents mat-font-body-md mat-text-on-surface-variant w-max">
+    <ng-content select="[slot='text']" />
+  </div>
+  <div class="contents mat-font-label-lg">
+    <ng-content select="[slot='value']" />
+  </div>
+</div>

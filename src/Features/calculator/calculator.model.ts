@@ -80,13 +80,13 @@ function computeSimpleInterest(
   const principalInterest = pn * ra * dy;
   const monthlyInterest   = ml * (ra / 12) * (mm * (mm - 1)) / 2;
 
-  const interest = principalInterest + monthlyInterest;
-  const depositedAmount = mm * ml;
+  const grossInterest  = principalInterest + monthlyInterest;
+  const totalDeposited = mm * ml;
 
-  const taxed = interest * tr;
-  const fvNet = pn + depositedAmount + interest - taxed;
+  const taxed = grossInterest * tr;
+  const fvNet = pn + totalDeposited + grossInterest - taxed;
 
-  return DepositResult.build(depositedAmount, interest, taxed, fvNet);
+  return DepositResult.build(totalDeposited, grossInterest, taxed, fvNet);
 }
 
 /**
@@ -114,11 +114,12 @@ function computeCompoundInterest(
   const principalGross = pn * (1 + rate) ** da;
   const monthlyGross = ml * ((1 + rate) ** mm - 1) / rate;
 
-  const deposited = mm * ml;
-  const fvGross   = principalGross + monthlyGross;
-  const interest  = fvGross - (pn + deposited);
-  const taxed     = interest * tr;
-  const fvNet     = fvGross - taxed;
+  const fvGross       = principalGross + monthlyGross;
 
-  return DepositResult.build(deposited, interest, taxed, fvNet);
+  const totalDeposited = mm * ml;
+  const grossInterest  = fvGross - (pn + totalDeposited);
+  const taxed = grossInterest * tr;
+  const fvNet = fvGross - taxed;
+
+  return DepositResult.build(totalDeposited, grossInterest, taxed, fvNet);
 }

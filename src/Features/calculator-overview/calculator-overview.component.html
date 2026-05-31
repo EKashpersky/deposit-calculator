@@ -1,0 +1,80 @@
+<mat-card
+  appearance="filled"
+  class="flex flex-col w-auto overflow-hidden"
+>
+  <overview-column>
+    <span slot="title">
+      Вхідні дані:
+    </span>
+
+    <span slot="text">{{ 'calculator.inputs.monthly_deposit' | translate }}:</span>
+    <span slot="value">
+      {{ deposit().monthlyDeposit() | currency:currency().code:'symbol-narrow' }}
+    </span>
+
+    <span slot="text">{{ 'calculator.result.duration' | translate }}:</span>
+    <span slot="value">
+      {{ deposit().durationValue() }}
+      {{ ('calculator.duration.' + deposit().durationScale() | translate) }}
+    </span>
+
+    <span slot="text">{{ 'calculator.result.annual_interest' | translate }}:</span>
+    <span slot="value">{{ deposit().annualRate() / 100 | percent:'1.0-2' }}</span>
+
+    <span slot="text">{{ 'calculator.result.taxed' | translate }}:</span>
+    <span slot="value">{{ deposit().tax() / 100 | percent:'1.0-2' }}</span>
+  </overview-column>
+</mat-card>
+
+<mat-card
+  appearance="filled"
+  class="flex flex-col w-auto overflow-hidden"
+>
+  <overview-column>
+    <span slot="title">
+      {{ 'calculator.result.accrued' | translate }}:
+    </span>
+
+    <span slot="text">{{ 'calculator.result.interest_gross' | translate }}:</span>
+    <span slot="value">{{ deposit().interest() | currency:currency().code:'symbol-narrow' }}</span>
+
+    <span slot="text">{{ 'calculator.result.interest_taxed' | translate }}:</span>
+    <span slot="value">{{ deposit().taxed() | currency:currency().code:'symbol-narrow' }}</span>
+
+    <span slot="text">{{ 'calculator.result.interest_net' | translate }}:</span>
+    <span slot="value">{{ deposit().interest() - deposit().taxed() | currency:currency().code:'symbol-narrow' }}</span>
+  </overview-column>
+</mat-card>
+
+<mat-card
+  appearance="filled"
+  class="flex flex-col w-auto overflow-hidden"
+>
+  <overview-column>
+    <span slot="title">
+      {{ 'calculator.result.net' | translate }}:
+    </span>
+
+    <span slot="text">{{ 'calculator.result.principal' | translate }}:</span>
+    <span slot="value">
+      {{ deposit().principal() | currency:currency().code:'symbol-narrow' }}
+    </span>
+
+    <span slot="text">
+      {{ 'calculator.result.deposited' | translate }}:
+    </span>
+    <span slot="value">
+      {{ deposit().deposited() | currency:currency().code:'symbol-narrow' }}
+    </span>
+
+    <span slot="text">{{ 'calculator.result.interest' | translate }}:</span>
+    <span slot="value">
+      {{ deposit().interest() - deposit().taxed() | currency:currency().code:'symbol-narrow' }}
+    </span>
+
+    <span slot="text">{{ 'calculator.result.net' | translate }}:</span>
+    <span slot="value">
+      {{ deposit().net() | currency:currency().code:'symbol-narrow' }}
+    </span>
+  </overview-column>
+</mat-card>

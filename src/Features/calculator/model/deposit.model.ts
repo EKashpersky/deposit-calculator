@@ -6,6 +6,11 @@ import { DepositResult } from './deposit-result.model';
 
 
 export class DepositModel {
+  public static Empty(): DepositModel {
+    return new DepositModel('', DepositInput.Empty(), DepositResult.Empty());
+  }
+
+
 
   private _name: string;
   private _input: DepositInput;
@@ -53,6 +58,14 @@ export class DepositModel {
 
   public monthlyDeposit(): number {
     return this._input.monthlyDeposit;
+  }
+
+  public tax(): number {
+    return this._input.tax;
+  }
+
+  public timesDeposited(): number {
+    return this._input.duration.durationInMonths() - +this._input.isNoFirstMonthDeposit();
   }
 
 
