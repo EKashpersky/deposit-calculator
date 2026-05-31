@@ -1,55 +1,79 @@
-<mat-card appearance="filled" class="w-min min-w-[300px] p-[16px] relative mat-bg-surface-container">
-  <form [formGroup]="calculatorForm" class="flex flex-col gap-[12px]">
-    <mat-form-field subscriptSizing="dynamic">
-      <mat-label>{{ 'calculator.inputs.initial_deposit' | translate }} ({{ currencySign }})</mat-label>
-      <input matInput inputmode="numeric" formControlName="principal" />
-    </mat-form-field>
+<form [formGroup]="calculatorForm" class="flex flex-col flex-[2_0_auto] gap-[16px]">
+  <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container">
+    <mat-card-header class="">
+      <mat-card-subtitle class="mat-text-on-surface-variant">Основні параметри:</mat-card-subtitle>
+    </mat-card-header>
 
-    <div class="flex flex-col gap-[8px] pt-[4px] mat-bg-surface-variant mat-corner-sm">
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>{{ 'calculator.inputs.monthly_deposit' | translate }} ({{ currencySign }})</mat-label>
-        <input matInput inputmode="numeric" formControlName="monthlyDeposit" />
-      </mat-form-field>
+    <mat-card-content>
+      <div class="content-fix flex flex-col gap-[12px] pt-[8px]">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'calculator.inputs.initial_deposit' | translate }} ({{ currencySign }})</mat-label>
+          <input matInput inputmode="numeric" formControlName="principal" />
+        </mat-form-field>
 
-      <mat-slide-toggle class="mx-[8px] mb-[8px] text-right" formControlName="noFirstMonthDeposit" labelPosition="before">
-        {{ 'calculator.inputs.no_first_month_deposit' | translate }}
-      </mat-slide-toggle>
-    </div>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'calculator.inputs.monthly_deposit' | translate }} ({{ currencySign }})</mat-label>
+          <input matInput inputmode="numeric" formControlName="monthlyDeposit" />
+        </mat-form-field>
 
-    <mat-form-field subscriptSizing="dynamic">
-      <mat-label>{{ 'calculator.inputs.annual_interest' | translate }} (%)</mat-label>
-      <input matInput inputmode="numeric" formControlName="annualRate" />
-    </mat-form-field>
+        <mat-slide-toggle class="mb-[8px]" formControlName="noFirstMonthDeposit">
+          {{ 'calculator.inputs.no_first_month_deposit' | translate }}
+        </mat-slide-toggle>
+      </div>
+    </mat-card-content>
 
-    <div class="flex flex-col gap-[8px] pt-[4px] mat-bg-surface-variant mat-corner-sm">
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>{{ 'calculator.inputs.tax' | translate }} (%)</mat-label>
-        <input matInput inputmode="numeric" formControlName="tax" />
-      </mat-form-field>
+    <mat-card-footer></mat-card-footer>
+  </mat-card>
 
-      <mat-slide-toggle class="mx-[8px] mb-[8px] text-right" formControlName="withTaxes" labelPosition="before">
-        {{ 'calculator.inputs.with_taxes' | translate }}
-      </mat-slide-toggle>
-    </div>
+  <mat-card appearance="filled" class="mat-bg-surface-container">
+    <mat-card-header>
+      <mat-card-subtitle class="mat-text-on-surface-variant">Відсотки та податки:</mat-card-subtitle>
+    </mat-card-header>
 
-    <div class="flex flex-col gap-[8px] pt-[4px] mat-bg-surface-variant mat-corner-sm" formGroupName="duration">
-      <mat-form-field subscriptSizing="dynamic">
-        <mat-label>{{ 'calculator.inputs.deposit_duration' | translate }}</mat-label>
-        <input matInput inputmode="numeric" formControlName="value" />
-      </mat-form-field>
+    <mat-card-content>
+      <div class="content-fix flex flex-col gap-[12px] pt-[8px]">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'calculator.inputs.annual_interest' | translate }} (%)</mat-label>
+          <input matInput inputmode="numeric" formControlName="annualRate" />
+        </mat-form-field>
 
-      <mat-button-toggle-group formControlName="scale" class="mx-[8px] mb-[8px]">
-        <mat-button-toggle class="w-full" value='months'>
-          {{ 'calculator.duration.months' | translate }}
-        </mat-button-toggle>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'calculator.inputs.tax' | translate }} (%)</mat-label>
+          <input matInput inputmode="numeric" formControlName="tax" />
+        </mat-form-field>
 
-        <mat-button-toggle class="w-full" value='years'>
-          {{ 'calculator.duration.years' | translate }}
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
+        <mat-slide-toggle class="mb-[8px]" formControlName="withTaxes">
+          {{ 'calculator.inputs.with_taxes' | translate }}
+        </mat-slide-toggle>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
-    <div class="flex flex-col gap-[8px] p-[8px] mat-bg-surface-variant mat-corner-sm">
+  <mat-card appearance="filled" class="mat-bg-surface-container">
+    <mat-card-header>
+      <mat-card-subtitle class="mat-text-on-surface-variant">
+        Тривалість та капіталізація:
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="flex flex-col">
+      <div class="content-fix flex flex-col gap-[12px] pt-[8px]" formGroupName="duration">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'calculator.inputs.deposit_duration' | translate }}</mat-label>
+          <input matInput inputmode="numeric" formControlName="value" />
+        </mat-form-field>
+
+        <mat-button-toggle-group formControlName="scale" class="mx-[8px] mb-[8px]">
+          <mat-button-toggle class="w-full" value='months'>
+            {{ 'calculator.duration.months' | translate }}
+          </mat-button-toggle>
+
+          <mat-button-toggle class="w-full" value='years'>
+            {{ 'calculator.duration.years' | translate }}
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
       <div class="flex flex-row justify-between items-baseline mx-[4px] mb-[4px]">
         <mat-label id="compoundRateLabel" class="mat-font-label-md mat-text-secondary">
           {{ 'calculator.inputs.compound_rate' | translate }}
@@ -65,15 +89,16 @@
         [showTickMarks]="true"
         aria-labelledby="compoundRateLabel"
       >
-        <input matSliderThumb formControlName="compoundRate" class="mat-bg-primary-container">
+        <input matSliderThumb formControlName="compoundRate">
       </mat-slider>
-    </div>
 
-    <button matButton="filled" class="w-full" (click)="save()">
-      {{ 'common_buttons.save' | translate }}
-    </button>
-  </form>
-</mat-card>
+    </mat-card-content>
+  </mat-card>
+
+  <button matButton="tonal" class="w-full" (click)="save()">
+    {{ 'common_buttons.save' | translate }}
+  </button>
+</form>
 
 @if (formChanged()) {
   <mat-progress-bar
@@ -84,4 +109,4 @@
   ></mat-progress-bar>
 }
 
-<calculator-overview [deposit]="deposit()" />
+<calculator-overview [deposit]="deposit()" class="flex flex-[3_1_auto] w-auto overflow-hidden" />

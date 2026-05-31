@@ -53,7 +53,7 @@ import { CalculatorOverviewComponent } from '@features/calculator-overview';
   templateUrl: 'calculator.page.html',
   styleUrl: 'calculator.page.scss',
   host: {
-    class: 'flex flex-row gap-[16px]'
+    class: 'flex flex-row gap-[32px]'
   },
 
   imports: [
