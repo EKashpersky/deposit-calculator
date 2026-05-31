@@ -31,6 +31,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { debounceTime, filter, map, take } from 'rxjs';
 
+import { DepositSummaryComponent } from '@features/deposit-summary';
 import { DepositBridgeService } from '@shared/deposits';
 
 import {
@@ -44,7 +45,6 @@ import {
   DepositResult,
   Duration,
 } from './model';
-import { CalculatorOverviewComponent } from '@features/calculator-overview';
 
 
 
@@ -72,7 +72,7 @@ import { CalculatorOverviewComponent } from '@features/calculator-overview';
     MatProgressBarModule,
     MatDividerModule,
 
-    CalculatorOverviewComponent,
+    DepositSummaryComponent,
   ],
 
   changeDetection: ChangeDetectionStrategy.OnPush,

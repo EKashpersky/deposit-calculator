@@ -23,14 +23,14 @@ import { OverviewColumnComponent } from './overview-column.component';
     OverviewColumnComponent,
   ],
 
-  selector: 'calculator-overview',
-  templateUrl: 'calculator-overview.component.html',
+  selector: 'deposit-summary',
+  templateUrl: 'deposit-summary.component.html',
 
   host: {
     class: 'flex flex-row justify-stretch w-full flex-wrap gap-[16px] h-min'
   },
 })
-export class CalculatorOverviewComponent {
+export class DepositSummaryComponent {
   public readonly deposit = input<DepositModel>(DepositModel.Empty());
 
   private _currency = signal({
