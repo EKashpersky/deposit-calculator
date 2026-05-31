@@ -9,17 +9,20 @@ import { MatCardModule } from '@angular/material/card';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { DepositModel } from '@features/calculator/model';
+import { DurationPipe } from '@shared/duration.pipe';
 
 import { OverviewColumnComponent } from './overview-column.component';
 
 
 @Component({
   imports: [
-    TranslatePipe,
     CurrencyPipe,
-    MatCardModule,
     PercentPipe,
 
+    MatCardModule,
+    TranslatePipe,
+
+    DurationPipe,
     OverviewColumnComponent,
   ],
 

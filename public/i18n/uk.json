@@ -3,6 +3,22 @@
     "restore": "Відновити",
     "save": "Зберегти"
   },
+
+  "units": {
+    "years": {
+      "one": "рік",
+      "few": "роки",
+      "many": "років",
+      "other": "років"
+    },
+    "months": {
+      "one": "місяць",
+      "few": "місяці",
+      "many": "місяців",
+      "other": "місяців"
+    }
+  },
+
   "toolbar": {
     "deposit_calculator": "Депозитний калькулятор",
     "language": "Мова"
@@ -10,23 +26,18 @@
   "dashboard": {
     "add_deposit": "Додати депозит",
     "deposits": "Депозити",
-
     "no_deposit": "Тут ще немає <a>депозитів</a>",
-
     "deposit_dialog": {
       "snackbar": {
         "deposit_added": "Депозит додано",
         "deposit_removed": "Депозит видалено",
         "deposit_renamed": "Депозит перейменовано"
       },
-
       "create_title": "Створити депозит",
       "edit_title": "Редагувати депозит",
-
       "create": "Створити",
       "edit": "Редагувати",
       "cancel": "Скасувати",
-
       "not_unique": "Назва має бути унікальною",
       "required": "Назва є обов'язковою"
     },
@@ -47,7 +58,6 @@
       "main_parameters": "Основні параметри",
       "interest_and_taxes": "Відсотки та податки",
       "duration_and_capitalization": "Тривалість та капіталізація",
-
       "initial_deposit": "Початковий депозит",
       "monthly_deposit": "Щомісячний внесок",
       "annual_interest": "Річна відсоткова ставка",
@@ -64,12 +74,10 @@
       "monthly_deposit": "Щомісячний внесок",
       "annual_interest": "Річна відсоткова ставка",
       "tax": "Податок",
-
       "accrued": "Нараховано",
       "interest_gross": "Нараховано",
       "interest_taxed": "Податок",
       "interest_net": "Чистими",
-
       "principal": "Початковий внесок",
       "deposited": "Сума поповнень",
       "interest": "Нараховано",

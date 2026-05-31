@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import {
@@ -19,17 +20,17 @@ import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
 
-import { calculateDeposit } from '../calculator';
 import {
-  DepositFlags,
   CompoundRate,
+  DepositFlags,
   DepositInput,
   DepositModel,
   Duration,
 } from '@features/calculator/model';
+import { calculateDeposit } from '../calculator';
 import { DepositNameComponent } from './deposit-name.component';
 import { UndoSnackbarComponent } from './undo-snackbar.component';
-import { MatFormFieldModule } from "@angular/material/form-field";
+import { DurationPipe } from '@shared/duration.pipe';
 
 
 
@@ -58,16 +59,19 @@ function templateDeposit() {
 
   imports: [
     CurrencyPipe,
-    RouterLink,
     PercentPipe,
+    RouterLink,
+
     MatButtonModule,
     MatCardModule,
+    MatFormFieldModule,
     MatIconModule,
     MatListModule,
     MatRippleModule,
     MatSnackBarModule,
     TranslatePipe,
-    MatFormFieldModule
+
+    DurationPipe,
 ],
 })
 export class DashboardPage {

@@ -69,11 +69,11 @@
 
         <mat-button-toggle-group formControlName="scale" class="mx-[8px] mb-[8px]">
           <mat-button-toggle class="w-full" value='months'>
-            {{ 'calculator.duration.months' | translate }}
+            {{ duration().duration() | duration:'months' | translate | titlecase }}
           </mat-button-toggle>
 
           <mat-button-toggle class="w-full" value='years'>
-            {{ 'calculator.duration.years' | translate }}
+            {{ duration().duration() | duration:'years' | translate | titlecase }}
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>

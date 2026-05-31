@@ -3,32 +3,41 @@
     "restore": "Restore",
     "save": "Save"
   },
+
+  "units": {
+    "years": {
+      "one": "year",
+      "other": "years"
+    },
+    "months": {
+      "one": "month",
+      "other": "months"
+    }
+  },
+
+
+
+
+
   "toolbar": {
     "deposit_calculator": "Deposit calculator",
     "language": "Language"
   },
-
-  
   "dashboard": {
     "snackbar": {
       "deposit_added": "Deposit added",
       "deposit_removed": "Deposit removed",
       "deposit_renamed": "Deposit renamed"
     },
-
     "add_deposit": "Add deposit",
     "deposits": "Deposits",
-
     "no_deposit": "There are no deposits here <a>yet</a>...",
-
     "deposit_dialog": {
       "create_title": "Create deposit",
       "edit_title": "Edit deposit",
-
       "create": "Create",
       "edit": "Edit",
       "cancel": "Cancel",
-
       "not_unique": "Name must be unique",
       "required": "Name is required"
     },
@@ -49,7 +58,6 @@
       "main_parameters": "Main parameters",
       "interest_and_taxes": "Interest and taxes",
       "duration_and_capitalization": "Duration and capitalization",
-
       "initial_deposit": "Initial deposit",
       "monthly_deposit": "Monthly deposit",
       "annual_interest": "Annual interest",
@@ -66,12 +74,10 @@
       "monthly_deposit": "Monthly deposit",
       "annual_interest": "Annual interest rate",
       "tax": "Tax",
-
       "accrued": "Accrued",
       "interest_gross": "Gross interest",
       "interest_taxed": "Taxed interest",
       "interest_net": "Net interest",
-
       "principal": "Initial deposit",
       "deposited": "Deposited amount",
       "interest": "Accrued",

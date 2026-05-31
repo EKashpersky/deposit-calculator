@@ -15,7 +15,7 @@
     <span slot="text">{{ 'calculator.result.duration' | translate }}:</span>
     <span slot="value">
       {{ deposit().durationValue() }}
-      {{ ('calculator.duration.' + deposit().durationScale() | translate) }}
+      {{ deposit().durationValue() | duration:deposit().durationScale() | translate }}
     </span>
 
     <span slot="text">{{ 'calculator.result.annual_interest' | translate }}:</span>

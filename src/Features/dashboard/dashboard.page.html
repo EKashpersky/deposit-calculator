@@ -54,7 +54,10 @@
         <mat-card-content class="flex! flex-row justify-between text-right">
           <div class="flex flex-col">
             <p class="mat-font-body-md">{{ 'dashboard.deposit.duration' | translate }}:</p>
-            <p class="mat-font-title-md">{{ deposit.durationValue() }} {{ deposit.durationScale() }}</p>
+            <p class="mat-font-title-md">
+              {{ deposit.durationValue() }}
+              {{ deposit.durationValue() | duration:deposit.durationScale() | translate }}
+            </p>
           </div>
 
           <div class="flex flex-col">

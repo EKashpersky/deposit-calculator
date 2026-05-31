@@ -1,8 +1,7 @@
 import {
-  CurrencyPipe,
   getLocaleCurrencyCode,
   getLocaleCurrencySymbol,
-  PercentPipe
+  TitleCasePipe,
 } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -45,6 +44,7 @@ import {
   DepositResult,
   Duration,
 } from './model';
+import { DurationPipe } from '@shared/duration.pipe';
 
 
 
@@ -58,20 +58,22 @@ import {
 
   imports: [
     ReactiveFormsModule,
+    TitleCasePipe,
 
+    MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
     MatCheckboxModule,
-    MatSlideToggleModule,
+    MatDividerModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
+    MatProgressBarModule,
     MatSelectModule,
     MatSliderModule,
+    MatSlideToggleModule,
     TranslatePipe,
-    MatProgressBarModule,
-    MatDividerModule,
 
+    DurationPipe,
     DepositSummaryComponent,
   ],
 
