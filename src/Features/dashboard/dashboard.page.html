@@ -18,8 +18,11 @@
 
 <div class="card-list flex flex-col transition">
   @if (deposits().length === 0) {
-    <span class="mat-font-body-lg mat-text-disabled" (click)="addDeposit($event)">
-      No deposit exists <a class="mat-text-on-surface-variant cursor-pointer">yet</a>
+    <span
+      class="empty-state mat-font-body-lg mat-text-disabled"
+      [innerHTML]="'dashboard.no_deposit' | translate"
+      (click)="addDeposit($event)"
+    >
     </span>
   }
 

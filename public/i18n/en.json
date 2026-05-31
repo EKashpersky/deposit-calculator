@@ -19,7 +19,7 @@
     "add_deposit": "Add deposit",
     "deposits": "Deposits",
 
-    "no_deposit": "Тут ще немає <a>депозитів</a>",
+    "no_deposit": "There are no deposits here <a>yet</a>...",
 
     "deposit_dialog": {
       "create_title": "Create deposit",

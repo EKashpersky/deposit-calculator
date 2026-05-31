@@ -1,6 +1,13 @@
+@use '@angular/material' as mat;
+
 @use '../../global-styles/md3-expressive-polyfill.scss' as *;
 
 
+
+
+.empty-state ::ng-deep a {
+  color: var(--mat-sys-on-surface-variant) !important;
+}
 
 .fade-in {
   animation-name: fade-in;
