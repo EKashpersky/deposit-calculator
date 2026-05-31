@@ -29,6 +29,7 @@ import {
 } from '@features/calculator/model';
 import { DepositNameComponent } from './deposit-name.component';
 import { UndoSnackbarComponent } from './undo-snackbar.component';
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 
 
@@ -51,19 +52,23 @@ function templateDeposit() {
   templateUrl: './dashboard.page.html',
   styleUrl: './dashboard.page.scss',
 
+  host: {
+    class: 'flex flex-col gap-[20px] pt-[20px] w-[800px] mx-auto'
+  },
+
   imports: [
     CurrencyPipe,
     RouterLink,
     PercentPipe,
-
     MatButtonModule,
     MatCardModule,
     MatIconModule,
     MatListModule,
     MatRippleModule,
     MatSnackBarModule,
-    TranslatePipe
-  ],
+    TranslatePipe,
+    MatFormFieldModule
+],
 })
 export class DashboardPage {
   private _snackRef: MatSnackBarRef<UndoSnackbarComponent> | null;
