@@ -6,12 +6,12 @@
 
   "units": {
     "years": {
-      "one": "year",
-      "other": "years"
+      "few": "year",
+      "many": "years"
     },
     "months": {
-      "one": "month",
-      "other": "months"
+      "few": "month",
+      "many": "months"
     }
   },
 
