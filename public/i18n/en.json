@@ -6,11 +6,13 @@
 
   "units": {
     "years": {
-      "few": "year",
+      "one": "year",
+      "few": "years",
       "many": "years"
     },
     "months": {
-      "few": "month",
+      "one": "month",
+      "few": "months",
       "many": "months"
     }
   },
