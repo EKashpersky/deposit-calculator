@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { Component, computed, effect, OnInit, Renderer2, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, Renderer2, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -8,6 +8,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
+import { CurrencyService, CurrencyShape } from '@shared/currency.service';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
 import { Theme, ThemeService } from '@shared/theme.service';
@@ -21,7 +22,12 @@ import {
 
 @Component({
   selector: 'app-root',
-  providers: [ MatIconRegistry, BreakpointObserver, ThemeService ],
+  providers: [
+    MatIconRegistry,
+    BreakpointObserver,
+    ThemeService,
+    CurrencyService
+  ],
   imports: [
     RouterOutlet,
 
@@ -44,6 +50,9 @@ export class App implements OnInit {
   private _breakpoint2SizeMap: Record<string, string>;
 
   public languages: LanguageShape[];
+  public currencies: CurrencyShape[];
+
+  public currencyIcon = inject(CurrencyService).currency;
 
   public themeIcon = computed(() => {
     return this._theme.theme() === Theme.Light ? 'dark_mode' : 'light_mode';
@@ -58,6 +67,7 @@ export class App implements OnInit {
     private _breakpoint: BreakpointObserver,
     private _theme: ThemeService,
     private _renderer: Renderer2,
+    private _currency: CurrencyService,
   ) {
     this.languages = SUPPORTED_LANGUAGES;
 
@@ -66,6 +76,9 @@ export class App implements OnInit {
       [Breakpoints.Medium]: 'md',
       [Breakpoints.Large]: 'lg',
     };
+
+    this.currencies = this._currency.getSupportedCurrencies();
+
 
     effect(() => {
       this._shortcuts.undo();
@@ -111,6 +124,10 @@ export class App implements OnInit {
       }
     }
 
+  }
+
+  public changeCurrency(currency: CurrencyShape) {
+    this._currency.changeCurrency(currency);
   }
 
   public toggleTheme() {

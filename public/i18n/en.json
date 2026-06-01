@@ -16,12 +16,18 @@
       "few": "months",
       "many": "months",
       "other": "months"
+    },
+    "currency": {
+      "EUR": "Euro",
+      "USD": "US Dollar",
+      "UAH": "Hryvnia"
     }
   },
 
   "toolbar": {
     "deposit_calculator": "Deposit calculator",
-    "language": "Language"
+    "language": "Language",
+    "currency": "Currency"
   },
   "dashboard": {
     "snackbar": {

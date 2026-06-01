@@ -16,12 +16,18 @@
       "few": "місяці",
       "many": "місяців",
       "other": "місяців"
+    },
+    "currency": {
+      "EUR": "Євро",
+      "USD": "Долар США",
+      "UAH": "Гривня"
     }
   },
 
   "toolbar": {
     "deposit_calculator": "Депозитний калькулятор",
-    "language": "Мова"
+    "language": "Мова",
+    "currency": "Валюта"
   },
   "dashboard": {
     "add_deposit": "Додати депозит",
