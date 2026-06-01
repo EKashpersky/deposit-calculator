@@ -1,4 +1,4 @@
-import { CurrencyPipe, getLocaleCurrencyCode, PercentPipe } from '@angular/common';
+import { CurrencyPipe, PercentPipe } from '@angular/common';
 import { Component, computed, effect, inject, Signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -13,13 +13,14 @@ import {
   MatSnackBarRef,
 } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 
+import { CurrencyService, CurrencyShape } from '@shared/currency.service';
 import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
+import { DurationPipe } from '@shared/duration.pipe';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
-
 import {
   CompoundRate,
   DepositFlags,
@@ -27,11 +28,10 @@ import {
   DepositModel,
   Duration,
 } from '@features/calculator/model';
+
 import { calculateDeposit } from '../calculator';
 import { DepositNameComponent } from './deposit-name.component';
 import { UndoSnackbarComponent } from './undo-snackbar.component';
-import { DurationPipe } from '@shared/duration.pipe';
-import { Currency, CurrencyService, CurrencyShape } from '@shared/currency.service';
 
 
 
@@ -84,7 +84,6 @@ export class DashboardPage {
 
 
   public constructor(
-    private _translate: TranslateService,
     private _dialog: MatDialog,
     private _snack: MatSnackBar,
     private _history: HistoryService,

@@ -1,9 +1,7 @@
 <div class="flex flex-row justify-between">
   <h1 class="mat-font-headline-md">{{ 'dashboard.deposits' | translate }}:</h1>
 
-
   @if (deposits().length > 0) {
-
     <button
       matButton="filled"
       class="flex cursor-pointer select-none"
@@ -13,7 +11,6 @@
       <mat-icon>add2</mat-icon>
     </button>
   }
-
 </div>
 
 <div class="card-list flex flex-col transition">
