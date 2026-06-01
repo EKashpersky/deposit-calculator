@@ -4,6 +4,8 @@
 
 @use 'themes.scss' as *;
 
+@use 'md3-expressive-polyfill.scss' as *;
+
 
 
 mat-slider.mat-mdc-slider {
