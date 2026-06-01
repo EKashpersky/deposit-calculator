@@ -8,16 +8,16 @@
     "years": {
       "one": "year",
       "few": "years",
-      "many": "years"
+      "many": "years",
+      "other": "years"
     },
     "months": {
       "one": "month",
       "few": "months",
-      "many": "months"
+      "many": "months",
+      "other": "months"
     }
   },
-
-
 
   "toolbar": {
     "deposit_calculator": "Deposit calculator",
