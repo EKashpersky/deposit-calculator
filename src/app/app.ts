@@ -1,5 +1,17 @@
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { Component, computed, effect, inject, OnInit, Renderer2, signal } from '@angular/core';
+import {
+  BreakpointObserver,
+  Breakpoints,
+  BreakpointState
+} from '@angular/cdk/layout';
+import {
+  Component,
+  computed,
+  effect,
+  OnInit,
+  Renderer2,
+  Signal,
+  signal
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -52,7 +64,7 @@ export class App implements OnInit {
   public languages: LanguageShape[];
   public currencies: CurrencyShape[];
 
-  public currencyIcon = inject(CurrencyService).currency;
+  public readonly currencyIcon: Signal<CurrencyShape>;
 
   public themeIcon = computed(() => {
     return this._theme.theme() === Theme.Light ? 'dark_mode' : 'light_mode';
@@ -78,6 +90,8 @@ export class App implements OnInit {
     };
 
     this.currencies = this._currency.getSupportedCurrencies();
+
+    this.currencyIcon = this._currency.currency;
 
 
     effect(() => {
