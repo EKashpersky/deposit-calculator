@@ -1,12 +1,9 @@
-import {
-  getLocaleCurrencyCode,
-  getLocaleCurrencySymbol,
-  TitleCasePipe,
-} from '@angular/common';
+import { TitleCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  Signal,
   signal
 } from '@angular/core';
 import {
@@ -33,6 +30,9 @@ import { debounceTime, filter, map, take } from 'rxjs';
 import { DepositSummaryComponent } from '@features/deposit-summary';
 import { DepositBridgeService } from '@shared/deposits';
 
+import {CurrencyService, CurrencyShape } from '@shared/currency.service';
+import { DurationPipe } from '@shared/duration.pipe';
+
 import {
   calculateDeposit,
   createDepositInput,
@@ -44,7 +44,6 @@ import {
   DepositResult,
   Duration,
 } from './model';
-import { DurationPipe } from '@shared/duration.pipe';
 
 
 
@@ -81,8 +80,6 @@ import { DurationPipe } from '@shared/duration.pipe';
 })
 export class CalculatorPage {
   public readonly calculatorForm: FormGroup;
-  public readonly currency: string;
-  public readonly currencySign: string;
   public readonly compoundRates: { value: number, label: string }[];
 
   public readonly duration = signal(new Duration('months', 24));
@@ -94,6 +91,8 @@ export class CalculatorPage {
   private _depositInput: DepositInput;
   private _depositResult: DepositResult;
 
+  public readonly currency: Signal<CurrencyShape>;
+
 
 
   private _deposit = signal<DepositModel>(DepositModel.Empty());
@@ -103,8 +102,8 @@ export class CalculatorPage {
 
   public constructor(
     private _fb: FormBuilder,
-    private _translate: TranslateService,
     private _depositBridge: DepositBridgeService,
+    private _currency: CurrencyService,
   ) {
     /**
      * All the boring stuff
@@ -126,8 +125,7 @@ export class CalculatorPage {
       return { value, label: `calculator.compound_rates.${i}` };
     });
 
-    this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
-    this.currencySign = getLocaleCurrencySymbol(this._translate.getCurrentLang())!;
+    this.currency = this._currency.currency;
 
 
     /**

@@ -31,6 +31,7 @@ import { calculateDeposit } from '../calculator';
 import { DepositNameComponent } from './deposit-name.component';
 import { UndoSnackbarComponent } from './undo-snackbar.component';
 import { DurationPipe } from '@shared/duration.pipe';
+import { Currency, CurrencyService, CurrencyShape } from '@shared/currency.service';
 
 
 
@@ -78,7 +79,7 @@ export class DashboardPage {
   private _snackRef: MatSnackBarRef<UndoSnackbarComponent> | null;
   private _depositsManager = inject(DepositsManagerService);
   public deposits: Signal<DepositModel[]>;
-  public readonly currency: string;
+  public readonly currency: Signal<CurrencyShape>;
 
 
 
@@ -89,6 +90,7 @@ export class DashboardPage {
     private _history: HistoryService,
     private _shortcuts: ShortcutsService,
     private _depositBridge: DepositBridgeService,
+    private _currency: CurrencyService,
   ) {
     const collator = new Intl.Collator(void 0, { usage: 'sort', numeric: true });
     this.deposits = computed(() => {
@@ -97,6 +99,7 @@ export class DashboardPage {
       );
     });
 
+    this.currency = this._currency.currency;
 
     effect(() => {
       this._shortcuts.undo();
@@ -116,8 +119,6 @@ export class DashboardPage {
         this._history.addAction(updateDepositAction);
       }
     });
-
-    this.currency = getLocaleCurrencyCode(this._translate.getCurrentLang())!;
 
     this._snackRef = null;
   }

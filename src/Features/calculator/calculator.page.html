@@ -9,12 +9,12 @@
     <mat-card-content>
       <div class="content-fix flex flex-col gap-[12px] pt-[8px]">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>{{ 'calculator.inputs.initial_deposit' | translate }} ({{ currencySign }})</mat-label>
+          <mat-label>{{ 'calculator.inputs.initial_deposit' | translate }} ({{ currency().symbol }})</mat-label>
           <input matInput inputmode="numeric" formControlName="principal" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>{{ 'calculator.inputs.monthly_deposit' | translate }} ({{ currencySign }})</mat-label>
+          <mat-label>{{ 'calculator.inputs.monthly_deposit' | translate }} ({{ currency().symbol }})</mat-label>
           <input matInput inputmode="numeric" formControlName="monthlyDeposit" />
         </mat-form-field>
 
