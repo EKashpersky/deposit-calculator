@@ -1,8 +1,4 @@
-import {
-  BreakpointObserver,
-  Breakpoints,
-  BreakpointState
-} from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import {
   Component,
   computed,
@@ -10,7 +6,8 @@ import {
   OnInit,
   Renderer2,
   Signal,
-  signal
+  signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -25,21 +22,11 @@ import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
 import { Theme, ThemeService } from '@shared/theme.service';
 
-import {
-  LanguageShape,
-  SUPPORTED_LANGUAGES
-} from '../config/supported-languages';
-
-
+import { LanguageShape, SUPPORTED_LANGUAGES } from '../config/supported-languages';
 
 @Component({
   selector: 'app-root',
-  providers: [
-    MatIconRegistry,
-    BreakpointObserver,
-    ThemeService,
-    CurrencyService
-  ],
+  providers: [MatIconRegistry, BreakpointObserver, ThemeService, CurrencyService],
   imports: [
     RouterOutlet,
 
@@ -54,9 +41,10 @@ import {
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     class: 'block h-full w-full overflow-scroll',
-  }
+  },
 })
 export class App implements OnInit {
   private _breakpoint2SizeMap: Record<string, string>;
@@ -112,32 +100,26 @@ export class App implements OnInit {
   }
 
   public ngOnInit(): void {
-    const breakpoints = [
-      Breakpoints.Small,
-      Breakpoints.Medium,
-      Breakpoints.Large,
-    ];
+    const breakpoints = [Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large];
 
-    this._breakpoint.observe(breakpoints).pipe().subscribe((state) => {
-      for (const breakpoint of breakpoints) {
-        if (state.breakpoints[breakpoint]) {
-          this.size.set(
-            this._breakpoint2SizeMap[breakpoint] as '' | 'sm' | 'md' | 'lg'
-          );
-          break;
+    this._breakpoint
+      .observe(breakpoints)
+      .pipe()
+      .subscribe((state) => {
+        for (const breakpoint of breakpoints) {
+          if (state.breakpoints[breakpoint]) {
+            this.size.set(this._breakpoint2SizeMap[breakpoint] as '' | 'sm' | 'md' | 'lg');
+            break;
+          }
         }
-      }
-    });
+      });
 
     findBreakpoint: for (const breakpoint of breakpoints) {
       if (this._breakpoint.isMatched(breakpoint)) {
-        this.size.set(
-          this._breakpoint2SizeMap[breakpoint] as '' | 'sm' | 'md' | 'lg'
-        );
+        this.size.set(this._breakpoint2SizeMap[breakpoint] as '' | 'sm' | 'md' | 'lg');
         break findBreakpoint;
       }
     }
-
   }
 
   public changeCurrency(currency: CurrencyShape) {
@@ -151,8 +133,6 @@ export class App implements OnInit {
   public selectLanguage(language: LanguageShape) {
     this._translate.use(language.locale);
   }
-
-
 
   private _getContentWidth(state: BreakpointState) {
     if (state.breakpoints[Breakpoints.Small]) {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -24,16 +24,14 @@ function validatorUnique(strings: string[], uniqueString: string) {
     return strings.includes(control.value) && control.value !== uniqueString
       ? { notUnique: true }
       : null;
-  }
+  };
 }
 
 class InstantErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: AbstractControl): boolean {
-    return control.invalid && (control.dirty || control.touched) || false;
+    return (control.invalid && (control.dirty || control.touched)) || false;
   }
 }
-
-
 
 @Component({
   selector: 'deposit-name',
@@ -60,12 +58,17 @@ class InstantErrorStateMatcher implements ErrorStateMatcher {
       </mat-dialog-content>
 
       <mat-dialog-actions align="start">
-        <button matButton="filled" [mat-dialog-close] (click)="save()" [disabled]="form.invalid">{{ i18nAction | translate }}</button>
-        <button matButton [mat-dialog-close]>{{ 'dashboard.deposit_dialog.cancel' | translate }}</button>
+        <button matButton="filled" [mat-dialog-close] (click)="save()" [disabled]="form.invalid">
+          {{ i18nAction | translate }}
+        </button>
+        <button matButton [mat-dialog-close]>
+          {{ 'dashboard.deposit_dialog.cancel' | translate }}
+        </button>
       </mat-dialog-actions>
     </form>
   `,
 
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ReactiveFormsModule,
 
@@ -73,8 +76,8 @@ class InstantErrorStateMatcher implements ErrorStateMatcher {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    TranslatePipe
-  ]
+    TranslatePipe,
+  ],
 })
 export class DepositNameComponent {
   public readonly i18nTitle: string;
@@ -100,9 +103,9 @@ export class DepositNameComponent {
       name: fb.control(data.depositName, {
         validators: Validators.compose([
           validatorUnique(this.depositNames, data.depositName),
-          Validators.required
-        ])
-      })
+          Validators.required,
+        ]),
+      }),
     });
   }
 
