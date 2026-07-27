@@ -24,12 +24,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { ActivatedRoute } from '@angular/router';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, filter, map, take } from 'rxjs';
 
 import { DepositSummaryComponent } from '@features/deposit-summary';
 import { DepositBridgeService } from '@shared/deposits';
-
 import {CurrencyService, CurrencyShape } from '@shared/currency.service';
 import { DurationPipe } from '@shared/duration.pipe';
 
@@ -201,6 +200,8 @@ export class CalculatorPage {
           scale: input.duration.scale(),
         },
       }, { emitEvent: true });
+
+      this._recalculateResult();
     });
   }
 
