@@ -45,3 +45,6 @@ Thumbs.db
 
 # Dependency graph
 dependency-graph.svg
+
+# Playground feature
+src/Features/playground

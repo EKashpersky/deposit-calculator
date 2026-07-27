@@ -2,31 +2,38 @@ import { Injectable, signal } from '@angular/core';
 
 
 
-export enum Currency {
+export enum CurrencyCodeEnum {
   EUR = 'EUR',
-  USD = 'USD',
   UAH = 'UAH',
+  USD = 'USD',
 }
+
+export enum CurrencyCharEnum {
+  EUR = '€',
+  UAH = '₴',
+  USD = '$',
+}
+
 
 
 
 export interface CurrencyShape {
-  code: Currency;
-  symbol: string;
+  code: CurrencyCodeEnum;
+  symbol: CurrencyCharEnum;
 }
 
 const SUPPORTED_CURRENCIES = [
   {
-    code: Currency.EUR,
-    symbol: '€',
+    code: CurrencyCodeEnum.EUR,
+    symbol: CurrencyCharEnum.EUR,
   },
   {
-    code: Currency.USD,
-    symbol: '$',
+    code: CurrencyCodeEnum.USD,
+    symbol: CurrencyCharEnum.USD,
   },
   {
-    code: Currency.UAH,
-    symbol: '₴',
+    code: CurrencyCodeEnum.UAH,
+    symbol: CurrencyCharEnum.UAH,
   },
 ] as const satisfies CurrencyShape[];
 

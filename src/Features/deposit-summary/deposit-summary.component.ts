@@ -26,7 +26,7 @@ import { OverviewColumnComponent } from './overview-column.component';
 
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
-    class: 'flex flex-row justify-stretch w-full flex-wrap gap-[16px] h-min',
+    class: 'grid grid-cols-2 h-min gap-[16px]'
   },
 })
 export class DepositSummaryComponent {

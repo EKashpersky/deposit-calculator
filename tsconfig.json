@@ -16,9 +16,10 @@
     "module": "preserve",
 
     "paths": {
-      "@features/*":  [ "./src/Features/*" ],
-      "@shared/*":    [ "./src/Shared/*" ],
-      "@utils/*":     [ "./src/utils/*" ],
+      "@components/*": [ "./src/Components/*" ],
+      "@features/*":   [ "./src/Features/*" ],
+      "@shared/*":     [ "./src/Shared/*" ],
+      "@utils/*":      [ "./src/utils/*" ],
     },
   },
   "angularCompilerOptions": {

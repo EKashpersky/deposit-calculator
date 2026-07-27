@@ -1,0 +1,11 @@
+@use '../../global-styles/md3-expressive-polyfill.scss' as *;
+
+
+
+.roller-strip {
+  transition-property: transform;
+
+  @include transition('fast', 'spatial', 'expressive');
+
+  // @include transition('fast', 'spatial', 'standard');
+}

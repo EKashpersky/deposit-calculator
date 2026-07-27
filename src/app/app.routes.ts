@@ -21,3 +21,11 @@ export const routes: Routes = [
     redirectTo: 'dashboard'
   }
 ];
+
+if (ngDevMode) {
+  routes.push({
+    path: 'playground',
+    loadComponent: () => import('../Features/playground/playground.page')
+      .then(m => m.PlaygroundPage)
+  });
+}

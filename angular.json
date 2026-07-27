@@ -71,7 +71,16 @@
           "defaultConfiguration": "develop"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "configurations": {
+            "develop": {
+              "buildTarget": "deposit-calculator:build:develop",
+              "include": [
+                "**/*.spec.ts",
+                "**/*.test.ts"
+              ]
+            }
+          }
         }
       }
     }
