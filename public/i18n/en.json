@@ -39,6 +39,11 @@
     "deposits": "Deposits",
     "no_deposit": "There are no deposits here <a>yet</a>...",
     "deposit_dialog": {
+      "snackbar": {
+        "deposit_added": "Deposit added",
+        "deposit_removed": "Deposit removed",
+        "deposit_renamed": "Deposit renamed"
+      },
       "create_title": "Create deposit",
       "edit_title": "Edit deposit",
       "create": "Create",
