@@ -24,7 +24,7 @@
   }
 
   @for (deposit of deposits(); track deposit.name()) {
-    <div class="mat-card-wrapper pb-[20px] box-border h-[220px]" animate.leave="fade-out" animate.enter="fade-in">
+    <div class="mat-card-wrapper pb-[20px] box-border" animate.leave="fade-out" animate.enter="fade-in">
       <mat-card
         appearance="filled"
         matRipple
@@ -105,6 +105,8 @@
             </p>
           </div>
         </mat-card-content>
+
+        <mat-card-footer></mat-card-footer>
       </mat-card>
     </div>
   }

@@ -9,45 +9,85 @@
   color: var(--mat-sys-on-surface-variant) !important;
 }
 
-.fade-in {
-  animation-name: fade-in;
-  animation-fill-mode: both;
-  @include animation('default', 'spatial', 'standard');
-}
+// .fade-in {
+//   animation-name: fade-in;
+//   animation-fill-mode: both;
+//   @include animation('default', 'spatial', 'standard');
+// }
 
-@keyframes fade-in {
-  from {
-    height: 0px;
+// @keyframes fade-in {
+//   from {
+//     height: 0px;
+//     padding-bottom: 0px;
+//     opacity: 0.4;
+//   }
+
+//   to {
+//     height: 220px;
+//     padding-bottom: 20px;
+//     opacity: 1;
+//   }
+// }
+
+
+
+
+// .fade-out {
+//   animation-name: fade-out;
+//   animation-fill-mode: both;
+//   @include animation('default', 'spatial', 'standard');
+// }
+
+// @keyframes fade-out {
+//   from {
+//     height: 220px;
+//     padding-bottom: 20px;
+//     opacity: 1;
+//   }
+
+//   to {
+//     height: 0px;
+//     padding-bottom: 0px;
+//     opacity: 0.4;
+//   }
+// }
+
+
+
+.mat-card-wrapper {
+  transition-property: grid-template-rows, padding-bottom, opacity;
+  @include transition('default', 'effects', 'expressive');
+
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  overflow: hidden;
+
+  &.fade-in {
+    animation-name: mat-card-enter;
+    @include animation('default', 'effects', 'expressive');
+  }
+
+  &.fade-out {
+    grid-template-rows: 0fr;
     padding-bottom: 0px;
-    opacity: 0.4;
+    opacity: 0;
   }
 
-  to {
-    height: 220px;
-    padding-bottom: 12px;
-    opacity: 1;
-  }
-}
-
-
-
-
-.fade-out {
-  animation-name: fade-out;
-  animation-fill-mode: both;
-  @include animation('default', 'spatial', 'standard');
-}
-
-@keyframes fade-out {
-  from {
-    height: 220px;
-    padding-bottom: 12px;
-    opacity: 1;
+  @keyframes mat-card-enter {
+    from {
+      grid-template-rows: 0fr;
+      opacity: 0;
+      padding-bottom: 0;
+    }
+    to {
+      grid-template-rows: 1fr;
+      opacity: 1;
+      padding-bottom: 20px;
+    }
   }
 
-  to {
-    height: 0px;
-    padding-bottom: 0px;
-    opacity: 0.4;
+  & > mat-card {
+    min-height: 0;
   }
 }
