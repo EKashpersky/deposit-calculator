@@ -1,11 +1,12 @@
-import { CurrencyPipe, PercentPipe } from '@angular/common';
+import { PercentPipe } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
   inject,
   Signal,
-  ChangeDetectionStrategy,
+  signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -23,11 +24,7 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 
-import { CurrencyService, CurrencyShape } from '@shared/currency.service';
-import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
-import { DurationPipe } from '@shared/duration.pipe';
-import { HistoryService } from '@shared/history';
-import { ShortcutsService } from '@shared/shortcuts.service';
+import { CurrencyComponent } from '@components/currency';
 import {
   CompoundRate,
   DepositFlags,
@@ -35,10 +32,17 @@ import {
   DepositModel,
   Duration,
 } from '@features/calculator/model';
+import { CurrencyService, CurrencyShape } from '@shared/currency.service';
+import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
+import { DurationPipe } from '@shared/duration.pipe';
+import { HistoryService } from '@shared/history';
+import { ShortcutsService } from '@shared/shortcuts.service';
 
 import { calculateDeposit } from '../calculator';
 import { DepositNameComponent } from './deposit-name.component';
 import { UndoSnackbarComponent } from './undo-snackbar.component';
+
+
 
 function templateDeposit() {
   const depositInput = DepositInput.New(
@@ -65,7 +69,6 @@ function templateDeposit() {
 
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    CurrencyPipe,
     PercentPipe,
     RouterLink,
 
@@ -78,6 +81,7 @@ function templateDeposit() {
     MatSnackBarModule,
     TranslatePipe,
 
+    CurrencyComponent,
     DurationPipe,
   ],
 })
@@ -86,6 +90,10 @@ export class DashboardPage {
   private _depositsManager = inject(DepositsManagerService);
   public deposits: Signal<DepositModel[]>;
   public readonly currency: Signal<CurrencyShape>;
+
+  public isFlashing = signal(false);
+
+
 
   public constructor(
     private _dialog: MatDialog,

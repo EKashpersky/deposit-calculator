@@ -1,22 +1,25 @@
-import { CurrencyPipe, PercentPipe } from '@angular/common';
-import { Component, input, Signal, ChangeDetectionStrategy } from '@angular/core';
+import { PercentPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input, Signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { TranslatePipe } from '@ngx-translate/core';
 
+import { CurrencyComponent } from '@components/currency';
 import { DepositModel } from '@features/calculator/model';
 import { CurrencyService, CurrencyShape } from '@shared/currency.service';
 import { DurationPipe } from '@shared/duration.pipe';
 
 import { OverviewColumnComponent } from './overview-column.component';
 
+
+
 @Component({
   imports: [
-    CurrencyPipe,
     PercentPipe,
 
     MatCardModule,
     TranslatePipe,
 
+    CurrencyComponent,
     DurationPipe,
     OverviewColumnComponent,
   ],
