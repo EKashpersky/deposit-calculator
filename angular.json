@@ -52,6 +52,7 @@
             },
             "develop": {
               "optimization": false,
+              "namedChunks": true,
               "extractLicenses": false,
               "sourceMap": true
             }
