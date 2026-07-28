@@ -25,6 +25,7 @@ export const routes: Routes = [
 if (ngDevMode) {
   routes.push({
     path: 'playground',
+    /// @ts-ignore
     loadComponent: () => import('../Features/playground/playground.page')
       .then(m => m.PlaygroundPage)
   });
