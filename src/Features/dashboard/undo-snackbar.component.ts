@@ -1,15 +1,22 @@
-import { Component, Inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Inject,
+  signal,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   MAT_SNACK_BAR_DATA,
-  MatSnackBarLabel,
   MatSnackBarModule,
   MatSnackBarRef,
 } from '@angular/material/snack-bar';
-import FrameTicker from 'frame-ticker';
 import { TranslatePipe } from '@ngx-translate/core';
+
+import { FrameRunner } from '@utils/frame-runner';
+
+
 
 @Component({
   host: {
@@ -68,18 +75,19 @@ export class UndoSnackbarComponent {
     this.i18nAction = data.i18nAction;
 
     const { duration } = this._snackBarRef.containerInstance.snackBarConfig;
-    const createdAt = performance.now();
 
+    const createdAt = performance.now();
     let diff = 0;
 
-    const looper = new FrameTicker();
+    const frameRunner = new FrameRunner(
+      (dt, progress) => {
+        this.ttl.set(100 - progress * 100);
+      },
+      duration!,
+      1,
+    )
 
-    looper.onTick.add((currentTime: number) => {
-      currentTime = performance.now();
-      diff = currentTime - createdAt;
-
-      this.ttl.set(100 - (diff / duration!) * 100);
-    });
+    frameRunner.run();
   }
 
   public onAction() {

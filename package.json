@@ -23,7 +23,6 @@
     "@angular/router": "^22.0.7",
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
-    "frame-ticker": "^1.0.3",
     "localspace": "^1.1.1",
     "rxjs": "~7.8.0",
     "tinykeys": "^4.0.0",
