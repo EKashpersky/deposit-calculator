@@ -22,7 +22,12 @@ import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
 import { Theme, ThemeService } from '@shared/theme.service';
 
-import { LanguageShape, SUPPORTED_LANGUAGES } from '../config/supported-languages';
+import {
+  LanguageShape,
+  SUPPORTED_LANGUAGES
+} from '../config/supported-languages';
+
+
 
 @Component({
   selector: 'app-root',
@@ -141,17 +146,4 @@ export class App implements OnInit {
   public selectLanguage(language: LanguageShape) {
     this._translate.use(language.locale);
   }
-
-  private _getContentWidth(state: BreakpointState) {
-    if (state.breakpoints[Breakpoints.Small]) {
-      return 600;
-    } else if (state.breakpoints[Breakpoints.Medium]) {
-      return 800;
-    } else if (state.breakpoints[Breakpoints.Large]) {
-      return 1200;
-    }
-
-    return 900;
-  }
 }
-
