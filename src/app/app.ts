@@ -112,8 +112,6 @@ export class App implements OnInit {
       .observe(breakpoints)
       .pipe()
       .subscribe((state) => {
-        console.log(state)
-
         for (const breakpoint of breakpoints) {
           if (state.breakpoints[breakpoint]) {
             this.size.set(
