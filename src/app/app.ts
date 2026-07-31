@@ -43,7 +43,7 @@ import { LanguageShape, SUPPORTED_LANGUAGES } from '../config/supported-language
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
-    class: 'block h-full w-full overflow-scroll',
+    class: 'block h-full w-full overflow-auto',
   },
 })
 export class App implements OnInit {
