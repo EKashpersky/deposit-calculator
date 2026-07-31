@@ -58,7 +58,7 @@ export class App implements OnInit {
     return this._theme.theme() === Theme.Light ? 'dark_mode' : 'light_mode';
   });
 
-  public readonly size = signal<'' | 'sm' | 'md' | 'lg'>('');
+  public readonly size = signal<'' | 'sm' | 'md' | 'lg' | 'xlg'>('');
 
   public constructor(
     private _translate: TranslateService,
@@ -75,6 +75,7 @@ export class App implements OnInit {
       [Breakpoints.Small]: 'sm',
       [Breakpoints.Medium]: 'md',
       [Breakpoints.Large]: 'lg',
+      [Breakpoints.XLarge]: 'xlg'
     };
 
     this.currencies = this._currency.getSupportedCurrencies();
@@ -100,15 +101,24 @@ export class App implements OnInit {
   }
 
   public ngOnInit(): void {
-    const breakpoints = [Breakpoints.Small, Breakpoints.Medium, Breakpoints.Large];
+    const breakpoints = [
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge,
+    ];
 
     this._breakpoint
       .observe(breakpoints)
       .pipe()
       .subscribe((state) => {
+        console.log(state)
+
         for (const breakpoint of breakpoints) {
           if (state.breakpoints[breakpoint]) {
-            this.size.set(this._breakpoint2SizeMap[breakpoint] as '' | 'sm' | 'md' | 'lg');
+            this.size.set(
+              this._breakpoint2SizeMap[breakpoint] as '' | 'sm' | 'md' | 'lg' | 'xlg'
+            );
             break;
           }
         }
