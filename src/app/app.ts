@@ -26,6 +26,7 @@ import {
   LanguageShape,
   SUPPORTED_LANGUAGES
 } from '../config/supported-languages';
+import { environment } from '@environment/development';
 
 
 
@@ -65,6 +66,8 @@ export class App implements OnInit {
 
   public readonly size = signal<'' | 'sm' | 'md' | 'lg' | 'xlg'>('');
 
+  public readonly appVersion = signal('');
+
   public constructor(
     private _translate: TranslateService,
     private _history: HistoryService,
@@ -102,6 +105,11 @@ export class App implements OnInit {
       this._renderer.removeClass(document.body, this._theme.lastTheme());
 
       this._renderer.addClass(document.body, this._theme.theme());
+    });
+
+    /// Set up application version once
+    effect(() => {
+      this.appVersion.set(environment.version())
     });
   }
 

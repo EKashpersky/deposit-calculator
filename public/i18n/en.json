@@ -27,7 +27,8 @@
   "toolbar": {
     "deposit_calculator": "Deposit calculator",
     "language": "Language",
-    "currency": "Currency"
+    "currency": "Currency",
+    "version": "ver."
   },
   "dashboard": {
     "snackbar": {

@@ -27,7 +27,8 @@
   "toolbar": {
     "deposit_calculator": "Депозитний калькулятор",
     "language": "Мова",
-    "currency": "Валюта"
+    "currency": "Валюта",
+    "version": "вер."
   },
   "dashboard": {
     "add_deposit": "Додати депозит",
