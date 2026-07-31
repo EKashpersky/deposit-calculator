@@ -44,6 +44,12 @@
                   "maximumError": "8kB"
                 }
               ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environment/development.ts",
+                  "with": "src/environment/production.ts"
+                }
+              ],
               "outputHashing": "all",
               "aot": true,
               "extractLicenses": true,
