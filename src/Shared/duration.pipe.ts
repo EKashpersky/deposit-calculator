@@ -13,7 +13,7 @@ export class DurationPipe implements PipeTransform {
 
   public constructor() {
     this._pluralizer = new Intl.PluralRules(
-      inject(TranslateService).getCurrentLang()
+      inject(TranslateService).getCurrentLang()!
     );
   }
 

@@ -11,6 +11,10 @@ export interface LanguageShape {
 
 export const SUPPORTED_LANGUAGES = [
   {
+    locale: 'en',
+    name: 'English',
+  },
+  {
     locale: 'uk',
     name: 'Українська',
   },
@@ -18,11 +22,14 @@ export const SUPPORTED_LANGUAGES = [
   //   locale: 'ru',
   //   name: 'Русский',
   // },
-  {
-    locale: 'en',
-    name: 'English',
-  }
 ] as LanguageShape[];
+
+
+
+export const FALLBACK_LANGUAGES = {
+  'de': [ 'en' ],
+  'ru': [ 'en' ],
+};
 
 
 registerLocaleData(ukLocaleData, 'uk');
