@@ -167,6 +167,8 @@ export class DashboardPage {
             i18nAction: 'dashboard.deposit_dialog.edit',
             depositName: deposit.name(),
             depositNames,
+            currencies: this._currency.getCurrenciesWithRates(),
+            preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
           },
         });
       })
