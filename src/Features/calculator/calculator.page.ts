@@ -37,6 +37,7 @@ import {
 } from '@shared/Currency';
 import { DepositBridgeService } from '@shared/deposits';
 import { DurationPipe } from '@shared/duration.pipe';
+import { LoggerService, LoggerShape, ScopedLogger } from '@shared/logger';
 
 import {
   calculateDeposit,
@@ -48,10 +49,6 @@ import {
   DepositModel,
   Duration,
 } from './model';
-import { LumberjackService, ScopedLumberjackLogger } from '@ngworker/lumberjack';
-import { LoggerService } from '@shared/logger';
-import { ScopedLogger } from '@shared/logger/scoped-logger.service';
-import { LoggerShape } from '@shared/logger/logger.model';
 
 
 
