@@ -60,7 +60,7 @@ class InstantErrorStateMatcher implements ErrorStateMatcher {
         </mat-form-field>
 
         <mat-form-field class="w-full">
-          <mat-label>{{ 'Desired currency' | translate }}</mat-label>
+          <mat-label>{{ 'dashboard.deposit_dialog.deposit_currency' | translate }}</mat-label>
 
           <mat-select formControlName="currency">
             @for (currency of currencies; track currency) {
