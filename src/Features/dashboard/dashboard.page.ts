@@ -32,14 +32,14 @@ import {
   DepositModel,
   Duration,
 } from '@features/calculator/model';
-import { CurrencyService, CurrencyShape } from '@shared/currency.service';
-import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
+import { CurrencyService } from '@shared/Currency';
+import { DepositsManagerService } from '@shared/deposits';
 import { DurationPipe } from '@shared/duration.pipe';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
 
 import { calculateDeposit } from '../calculator';
-import { DepositNameComponent } from './deposit-name.component';
+import { DepositNameComponent } from './deposit-create.component';
 import { UndoSnackbarComponent } from './undo-snackbar.component';
 
 
@@ -89,7 +89,6 @@ export class DashboardPage {
   private _snackRef: MatSnackBarRef<UndoSnackbarComponent> | null;
   private _depositsManager = inject(DepositsManagerService);
   public deposits: Signal<DepositModel[]>;
-  public readonly currency: Signal<CurrencyShape>;
 
   public isFlashing = signal(false);
 
@@ -100,29 +99,20 @@ export class DashboardPage {
     private _snack: MatSnackBar,
     private _history: HistoryService,
     private _shortcuts: ShortcutsService,
-    private _depositBridge: DepositBridgeService,
     private _currency: CurrencyService,
   ) {
     const collator = new Intl.Collator(void 0, { usage: 'sort', numeric: true });
     this.deposits = computed(() => {
-      return this._depositsManager.deposits().sort((a, b) => collator.compare(a.name(), b.name()));
+      return this._depositsManager.deposits().sort(
+        (a, b) => collator.compare(a.name(), b.name())
+      );
     });
-
-    this.currency = this._currency.currency;
 
     effect(() => {
       this._shortcuts.undo();
       if (this._snackRef) {
         this._snackRef!.dismissWithAction();
         this._snackRef = null;
-      }
-    });
-
-    this._depositBridge.deposit.subscribe((deposit) => {
-      if (deposit) {
-        const updateDepositAction = this._depositsManager.updateDeposit(deposit);
-
-        this._history.addAction(updateDepositAction);
       }
     });
 
@@ -139,6 +129,8 @@ export class DashboardPage {
         i18nAction: 'dashboard.deposit_dialog.create',
         depositName: '',
         depositNames: [],
+        currencies: this._currency.getCurrenciesWithRates(),
+        preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
       },
     });
 
@@ -150,7 +142,13 @@ export class DashboardPage {
       const depositInput = templateDeposit();
       const depositResult = calculateDeposit(depositInput);
       const addDepositAction = this._depositsManager.addDeposit(
-        new DepositModel(depositName, depositInput, depositResult),
+        new DepositModel(
+          depositName,
+          this._currency.getPreferredOrFallbackCurrency(),
+          false,
+          depositInput,
+          depositResult
+        ),
       );
       this._history.addAction(addDepositAction);
     });

@@ -56,6 +56,18 @@ export class DepositInput {
     this.flags          = flags;
   }
 
+  public withCurrencyUpdate(principal: number, monthlyDeposit: number) {
+    return new DepositInput(
+      principal,
+      this.annualRate,
+      this.duration,
+      monthlyDeposit,
+      this.tax,
+      this.compoundRate,
+      this.flags
+    );
+  }
+
   public isTaxed() {
     return Boolean(DepositFlags.IsTaxed(this.flags));
   }

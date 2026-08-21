@@ -1,10 +1,11 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 
+import { CurrencySymbolEnum } from '@config/supported-currencies';
 import { ReelRollerComponent } from '@components/reels';
-import { reelRollerCurrencyFactory } from './reel-roller-currency.factory';
-import { CurrencyCharEnum, CurrencyService } from '@shared/currency.service';
 import { round } from '@utils/round';
+
+import { reelRollerCurrencyFactory } from './reel-roller-currency.factory';
 
 
 
@@ -14,7 +15,7 @@ import { round } from '@utils/round';
   imports: [ReelRollerComponent]
 })
 export class CurrencyComponent {
-  public readonly currency = input<CurrencyCharEnum>();
+  public readonly currency = input<CurrencySymbolEnum>();
   public readonly value = input<number>(0);
 
   public readonly model = computed(

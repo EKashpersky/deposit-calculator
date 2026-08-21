@@ -65,7 +65,7 @@
           <div class="flex flex-col">
             <p class="mat-font-body-md">{{ 'dashboard.deposit.principal' | translate }}:</p>
             <p class="mat-font-title-md">
-              <currency [currency]="currency().symbol" [value]="deposit.principal()"></currency>
+              <currency [currency]="deposit.currency().symbol" [value]="deposit.principal()"></currency>
             </p>
           </div>
 
@@ -73,35 +73,35 @@
             <p class="mat-font-body-md">{{ 'dashboard.deposit.monthly_payment' | translate }}:</p>
 
             <p class="mat-font-title-md">
-              <currency [currency]="currency().symbol" [value]="deposit.monthlyDeposit()"></currency>
+              <currency [currency]="deposit.currency().symbol" [value]="deposit.monthlyDeposit()"></currency>
             </p>
           </div>
 
           <div class="flex flex-col">
             <p class="mat-font-body-md">{{ 'dashboard.deposit.total_deposited' | translate }}:</p>
             <p class="mat-font-title-md">
-              <currency [currency]="currency().symbol" [value]="deposit.deposited()"></currency>
+              <currency [currency]="deposit.currency().symbol" [value]="deposit.deposited()"></currency>
             </p>
           </div>
 
           <div class="flex flex-col">
             <p class="mat-font-body-md">{{ 'dashboard.deposit.interest' | translate }}:</p>
             <p class="mat-font-title-md">
-              <currency [currency]="currency().symbol" [value]="deposit.interest()"></currency>
+              <currency [currency]="deposit.currency().symbol" [value]="deposit.interest()"></currency>
             </p>
           </div>
 
           <div class="flex flex-col">
             <p class="mat-font-body-md">{{ 'dashboard.deposit.taxed' | translate }}:</p>
             <p class="mat-font-title-md">
-              <currency [currency]="currency().symbol" [value]="deposit.taxed()"></currency>
+              <currency [currency]="deposit.currency().symbol" [value]="deposit.taxed()"></currency>
             </p>
           </div>
 
           <div class="flex flex-col">
             <p class="mat-font-body-md">{{ 'dashboard.deposit.net' | translate }}:</p>
             <p class="mat-font-title-md">
-              <currency [currency]="currency().symbol" [value]="deposit.net()"></currency>
+              <currency [currency]="deposit.currency().symbol" [value]="deposit.net()"></currency>
             </p>
           </div>
         </mat-card-content>

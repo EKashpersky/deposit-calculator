@@ -15,13 +15,18 @@
 
     <div class="flex flex-row gap-[8px] end">
       <button matButton [matMenuTriggerFor]="currencyMenu">
-        <mat-icon class="mat-text-secondary mat-font-label-lg">{{ currencyIcon().symbol }}</mat-icon>
+        <mat-icon class="mat-text-secondary mat-font-label-lg">{{ preferredCurrency().symbol }}</mat-icon>
         <span class="mat-text-on-surface-variant">{{ 'toolbar.currency' | translate }}</span>
       </button>
 
       <mat-menu #currencyMenu="matMenu">
         @for (currency of currencies; track currency) {
-          <button mat-menu-item (click)="changeCurrency(currency)">{{ currency.symbol }} {{ 'units.currency.' + currency.code | translate }}</button>
+          <button
+            mat-menu-item
+            (click)="changePreferredCurrency(currency)"
+          >
+            {{ currency.symbol }} {{ 'units.currency.' + currency.code | translate }}
+          </button>
         }
       </mat-menu>
 

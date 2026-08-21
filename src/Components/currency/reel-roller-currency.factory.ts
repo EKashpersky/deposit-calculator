@@ -1,14 +1,12 @@
-import { CurrencyCharEnum } from '@shared/currency.service';
-
 import { ReelModel } from '@components/reels';
+import { CurrencySymbolEnum } from '@config/supported-currencies';
+
 import { ReelRollerCurrencyModel } from './reel-roller.currency.model';
 
 
 
-
-
 export function reelRollerCurrencyFactory(
-  currency: CurrencyCharEnum,
+  currency: CurrencySymbolEnum,
   value: number,
   withSpace: boolean
 ) {
@@ -24,12 +22,8 @@ export function reelRollerCurrencyFactory(
 }
 
 
-export function reelRollerCurrencySignFactory(currency: CurrencyCharEnum) {
-  return new ReelModel([
-    CurrencyCharEnum.EUR,
-    CurrencyCharEnum.UAH,
-    CurrencyCharEnum.USD,
-  ], currency);
+export function reelRollerCurrencySignFactory(currency: CurrencySymbolEnum) {
+  return new ReelModel(Object.values(CurrencySymbolEnum), currency, true);
 }
 
 export function reelRollerCurrencyValueFactory(value: number) {

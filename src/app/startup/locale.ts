@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   FALLBACK_LANGUAGES,
   SUPPORTED_LANGUAGES,
-} from '../../config/supported-languages';
+} from '@config/supported-languages';
 
 
 

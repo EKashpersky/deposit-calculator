@@ -56,6 +56,12 @@
               "sourceMap": false,
               "optimization": true
             },
+            "test": {
+              "optimization": true,
+              "namedChunks": true,
+              "extractLicenses": true,
+              "sourceMap": true
+            },
             "develop": {
               "optimization": false,
               "namedChunks": true,
@@ -73,6 +79,9 @@
             },
             "develop": {
               "buildTarget": "deposit-calculator:build:develop"
+            },
+            "test": {
+              "buildTarget": "deposit-calculator:build:test"
             }
           },
           "defaultConfiguration": "develop"

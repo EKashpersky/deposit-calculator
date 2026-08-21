@@ -12,6 +12,8 @@ export class DepositSerializer {
   public static deserialize(name: string, deposit: DepositPOJO): DepositModel {
     return new DepositModel(
       name,
+      deposit.currency,
+      deposit.autoConversion,
       DepositInput.New(
         deposit.input.principal,
         deposit.input.annualRate,
@@ -27,6 +29,8 @@ export class DepositSerializer {
 
   public static serialize(deposit: DepositModel): DepositPOJO {
     return {
+      currency: deposit.currency(),
+      autoConversion: deposit.autoConversion(),
       input: {
         principal: deposit.input().principal,
         annualRate: deposit.input().annualRate,

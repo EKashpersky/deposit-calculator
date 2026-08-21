@@ -62,6 +62,8 @@
   },
   "calculator": {
     "inputs": {
+      "currency": "Валюта депозиту",
+      "auto_exchange": "Автоматична конвертація",
       "main_parameters": "Основні параметри",
       "interest_and_taxes": "Відсотки та податки",
       "duration_and_capitalization": "Тривалість та капіталізація",

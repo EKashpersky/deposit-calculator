@@ -67,6 +67,8 @@
   },
   "calculator": {
     "inputs": {
+      "currency": "Currency of deposit",
+      "auto_exchange": "Automatic exchange",
       "main_parameters": "Main parameters",
       "interest_and_taxes": "Interest and taxes",
       "duration_and_capitalization": "Duration and capitalization",

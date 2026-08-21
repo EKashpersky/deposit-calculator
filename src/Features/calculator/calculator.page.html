@@ -1,4 +1,33 @@
 <form [formGroup]="calculatorForm" class="flex flex-col flex-[1_2_100%] gap-[16px]">
+  <button matButton="tonal" class="w-full" (click)="save()">
+    {{ 'common_buttons.save' | translate }}
+  </button>
+
+  <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container">
+    <mat-card-header>
+      <mat-card-subtitle class="mat-texton-surface-variant">
+        {{ 'calculator.inputs.currency' | translate }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="content-fix flex flex-col gap-[12px] pt-[8px]">
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-select formControlName="currency">
+            @for (currency of currencies(); track $index) {
+              <mat-option [value]="currency">{{currency.code}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="autoConversion">
+          {{ 'calculator.inputs.auto_exchange' | translate }}
+        </mat-checkbox>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
   <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container">
     <mat-card-header class="">
       <mat-card-subtitle class="mat-text-on-surface-variant">
@@ -9,13 +38,17 @@
     <mat-card-content>
       <div class="content-fix flex flex-col gap-[12px] pt-[8px]">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>{{ 'calculator.inputs.initial_deposit' | translate }} ({{ currency().symbol }})</mat-label>
-          <input matInput inputmode="numeric" formControlName="principal" />
+          <mat-label>
+            {{ 'calculator.inputs.initial_deposit' | translate }} ({{ deposit().currency().symbol }})
+          </mat-label>
+          <input matInput inputmode="numeric" type="number" formControlName="principal" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>{{ 'calculator.inputs.monthly_deposit' | translate }} ({{ currency().symbol }})</mat-label>
-          <input matInput inputmode="numeric" formControlName="monthlyDeposit" />
+          <mat-label>
+            {{ 'calculator.inputs.monthly_deposit' | translate }} ({{ deposit().currency().symbol }})
+          </mat-label>
+          <input matInput inputmode="numeric" type="number" formControlName="monthlyDeposit" />
         </mat-form-field>
 
         <mat-slide-toggle class="mb-[8px]" formControlName="noFirstMonthDeposit">
@@ -38,12 +71,12 @@
       <div class="content-fix flex flex-col gap-[12px] pt-[8px]">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>{{ 'calculator.inputs.annual_interest' | translate }} (%)</mat-label>
-          <input matInput inputmode="numeric" formControlName="annualRate" />
+          <input matInput inputmode="numeric" type="number" formControlName="annualRate" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>{{ 'calculator.inputs.tax' | translate }} (%)</mat-label>
-          <input matInput inputmode="numeric" formControlName="tax" />
+          <input matInput inputmode="numeric" type="number" formControlName="tax" />
         </mat-form-field>
 
         <mat-slide-toggle class="mb-[8px]" formControlName="withTaxes">
@@ -64,7 +97,7 @@
       <div class="content-fix flex flex-col gap-[12px] pt-[8px]" formGroupName="duration">
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
           <mat-label>{{ 'calculator.inputs.deposit_duration' | translate }}</mat-label>
-          <input matInput inputmode="numeric" formControlName="value" />
+          <input matInput inputmode="numeric" type="number" formControlName="value" />
         </mat-form-field>
 
         <mat-button-toggle-group formControlName="scale" class="mx-[8px] mb-[8px]">
@@ -84,7 +117,7 @@
         </mat-label>
 
         <mat-label class="mat-font-label-md">
-          {{ this.compoundRates[calculatorForm.get('compoundRate')?.value].label | translate }}
+          {{ this.compoundRates[calculatorForm.controls.compoundRate.value].label | translate }}
         </mat-label>
       </div>
 
@@ -98,10 +131,6 @@
 
     </mat-card-content>
   </mat-card>
-
-  <button matButton="tonal" class="w-full" (click)="save()">
-    {{ 'common_buttons.save' | translate }}
-  </button>
 </form>
 
 @if (formChanged()) {

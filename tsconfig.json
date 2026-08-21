@@ -16,12 +16,14 @@
     "module": "preserve",
 
     "paths": {
+      "@api/*":         [ "./src/Api/*" ],
+      "@config/*":      [ "./src/config/*" ],
       "@components/*":  [ "./src/Components/*" ],
+      "@environment":   [ "./src/environment" ],
+      "@environment/*": [ "./src/environment/*" ],
       "@features/*":    [ "./src/Features/*" ],
       "@shared/*":      [ "./src/Shared/*" ],
       "@utils/*":       [ "./src/utils/*" ],
-      "@environment/*": [ "./src/environment/*" ],
-      "@environment":   [ "./src/environment" ],
     },
   },
   "angularCompilerOptions": {

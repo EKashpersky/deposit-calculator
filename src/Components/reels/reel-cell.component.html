@@ -1,5 +1,8 @@
 
-<div class="flex flex-col will-change-transform items-center roller-strip" [style]="{ transform: 'translateY(' + -(reelIndex() * 1.5) + 'em)' }">
+<div
+  class="flex flex-col will-change-transform items-center roller-strip"
+  [style]="{ transform: 'translateY(' + -(reelIndex() * 1.5) + 'em)', width: width() }"
+>
   @for (word of reel().dictionary(); track $index) {
     <span class="flex h-[1.5em] shrink-0">{{ word }}</span>
   }

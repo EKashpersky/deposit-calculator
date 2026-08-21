@@ -1,27 +1,52 @@
 import {
   ApplicationConfig,
+  isDevMode,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { lumberjackLogDriverToken, provideLumberjack } from '@ngworker/lumberjack';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import {
+  CurrencyConverterService,
+  CurrencyRatesService,
+  CurrencyService
+} from '@shared/Currency';
+import {
+  DepositBridgeService,
   DepositsManagerService,
   DepositsStorageService
 } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
-
-import { routes } from './app.routes';
-import { appStartup } from './app-startup';
+import { ColoredConsoleDriver, LoggerService } from '@shared/logger';
 import { ShortcutsService } from '@shared/shortcuts.service';
-import { DepositBridgeService } from '@shared/deposits/deposit-bridge.service';
+
+import { appStartup } from './app-startup';
+import { routes } from './app.routes';
 
 
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideLumberjack({
+      levels: isDevMode() ? [
+        'critical',
+        'error',
+        'info',
+        'trace',
+      ] : [],
+    }),
+
+    {
+      provide: lumberjackLogDriverToken,
+      useClass: ColoredConsoleDriver,
+      multi: true,
+    },
+
+    LoggerService,
+
     provideAppInitializer(appStartup),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
@@ -34,6 +59,9 @@ export const appConfig: ApplicationConfig = {
     }),
     DepositsStorageService,
     DepositsManagerService,
+    CurrencyService,
+    CurrencyRatesService,
+    CurrencyConverterService,
 
     DepositBridgeService,
     HistoryService,

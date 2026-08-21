@@ -1,4 +1,5 @@
 import { round } from '@utils/round';
+import { CurrencyShape, getDefaultCurrency } from '@shared/Currency';
 
 import { DepositInput } from './deposit-input.model';
 import { DepositResult } from './deposit-result.model';
@@ -7,21 +8,54 @@ import { DepositResult } from './deposit-result.model';
 
 export class DepositModel {
   public static Empty(): DepositModel {
-    return new DepositModel('', DepositInput.Empty(), DepositResult.Empty());
+    return new DepositModel(
+      '',
+      getDefaultCurrency(),
+      false,
+      DepositInput.Empty(),
+      DepositResult.Empty()
+    );
   }
 
 
 
   private _name: string;
+  private _currency: CurrencyShape;
+  private _autoConversion: boolean;
   private _input: DepositInput;
   private _result: DepositResult;
 
 
 
-  public constructor(name: string, input: DepositInput, result: DepositResult) {
-    this._name = name;
-    this._input = input;
+  public constructor(
+    name: string,
+    currency: CurrencyShape,
+    autoConversion: boolean,
+    input: DepositInput,
+    result: DepositResult
+  ) {
+    this._name           = name;
+    this._currency       = currency;
+    this._autoConversion = autoConversion;
+
+    this._input  = input;
     this._result = result;
+  }
+
+  /**
+   * Method aimed upon updating deposit input, when the currency
+   * conversion happens.
+   * So we need to update all deposit input values that are currency-dependent.
+  **/
+  public setInput(principal: number, monthlyDeposit: number) {
+    this._input = this._input.withCurrencyUpdate(principal, monthlyDeposit);
+
+    return this;
+  }
+
+  public setCurrency(currency: CurrencyShape) {
+    this._currency = currency
+    return this;
   }
 
   public setName(name: string) {
@@ -38,6 +72,19 @@ export class DepositModel {
 
   public name(): string {
     return this._name;
+  }
+
+  public currency() {
+    return this._currency;
+  }
+
+  public setAutoconversion(autoConversion: boolean) {
+    this._autoConversion = autoConversion;
+    return this;
+  }
+
+  public autoConversion() {
+    return this._autoConversion;
   }
 
   public principal(): number {

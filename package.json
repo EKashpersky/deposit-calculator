@@ -21,6 +21,7 @@
     "@angular/material": "^22.0.5",
     "@angular/platform-browser": "^22.0.7",
     "@angular/router": "^22.0.7",
+    "@ngworker/lumberjack": "^22.0.0",
     "@ngx-translate/core": "^18.0.0",
     "@ngx-translate/http-loader": "^18.0.0",
     "localspace": "^1.1.1",

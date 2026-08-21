@@ -1,13 +1,14 @@
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
+  inject,
   OnInit,
   Renderer2,
-  Signal,
   signal,
-  ChangeDetectionStrategy,
+  Signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -17,22 +18,34 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
-import { CurrencyService, CurrencyShape } from '@shared/currency.service';
-import { HistoryService } from '@shared/history';
-import { ShortcutsService } from '@shared/shortcuts.service';
-import { Theme, ThemeService } from '@shared/theme.service';
+import { environment } from '@environment/development';
 
+import { CurrencyApiService } from '@api/currency-api.service';
 import {
   LanguageShape,
   SUPPORTED_LANGUAGES
-} from '../config/supported-languages';
-import { environment } from '@environment/development';
+} from '@config/supported-languages';
+import {
+  CurrencyRatesService,
+  CurrencyService,
+  CurrencyShape
+} from '@shared/Currency';
+import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
+import { HistoryService } from '@shared/history';
+import { ShortcutsService } from '@shared/shortcuts.service';
+import { Theme, ThemeService } from '@shared/theme.service';
 
 
 
 @Component({
   selector: 'app-root',
-  providers: [MatIconRegistry, BreakpointObserver, ThemeService, CurrencyService],
+  providers: [
+    MatIconRegistry,
+    BreakpointObserver,
+
+    ThemeService,
+    CurrencyApiService,
+  ],
   imports: [
     RouterOutlet,
 
@@ -58,7 +71,7 @@ export class App implements OnInit {
   public languages: LanguageShape[];
   public currencies: CurrencyShape[];
 
-  public readonly currencyIcon: Signal<CurrencyShape>;
+  public readonly preferredCurrency: Signal<CurrencyShape>;
 
   public themeIcon = computed(() => {
     return this._theme.theme() === Theme.Light ? 'dark_mode' : 'light_mode';
@@ -76,6 +89,9 @@ export class App implements OnInit {
     private _theme: ThemeService,
     private _renderer: Renderer2,
     private _currency: CurrencyService,
+    private _currencyRates: CurrencyRatesService,
+    private _depositsManager: DepositsManagerService,
+    private _depositBridge: DepositBridgeService,
   ) {
     this.languages = SUPPORTED_LANGUAGES;
 
@@ -86,10 +102,26 @@ export class App implements OnInit {
       [Breakpoints.XLarge]: 'xlg'
     };
 
-    this.currencies = this._currency.getSupportedCurrencies();
+    this.currencies = [];
 
-    this.currencyIcon = this._currency.currency;
+    this._currency.changePreferredCurrency(
+      this._currency.getPreferredOrFallbackCurrency()
+    );
 
+    this.preferredCurrency = this._currency.preferredCurrency as Signal<CurrencyShape>;
+
+    inject(CurrencyApiService).getCurrencyRates().then((rates) => {
+      this._currencyRates.setRates(rates);
+      this.currencies = this._currency.getCurrenciesWithRates();
+    });
+
+    this._depositBridge.deposit.subscribe((deposit) => {
+      if (deposit) {
+        const updateDepositAction = this._depositsManager.updateDeposit(deposit);
+
+        this._history.addAction(updateDepositAction);
+      }
+    });
 
     effect(() => {
       this._shortcuts.undo();
@@ -103,7 +135,6 @@ export class App implements OnInit {
 
     effect(() => {
       this._renderer.removeClass(document.body, this._theme.lastTheme());
-
       this._renderer.addClass(document.body, this._theme.theme());
     });
 
@@ -143,8 +174,9 @@ export class App implements OnInit {
     }
   }
 
-  public changeCurrency(currency: CurrencyShape) {
-    this._currency.changeCurrency(currency);
+  public changePreferredCurrency(currency: CurrencyShape) {
+    this._currency.changePreferredCurrency(currency);
+    // this.preferredCurrency.set(currency);
   }
 
   public toggleTheme() {

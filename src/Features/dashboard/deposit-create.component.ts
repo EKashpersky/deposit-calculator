@@ -15,7 +15,10 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
+
+import { CurrencyShape } from '@shared/Currency';
 
 
 
@@ -55,6 +58,16 @@ class InstantErrorStateMatcher implements ErrorStateMatcher {
             <mat-error>{{ 'dashboard.deposit_dialog.required' | translate }}</mat-error>
           }
         </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>{{ 'Desired currency' | translate }}</mat-label>
+
+          <mat-select formControlName="currency">
+            @for (currency of currencies; track currency) {
+              <mat-option [value]="currency">{{ currency.symbol }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
       </mat-dialog-content>
 
       <mat-dialog-actions align="start">
@@ -75,6 +88,7 @@ class InstantErrorStateMatcher implements ErrorStateMatcher {
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatButtonModule,
     TranslatePipe,
   ],
@@ -86,6 +100,9 @@ export class DepositNameComponent {
   public readonly form: FormGroup;
   public readonly errorStateMatcher: ErrorStateMatcher;
   public readonly depositNames: string[];
+  public readonly currencies: CurrencyShape[];
+
+
 
   public constructor(private _dialogRef: MatDialogRef<DepositNameComponent>) {
     const data = inject(MAT_DIALOG_DATA);
@@ -96,6 +113,9 @@ export class DepositNameComponent {
     this.i18nAction = data.i18nAction;
 
     this.depositNames = data.depositNames;
+    this.currencies = data.currencies;
+
+    const defaultCurrency = data.preferredCurrency;
 
     const fb = inject(FormBuilder);
 
@@ -106,6 +126,7 @@ export class DepositNameComponent {
           Validators.required,
         ]),
       }),
+      currency: fb.control(this.currencies.find(currencyx => currencyx.code === defaultCurrency.code))
     });
   }
 

@@ -3,11 +3,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  Signal,
   signal
 } from '@angular/core';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators
@@ -28,8 +28,14 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, filter, map, take } from 'rxjs';
 
 import { DepositSummaryComponent } from '@features/deposit-summary';
+import {
+  CurrencyConverterService,
+  CurrencyConvertSide,
+  CurrencyService,
+  CurrencyShape,
+  getDefaultCurrency,
+} from '@shared/Currency';
 import { DepositBridgeService } from '@shared/deposits';
-import {CurrencyService, CurrencyShape } from '@shared/currency.service';
 import { DurationPipe } from '@shared/duration.pipe';
 
 import {
@@ -40,9 +46,12 @@ import {
   CompoundRate,
   DepositInput,
   DepositModel,
-  DepositResult,
   Duration,
 } from './model';
+import { LumberjackService, ScopedLumberjackLogger } from '@ngworker/lumberjack';
+import { LoggerService } from '@shared/logger';
+import { ScopedLogger } from '@shared/logger/scoped-logger.service';
+import { LoggerShape } from '@shared/logger/logger.model';
 
 
 
@@ -78,24 +87,39 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalculatorPage {
-  public readonly calculatorForm: FormGroup;
-  public readonly compoundRates: { value: number, label: string }[];
+  public readonly calculatorForm: FormGroup<{
+    currency: FormControl<CurrencyShape>,
+    autoConversion: FormControl<boolean>,
 
+    principal: FormControl<number>,
+    annualRate: FormControl<number>,
+
+    monthlyDeposit: FormControl<number>,
+    noFirstMonthDeposit: FormControl<boolean>,
+
+    tax: FormControl<number>,
+    withTaxes: FormControl<boolean>,
+
+    duration: FormGroup<{
+      value: FormControl<number>,
+      scale: FormControl<'years' | 'months'>,
+    }>,
+
+    compoundRate: FormControl<CompoundRate>,
+  }>;
+  public readonly compoundRates: { value: number, label: string }[];
   public readonly duration = signal(new Duration('months', 24));
 
+  public readonly currencies = signal<CurrencyShape[]>([]);
+  public readonly currency = signal<CurrencyShape | null>(null);
 
   public formChanged = signal(false);
 
-  private _depositName: string;
-  private _depositInput: DepositInput;
-  private _depositResult: DepositResult;
-
-  public readonly currency: Signal<CurrencyShape>;
-
-
-
   private _deposit = signal<DepositModel>(DepositModel.Empty());
   public readonly deposit = this._deposit.asReadonly();
+
+
+  private _logger: LoggerShape;
 
 
 
@@ -103,13 +127,9 @@ export class CalculatorPage {
     private _fb: FormBuilder,
     private _depositBridge: DepositBridgeService,
     private _currency: CurrencyService,
+    private _currencyConversion: CurrencyConverterService,
   ) {
-    /**
-     * All the boring stuff
-    **/
-    this._depositName = '';
-    this._depositInput  = DepositInput.Empty();
-    this._depositResult = DepositResult.Empty();
+    this._logger = new ScopedLogger('CalculatorPage', inject(LoggerService));
 
     const COMPOUND_RATES_MAP_FROM_I18N = [
       CompoundRate.NO_COMPOUND,
@@ -124,46 +144,107 @@ export class CalculatorPage {
       return { value, label: `calculator.compound_rates.${i}` };
     });
 
-    this.currency = this._currency.currency;
-
+    this.currencies.set(this._currency.getCurrenciesWithRates());
 
     /**
      * Form initialisation, along with wiring up recalculation on form update
     **/
-    this.calculatorForm = this._fb.group({
-      principal: this._fb.control(10000, Validators.min(0)),
-      annualRate: this._fb.control(16, Validators.min(0)),
+    this.calculatorForm = this._fb.nonNullable.group({
+      currency: this._fb.nonNullable.control(getDefaultCurrency()),
+      autoConversion: this._fb.nonNullable.control(false),
 
-      monthlyDeposit: this._fb.control(0, Validators.min(0)),
-      noFirstMonthDeposit: this._fb.control(true),
+      principal: this._fb.nonNullable.control(10000, Validators.compose([
+        Validators.required,
+        Validators.min(0)
+      ])),
+      annualRate: this._fb.nonNullable.control(16, Validators.compose([
+        Validators.required,
+        Validators.min(0)
+      ])),
 
-      tax: this._fb.control(23, Validators.min(0)),
-      withTaxes: this._fb.control(true),
+      monthlyDeposit: this._fb.nonNullable.control(0, [
+        Validators.required,
+        Validators.min(0)
+      ]),
+      noFirstMonthDeposit: this._fb.nonNullable.control(true),
 
-      duration: this._fb.group({
-        value: this._fb.control(this.duration().duration(), Validators.min(0)),
-        scale: this._fb.control(this.duration().scale(), Validators.required),
+      tax: this._fb.nonNullable.control(23, Validators.min(0)),
+      withTaxes: this._fb.nonNullable.control(true),
+
+      duration: this._fb.nonNullable.group({
+        value: this._fb.nonNullable.control(this.duration().duration(), [
+          Validators.required,
+          Validators.min(3)
+        ]),
+        scale: this._fb.nonNullable.control(this.duration().scale()),
       }),
 
-      compoundRate: this._fb.control(4),
+      compoundRate: this._fb.nonNullable.control(4),
     });
 
-    this.calculatorForm.get('duration')!.valueChanges.subscribe(group => {
+    this.calculatorForm.controls.currency.valueChanges
+    .subscribe(currency => {
+      this._logger.d(`CalculatorForm.controls.currency.valueChanges`);
+
+      if (this.calculatorForm.controls.autoConversion.value) {
+        const principal = this._currencyConversion.convert(
+          this._deposit().principal(),
+          this._deposit().currency().code,
+          currency.code,
+          CurrencyConvertSide.Equal,
+        );
+
+        const monthlyDeposit = this._currencyConversion.convert(
+          this._deposit().monthlyDeposit(),
+          this._deposit().currency().code,
+          currency.code,
+          CurrencyConvertSide.Equal,
+        );
+
+        this._deposit.update(
+          deposit => deposit.setInput(
+            principal,
+            monthlyDeposit
+          ).setCurrency(currency)
+        );
+
+        this.calculatorForm.patchValue({
+          principal,
+          monthlyDeposit,
+        });
+      } else {
+        this._deposit.update(deposit => deposit.setCurrency(currency))
+      }
+    });
+
+    this.calculatorForm.controls.duration.valueChanges.subscribe(group => {
+      this._logger.d(`CalculatorForm#controls.duration#valueChanges`);
+
       this.duration.update(
-        duration => duration.update(group.value, group.scale)
+        duration => duration.update(group.value!, group.scale!)
       );
 
-      this.calculatorForm.get('duration')!.get('value')!.setValue(
+      this.calculatorForm.controls.duration.controls.value.setValue(
         this.duration().duration(),
-        { emitEvent: false, emitModelToViewChange: true, }
-      );
+        { emitEvent: false, emitModelToViewChange: true },
+      )
     });
 
     this.calculatorForm.valueChanges.subscribe(() => {
+      this._logger.d(`CalculatorForm#valueChanges, formChanged`);
+
       this.formChanged.set(true);
     });
 
     this.calculatorForm.valueChanges.pipe(debounceTime(500)).subscribe(() =>  {
+      this._logger.d(`CalculatorForm#valueChanges`);
+
+      this._deposit.update(
+        deposit => deposit.setAutoconversion(
+          this.calculatorForm.controls.autoConversion.value
+        )
+      );
+
       this._recalculateResult();
       this.formChanged.set(false);
     });
@@ -177,17 +258,23 @@ export class CalculatorPage {
       take(1),
       map(x => x['calculator'] as DepositModel)
     ).subscribe(data => {
-      this._depositName = data.name();
-
+      this._deposit.set(data);
       this.duration.set(data.input().duration);
 
       const input = data.input();
+
+      const depositCurrencyCode = data.currency().code;
 
       const mappedCompoundIndex = this.compoundRates.findIndex(
         x => x.value === input.compoundRate
       )!;
 
       this.calculatorForm.patchValue({
+        currency: this.currencies().find(
+          currency => currency.code === depositCurrencyCode
+        )!,
+        autoConversion: data.autoConversion(),
+
         principal: input.principal,
         annualRate: input.annualRate,
         monthlyDeposit: input.monthlyDeposit,
@@ -200,19 +287,11 @@ export class CalculatorPage {
           scale: input.duration.scale(),
         },
       }, { emitEvent: true });
-
-      this._recalculateResult();
     });
   }
 
   public save() {
-    this._depositBridge.updateDeposit(
-      new DepositModel(
-        this._depositName,
-        this._depositInput,
-        this._depositResult
-      )
-    );
+    this._depositBridge.updateDeposit(this.deposit());
   }
 
 
@@ -226,36 +305,42 @@ export class CalculatorPage {
       compoundRate,
       withTaxes,
       noFirstMonthDeposit,
-    } = this.calculatorForm.value;
+    } = this.calculatorForm.getRawValue();
 
-    const annualRateValue   = parseFloat(annualRate);
-    const compoundRateValue = this.compoundRates[parseInt(compoundRate)].value;
+    const annualRateValue   = annualRate;
+    const compoundRateValue = this.compoundRates[compoundRate].value;
     const duration          = this.duration();
-    const taxValue          = parseFloat(tax);
-    const principalValue    = parseInt(principal);
-    if (principalValue <= 0 || annualRateValue <= 0 || duration.duration() <= 0) {
-      // this._deposit.set(DepositModel.Empty());
+    const taxValue          = tax;
+    const principalValue    = principal;
+
+    let depositInput: DepositInput | null = null;
+
+    try {
+      depositInput = createDepositInput(
+        principalValue,
+        annualRateValue,
+        duration,
+        monthlyDeposit,
+        taxValue,
+        compoundRateValue,
+        noFirstMonthDeposit,
+        withTaxes,
+      );
+    } catch (e) {
+      this._logger.e((e as Error).message);
+
       return;
     }
 
-    this._depositInput = createDepositInput(
-      principalValue,
-      annualRateValue,
-      duration,
-      parseInt(monthlyDeposit),
-      taxValue,
-      compoundRateValue,
-      noFirstMonthDeposit,
-      withTaxes,
-    );
-
-    this._depositResult = calculateDeposit(this._depositInput);
+    const depositResult = calculateDeposit(depositInput);
 
     this._deposit.set(
       new DepositModel(
-        this._depositName,
-        this._depositInput,
-        this._depositResult
+        this._deposit().name(),
+        this._deposit().currency(),
+        this._deposit().autoConversion(),
+        depositInput,
+        depositResult
       )
     );
   }

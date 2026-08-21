@@ -1,3 +1,8 @@
+import { CurrencyCodeEnum } from '@config/supported-currencies';
+import { CurrencyShape } from '@shared/Currency';
+
+
+
 export interface DurationPOJO {
   readonly scale: 'years' | 'months';
   readonly duration: number;
@@ -23,6 +28,8 @@ export interface DepositResultPOJO {
 
 
 export interface DepositPOJO {
+  readonly currency: CurrencyShape;
+  readonly autoConversion: boolean;
   readonly input: DepositInputPOJO;
   readonly result: DepositResultPOJO;
 }
