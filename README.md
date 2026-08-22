@@ -23,7 +23,7 @@ Compare bank deposits with compound or simple interest, tax, and monthly contrib
 - Dashboard of created deposits (stored in the browser)
 - Currency switcher with rates
 
-## Features
+#### Features
 - Dashboard actions history with undo/redo shortcuts
 - Currency, language and theme switchers
 - Animated currency amounts
