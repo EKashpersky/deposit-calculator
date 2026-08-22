@@ -70,7 +70,7 @@
       {{ 'calculator.result.deposited' | translate }}:
     </span>
     <span slot="value">
-      <currency [currency]="deposit().currency().symbol" [value]="deposit().deposited() - deposit().taxed()"></currency>
+      <currency [currency]="deposit().currency().symbol" [value]="deposit().deposited()"></currency>
     </span>
 
     <span slot="text">{{ 'calculator.result.interest' | translate }}:</span>
