@@ -27,14 +27,12 @@ export class DomainStorage<Model, Pojo> {
   public getItems(): Promise<Model[]> {
     return this._storage.keys().then(
       keys => this._storage.getItems<Pojo>(keys)
-    ).then(items => {
-      console.debug(items, 'items');
-
-      return items.map(
+    ).then(items =>
+      items.map(
         item => item && this._serializer.deserialize(item.key, item.value!) || null
       )
       .filter(x => x !== null)
-    });
+    );
   }
 
   public setItem(name: string, model: Model) {
