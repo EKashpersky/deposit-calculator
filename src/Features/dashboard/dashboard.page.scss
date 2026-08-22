@@ -7,52 +7,8 @@
 
 .empty-state ::ng-deep a {
   color: var(--mat-sys-on-surface-variant) !important;
+  cursor: pointer;
 }
-
-// .fade-in {
-//   animation-name: fade-in;
-//   animation-fill-mode: both;
-//   @include animation('default', 'spatial', 'standard');
-// }
-
-// @keyframes fade-in {
-//   from {
-//     height: 0px;
-//     padding-bottom: 0px;
-//     opacity: 0.4;
-//   }
-
-//   to {
-//     height: 220px;
-//     padding-bottom: 20px;
-//     opacity: 1;
-//   }
-// }
-
-
-
-
-// .fade-out {
-//   animation-name: fade-out;
-//   animation-fill-mode: both;
-//   @include animation('default', 'spatial', 'standard');
-// }
-
-// @keyframes fade-out {
-//   from {
-//     height: 220px;
-//     padding-bottom: 20px;
-//     opacity: 1;
-//   }
-
-//   to {
-//     height: 0px;
-//     padding-bottom: 0px;
-//     opacity: 0.4;
-//   }
-// }
-
-
 
 .mat-card-wrapper {
   transition-property: grid-template-rows, padding-bottom, opacity;
