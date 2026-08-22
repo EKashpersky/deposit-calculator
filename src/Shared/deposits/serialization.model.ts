@@ -3,13 +3,14 @@ import {
   DepositModel,
   Duration
 } from '@features/calculator/model';
+import { DomainSerializer } from '@shared/Storage';
 
 import { DepositPOJO } from './storage.models';
 
 
 
-export class DepositSerializer {
-  public static deserialize(name: string, deposit: DepositPOJO): DepositModel {
+export class DepositSerializer implements DomainSerializer<DepositModel, DepositPOJO> {
+  public deserialize(name: string, deposit: DepositPOJO): DepositModel {
     return new DepositModel(
       name,
       deposit.currency,
@@ -27,7 +28,7 @@ export class DepositSerializer {
     );
   }
 
-  public static serialize(deposit: DepositModel): DepositPOJO {
+  public serialize(deposit: DepositModel): DepositPOJO {
     return {
       currency: deposit.currency(),
       autoConversion: deposit.autoConversion(),

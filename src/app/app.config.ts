@@ -5,7 +5,10 @@ import {
   provideBrowserGlobalErrorListeners
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { lumberjackLogDriverToken, provideLumberjack } from '@ngworker/lumberjack';
+import {
+  lumberjackLogDriverToken,
+  provideLumberjack,
+} from '@ngworker/lumberjack';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -17,11 +20,11 @@ import {
 import {
   DepositBridgeService,
   DepositsManagerService,
-  DepositsStorageService
 } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { ColoredConsoleDriver, LoggerService } from '@shared/logger';
 import { ShortcutsService } from '@shared/shortcuts.service';
+import { StorageService } from '@shared/Storage';
 
 import { appStartup } from './app-startup';
 import { routes } from './app.routes';
@@ -30,6 +33,8 @@ import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    StorageService,
+
     provideLumberjack({
       levels: isDevMode() ? [
         'critical',
@@ -57,7 +62,6 @@ export const appConfig: ApplicationConfig = {
         useHttpBackend: true,
       })
     }),
-    DepositsStorageService,
     DepositsManagerService,
     CurrencyService,
     CurrencyRatesService,

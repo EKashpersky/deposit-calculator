@@ -5,7 +5,6 @@ import { CurrencyService } from '@shared/Currency';
 
 import { appStartupSetupCurrency } from './startup/currency';
 import { appStartupSetupLocale } from './startup/locale';
-import { appStartupSetupStorage } from './startup/storage';
 
 
 
@@ -16,6 +15,5 @@ export function appStartup() {
   return Promise.all([
     appStartupSetupLocale(translateService),
     appStartupSetupCurrency(currencyService),
-    appStartupSetupStorage(),
   ]);
 }

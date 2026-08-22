@@ -178,7 +178,6 @@ export class App implements OnInit {
 
   public changePreferredCurrency(currency: CurrencyShape) {
     this._currency.changePreferredCurrency(currency);
-    // this.preferredCurrency.set(currency);
   }
 
   public toggleTheme() {

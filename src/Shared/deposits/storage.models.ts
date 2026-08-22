@@ -1,4 +1,3 @@
-import { CurrencyCodeEnum } from '@config/supported-currencies';
 import { CurrencyShape } from '@shared/Currency';
 
 

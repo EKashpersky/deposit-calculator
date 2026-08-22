@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 
 import { DepositModel } from '@features/calculator/model';
+import { StorageService } from '@shared/Storage';
 
 import {
   AddDepositCommand,
@@ -9,7 +10,7 @@ import {
   UpdateDepositCommand
 } from './commands';
 import { DepositCommandContext } from './deposit-command.context';
-import { DepositsStorageService } from './deposits-storage.service';
+import { DepositStorage } from './deposit-storage.model';
 
 
 
@@ -18,24 +19,31 @@ export class DepositsManagerService {
   private _deposits = signal<DepositModel[]>([]);
   public deposits = this._deposits.asReadonly();
 
+  private _depositStorage: DepositStorage;
+
   private _context: DepositCommandContext;
 
 
 
-  public constructor(private _depositStorage: DepositsStorageService) {
-    /// Use user browser locale for sorting deposits
+  public constructor(private _storage: StorageService) {
+    this._depositStorage = DepositStorage.New(
+      this._storage.createInstance('deposits')
+    );
+
+    this._depositStorage.getItems().then(value => this._deposits.set(value));
+
     this._context = new DepositCommandContext(
       this._depositStorage,
-      this._deposits,
+      this._deposits
     );
   }
 
   public fromName(name: string) {
-    return this._depositStorage.getItem(name);
+    return this._depositStorage!.getItem(name);
   }
 
   public addDepositsBulk(deposits: DepositModel[]) {
-    this._depositStorage.setItems(deposits);
+    this._depositStorage.setItems(deposits, deposit => deposit.name());
     this._deposits.update(prev => (prev.push(...deposits), prev));
   }
 
