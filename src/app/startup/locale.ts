@@ -1,3 +1,4 @@
+import { effect } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 import {
@@ -32,7 +33,10 @@ export function appStartupSetupLocale(translateService: TranslateService) {
 
     if (primaryLocale !== null) {
       translateService.use(primaryLocale);
-      return resolve();
+
+      return effect(() => {
+        translateService.isLoading() === false && resolve();
+      });
     }
 
     /**
@@ -62,6 +66,8 @@ export function appStartupSetupLocale(translateService: TranslateService) {
 
     translateService.setFallbackLang(fallbackCandidates[0]);
 
-    resolve();
+    return effect(() => {
+      translateService.isLoading() === false && resolve();
+    });
   });
 }
