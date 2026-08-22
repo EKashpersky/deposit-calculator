@@ -104,11 +104,13 @@ export class App implements OnInit {
 
     this.currencies = [];
 
+    this.preferredCurrency = this._currency.preferredCurrency as Signal<CurrencyShape>;
+
     this._currency.changePreferredCurrency(
       this._currency.getPreferredOrFallbackCurrency()
     );
 
-    this.preferredCurrency = this._currency.preferredCurrency as Signal<CurrencyShape>;
+    this._theme.detectPreferredTheme();
 
     inject(CurrencyApiService).getCurrencyRates().then((rates) => {
       this._currencyRates.setRates(rates);
