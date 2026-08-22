@@ -8,11 +8,11 @@ Compare bank deposits with compound or simple interest, tax, and monthly contrib
 
 ## Stack
 
-![Angular](https://img.shields.io/badge/Angular-22-DD0031?logo=angular&logoColor=white)
-![Angular Material](https://img.shields.io/badge/Angular%20Material-22-757575?logo=angular&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38BDF8?logo=tailwindcss&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
-![ngx-translate](https://img.shields.io/badge/ngx--translate-18-4B8BBE?logo=i18next&logoColor=white)
+[![Angular](https://img.shields.io/badge/Angular-22-DD0031?logo=angular&logoColor=white)](https://angular.dev)
+[![Angular Material](https://img.shields.io/badge/Angular%20Material-22-757575?logo=angular&logoColor=white)](https://material.angular.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![ngx-translate](https://img.shields.io/badge/ngx--translate-18-4B8BBE?logo=i18next&logoColor=white)](https://ngx-translate.org)
 
 ---
 
@@ -43,4 +43,5 @@ Output: total deposited, gross interest, tax, net future value.
 
 ## Author
 Yehor Kashperskyi
+
 [LinkedIn](https://linkedin.com/in/ekashpersky)
