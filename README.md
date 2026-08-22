@@ -1,59 +1,46 @@
-# DepositCalculator
+# Deposit Calculator
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.2.
+Compare bank deposits with compound or simple interest, tax, and monthly contributions. Save scenarios, undo changes, switch language (EN / UK) and theme.
 
-## Development server
+**[Live demo](https://ekashpersky.github.io/deposit-calculator/)**
 
-To start a local development server, run:
+> It is an estimate of future deposits, not financial advice.
 
-```bash
-ng serve
-```
+## Stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+![Angular](https://img.shields.io/badge/Angular-22-DD0031?logo=angular&logoColor=white)
+![Angular Material](https://img.shields.io/badge/Angular%20Material-22-757575?logo=angular&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38BDF8?logo=tailwindcss&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
+![ngx-translate](https://img.shields.io/badge/ngx--translate-18-4B8BBE?logo=i18next&logoColor=white)
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## What it does
+- Calculates simple and compound interest
+- Allows to manage monthly top-ups, first month skip
+- Tax on interest (on/off, rate)
+- Dashboard of created deposits (stored in the browser)
+- Currency switcher with rates
 
-```bash
-ng generate component component-name
-```
+## Features
+- Dashboard actions history with undo/redo shortcuts
+- Currency, language and theme switchers
+- Animated currency amounts
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## How interest is calculated
 
-## Building
+The model takes principal, annual rate, term, compounding frequency, monthly deposit, tax rate, and two flags (taxed, skip first-month deposit).
 
-To build the project run:
+- **Simple** — interest is not added back to the principal. Each contribution earns simple interest for the remaining months.
+- **Compound** — the annual rate is converted to an effective monthly rate from the chosen frequency, then applied over the term with contributions.
 
-```bash
-ng build
-```
+Output: total deposited, gross interest, tax, net future value.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Author
+Yehor Kashperskyi
+[LinkedIn](https://linkedin.com/in/ekashpersky)
