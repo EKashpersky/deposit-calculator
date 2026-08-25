@@ -12,7 +12,53 @@
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght,CRSV@100..900,0&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-<body class="dark mat-bg-surface-container-lowest mat-text-on-surface">
+<body class="mat-bg-surface-container-lowest mat-text-on-surface">
+  <style>
+    .boot-loader {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: var(--mat-sys-background);
+      z-index: 9999;
+      opacity: 1;
+    }
+
+    .boot-loader.leave {
+      opacity: 0;
+      transition: opacity var(--mat-motion-fast-spatial-standard-duration) var(--mat-motion-fast-spatial-standard-cb);
+    }
+
+    .boot-loader-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--mat-sys-tertiary-container);
+      border-top-color: var(--mat-sys-tertiary);
+      border-radius: 50%;
+      animation: boot-spin var(--mat-motion-slow-spatial-standard-duration) var(--mat-motion-slow-spatial-standard-cb) infinite;
+    }
+
+    @keyframes boot-spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
+  <script>
+    (function () {
+      try {
+        let theme = window.matchMedia('(prefers-color-scheme: light)').matches
+          ? 'light'
+          : 'dark';
+
+        document.body.classList.add(theme);
+      } catch (e) { }
+    })();
+  </script>
+
+  <div class="boot-loader" aria-label="Loading">
+    <div class="boot-loader-spinner"></div>
+  </div>
+
   <app-root></app-root>
 </body>
 </html>

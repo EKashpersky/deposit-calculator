@@ -81,6 +81,10 @@ export class App implements OnInit {
 
   public readonly appVersion = signal('');
 
+  public readonly fontsLoaded = signal(false);
+
+
+
   public constructor(
     private _translate: TranslateService,
     private _history: HistoryService,
@@ -93,6 +97,19 @@ export class App implements OnInit {
     private _depositsManager: DepositsManagerService,
     private _depositBridge: DepositBridgeService,
   ) {
+    Promise.allSettled([
+      document.fonts.ready,
+      document.fonts.load('18px "Material Icons"'),
+    ]).then(() => {
+      const loader = document.querySelector('body .boot-loader');
+
+      this._renderer.addClass(loader, 'leave');
+
+      setTimeout(() => {
+        this._renderer.removeChild(document.body, loader);
+      }, 350);
+    });
+
     this.languages = SUPPORTED_LANGUAGES;
 
     this._breakpoint2SizeMap = {
