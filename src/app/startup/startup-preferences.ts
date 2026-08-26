@@ -15,11 +15,13 @@ export function appStartupPreferences(
 ) {
   return new Promise<void>(resolve => {
     preferences.load().then(storedPrefs => {
-      const prefs = storedPrefs[0].get();
+      const prefs = storedPrefs[0]?.get() ?? null;
 
-      currency.changePreferredCurrency(currencyShapeFromCode(prefs.currency as CurrencyCodeEnum));
-      language.use(prefs.language!);
-      theme.setTheme(prefs.theme as ThemeEnum);
+      if (prefs !== null) {
+        currency.changePreferredCurrency(currencyShapeFromCode(prefs.currency as CurrencyCodeEnum));
+        language.use(prefs.language!);
+        theme.setTheme(prefs.theme as ThemeEnum);
+      }
 
       resolve();
     });
