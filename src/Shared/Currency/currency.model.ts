@@ -13,7 +13,7 @@ export interface CurrencyShape {
 
 export function currencyShapeFromCode(currencyCode: CurrencyCodeEnum) {
   return {
-    currencyCode,
-    currencySymbol: CurrencySymbolEnum[currencyCode],
-  };
+    code: currencyCode,
+    symbol: CurrencySymbolEnum[currencyCode],
+  } satisfies CurrencyShape;
 }

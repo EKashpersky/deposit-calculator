@@ -23,11 +23,13 @@ import {
 } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { ColoredConsoleDriver, LoggerService } from '@shared/logger';
+import { PreferencesService } from '@shared/preferences';
 import { ShortcutsService } from '@shared/shortcuts.service';
 import { StorageService } from '@shared/Storage';
 
 import { appStartup } from './app-startup';
 import { routes } from './app.routes';
+import { ThemeService } from '@shared/theme.service';
 
 
 
@@ -62,6 +64,10 @@ export const appConfig: ApplicationConfig = {
         useHttpBackend: true,
       })
     }),
+
+    ThemeService,
+
+    PreferencesService,
     DepositsManagerService,
     CurrencyService,
     CurrencyRatesService,

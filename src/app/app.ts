@@ -32,8 +32,9 @@ import {
 } from '@shared/Currency';
 import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
+import { PreferencesService } from '@shared/preferences';
 import { ShortcutsService } from '@shared/shortcuts.service';
-import { Theme, ThemeService } from '@shared/theme.service';
+import { ThemeEnum, ThemeService } from '@shared/theme.service';
 
 
 
@@ -43,7 +44,6 @@ import { Theme, ThemeService } from '@shared/theme.service';
     MatIconRegistry,
     BreakpointObserver,
 
-    ThemeService,
     CurrencyApiService,
   ],
   imports: [
@@ -74,7 +74,7 @@ export class App implements OnInit {
   public readonly preferredCurrency: Signal<CurrencyShape>;
 
   public themeIcon = computed(() => {
-    return this._theme.theme() === Theme.Light ? 'dark_mode' : 'light_mode';
+    return this._theme.theme() === ThemeEnum.Light ? 'dark_mode' : 'light_mode';
   });
 
   public readonly size = signal<'' | 'sm' | 'md' | 'lg' | 'xlg'>('');
@@ -96,6 +96,7 @@ export class App implements OnInit {
     private _currencyRates: CurrencyRatesService,
     private _depositsManager: DepositsManagerService,
     private _depositBridge: DepositBridgeService,
+    private _preferences: PreferencesService,
   ) {
     Promise.allSettled([
       document.fonts.ready,
@@ -127,8 +128,6 @@ export class App implements OnInit {
       this._currency.getPreferredOrFallbackCurrency()
     );
 
-    this._theme.detectPreferredTheme();
-
     inject(CurrencyApiService).getCurrencyRates().then((rates) => {
       this._currencyRates.setRates(rates);
       this.currencies = this._currency.getCurrenciesWithRates();
@@ -140,6 +139,17 @@ export class App implements OnInit {
 
         this._history.addAction(updateDepositAction);
       }
+    });
+
+    /// Keep track of user preferences on user storage level
+    effect(() => {
+      this._preferences.patch({
+        theme: this._theme.theme(),
+        language:  this._translate.currentLang(),
+        currency: this._currency.preferredCurrency()!.code
+      });
+
+      this._preferences.save();
     });
 
     effect(() => {
@@ -198,7 +208,7 @@ export class App implements OnInit {
   }
 
   public toggleTheme() {
-    this._theme.toggleTheme();
+    this._theme.cycleTheme();
   }
 
   public selectLanguage(language: LanguageShape) {

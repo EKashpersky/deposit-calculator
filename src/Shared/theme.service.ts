@@ -4,17 +4,16 @@ import { LoggerService } from './logger';
 
 
 
-export enum Theme {
+export enum ThemeEnum {
   Light = 'light',
   Dark  = 'dark',
 }
 
 @Injectable()
 export class ThemeService {
-  private _lastTheme: Theme;
+  private _lastTheme: ThemeEnum;
 
-  private _theme        = signal<Theme>(Theme.Dark);
-  public readonly theme = this._theme.asReadonly();
+  private _theme = signal<ThemeEnum>(ThemeEnum.Dark);
 
 
 
@@ -22,35 +21,49 @@ export class ThemeService {
     this._lastTheme = this._theme();
   }
 
-  public toggleTheme() {
-    this._lastTheme = this.theme();
+  public cycleTheme() {
+    this._lastTheme = this._theme();
 
-    this._theme.set(this.theme() === Theme.Light ? Theme.Dark : Theme.Light);
+    this._theme.set(
+      this._lastTheme === ThemeEnum.Light ? ThemeEnum.Dark : ThemeEnum.Light
+    );
   }
 
   public lastTheme() {
     return this._lastTheme;
   }
 
-  public detectPreferredTheme() {
-    if (typeof window.matchMedia !== 'undefined') {
-      this._initMatchMedia();
-    } else {
+  public canDetectTheme() {
+    const canDetectTheme = typeof window.matchMedia !== 'undefined';
+
+    if (!canDetectTheme) {
       this._logger.e(`Unable to detect preferred theme`, 'ThemeService');
     }
+
+    return canDetectTheme;
   }
 
-  private _initMatchMedia() {
+  public setTheme(theme: ThemeEnum) {
+    this._lastTheme = this._theme();
+
+    this._theme.set(theme);
+  }
+
+  public theme() {
+    return this._theme();
+  }
+
+  public detectTheme() {
     const darkTheme  = matchMedia('(prefers-color-scheme: dark)').matches;
     const lightTheme = matchMedia('(prefers-color-scheme: light)').matches;
 
     if (darkTheme) {
-      this._theme.set(Theme.Dark)
+      return ThemeEnum.Dark;
     } else if (lightTheme) {
-      this._theme.set(Theme.Light);
+      return ThemeEnum.Light;
     } else {
-      this._theme.set(Theme.Light);
       this._logger.w(`Unknown preferred color scheme`, 'ThemeService');
+      return ThemeEnum.Light;
     }
   }
 }
