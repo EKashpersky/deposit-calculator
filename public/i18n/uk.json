@@ -87,7 +87,7 @@
       "duration": "Термін депозиту",
       "annual_rate": "Річна ставка",
       "monthly_payment": "Щомісячний внесок",
-      "total_deposited": "Сума поповнень",
+      "total_deposits": "Щомісячні поповнення",
       "taxed": "Податок",
       "interest": "Відсоток",
       "net": "Чиста майбутня вартість"
@@ -119,9 +119,10 @@
       "accrued": "Нараховано",
       "interest_gross": "Нараховано",
       "interest_taxed": "Податок",
+      "breakdown": "Розбивка",
       "interest_net": "Чистими",
       "principal": "Початковий внесок",
-      "deposited": "Сума поповнень",
+      "total_deposits": "Щомісячні поповнення",
       "interest": "Нараховано",
       "taxed": "Податок",
       "net": "Чиста майбутня вартість"

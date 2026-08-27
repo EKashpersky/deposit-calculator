@@ -7,8 +7,6 @@ import { CurrencyComponent } from '@components/currency';
 import { DepositModel } from '@features/calculator/model';
 import { DurationPipe } from '@shared/duration.pipe';
 
-import { OverviewColumnComponent } from './overview-column.component';
-
 
 
 @Component({
@@ -20,7 +18,6 @@ import { OverviewColumnComponent } from './overview-column.component';
 
     CurrencyComponent,
     DurationPipe,
-    OverviewColumnComponent,
   ],
 
   selector: 'deposit-summary',
@@ -28,7 +25,7 @@ import { OverviewColumnComponent } from './overview-column.component';
 
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
-    class: 'grid grid-cols-2 h-min gap-[16px]'
+    class: 'flex flex-col gap-[16px]'
   },
 })
 export class DepositSummaryComponent {

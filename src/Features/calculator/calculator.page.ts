@@ -49,6 +49,7 @@ import {
   DepositModel,
   Duration,
 } from './model';
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -57,7 +58,7 @@ import {
   templateUrl: 'calculator.page.html',
   styleUrl: 'calculator.page.scss',
   host: {
-    class: 'flex flex-row gap-[32px]'
+    class: 'flex flex-col gap-[24px] mb-[256px]'
   },
 
   imports: [
@@ -66,6 +67,7 @@ import {
 
     MatButtonModule,
     MatButtonToggleModule,
+    MatIconModule,
     MatCardModule,
     MatCheckboxModule,
     MatDividerModule,

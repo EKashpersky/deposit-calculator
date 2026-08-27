@@ -92,7 +92,7 @@
       "duration": "Deposit duration",
       "annual_rate": "Annual interest rate",
       "monthly_payment": "Monthly payment",
-      "total_deposited": "Total deposited",
+      "total_deposits": "Total deposited",
       "taxed": "Taxed",
       "interest": "Interest",
       "net": "Net future value"
@@ -125,8 +125,9 @@
       "interest_gross": "Gross interest",
       "interest_taxed": "Taxed interest",
       "interest_net": "Net interest",
+      "breakdown": "Breakdown",
       "principal": "Initial deposit",
-      "deposited": "Deposited amount",
+      "total_deposits": "Monthly deposits",
       "interest": "Accrued",
       "taxed": "Taxed",
       "net": "Net future value"

@@ -1,8 +1,0 @@
-:host ::ng-deep span[slot="text"] {
-  width: fit-content;
-  grid-column: 1;
-}
-
-:host ::ng-deep span[slot="value"] {
-  grid-column: 2;
-}

@@ -1,86 +1,93 @@
-<mat-card
-  appearance="filled"
-  class="flex flex-col flex-[1_1_auto] w-auto overflow-hidden mat-bg-surface-container-low"
->
-  <overview-column>
-    <span slot="title">
-      {{ 'calculator.result.inputs' | translate }}:
+<mat-card appearance="filled" class="flex flex-col mat-bg-surface-container p-[20px_40px]">
+  <div id="label">
+    <span class="mat-font-label-lg mat-text-on-surface-variant">
+      {{ 'calculator.result.net' | translate }}
     </span>
+  </div>
 
-    <span slot="text">{{ 'calculator.inputs.monthly_deposit' | translate }}:</span>
-    <span slot="value">
-      <currency [currency]="deposit().currency().symbol" [value]="deposit().monthlyDeposit()"></currency>
+  <div id="amount">
+    <span class="mat-font-display-md mat-text-on-surface">
+      <currency [currency]="deposit().currency().symbol" [value]="deposit().net() - deposit().taxed()"></currency>
     </span>
+  </div>
 
-    <span slot="text">{{ 'calculator.result.duration' | translate }}:</span>
-    <span slot="value">
+  <div id="meta" class="mat-font-body-md mat-text-on-surface-variant">
+    <span>
       {{ deposit().durationValue() }}
       {{ deposit().durationValue() | duration:deposit().durationScale() | translate }}
     </span>
-
-    <span slot="text">{{ 'calculator.result.annual_interest' | translate }}:</span>
-    <span slot="value">{{ deposit().annualRate() / 100 | percent:'1.0-2' }}</span>
-
-    <span slot="text">{{ 'calculator.result.taxed' | translate }}:</span>
-    <span slot="value">{{ deposit().tax() / 100 | percent:'1.0-2' }}</span>
-  </overview-column>
+    <span> · </span>
+    <span>
+      <span>{{ deposit().annualRate() / 100 | percent:'1.0-2' }}</span>
+    </span>
+    <span> · </span>
+    <span>
+      <span>{{ 'calculator.result.taxed' | translate }} </span>
+      <span>{{ deposit().tax() / 100 | percent:'1.0-2' }}</span>
+    </span>
+  </div>
 </mat-card>
+
+
 
 <mat-card
   appearance="filled"
-  class="flex flex-col flex-[1_1_auto] w-auto overflow-hidden mat-bg-surface-container-low"
+  class="flex flex-col mat-text-body-sm mat-bg-surface-container p-[20px_40px]"
 >
-  <overview-column>
-    <span slot="title">
-      {{ 'calculator.result.accrued' | translate }}:
+  <div class="flex flex-row justify-between mb-[8px]">
+    <span class="mat-font-label-lg mat-text-on-surface-variant">
+      {{ 'calculator.result.breakdown' | translate }}
     </span>
+  </div>
 
-    <span slot="text">{{ 'calculator.result.interest_gross' | translate }}:</span>
-    <span slot="value">
-      <currency [currency]="deposit().currency().symbol" [value]="deposit().interest()"></currency>
+  <div class="flex flex-row justify-between items-center py-[24px_4px] border-b border-[var(--mat-sys-surface-container-highest)]">
+    <span class="mat-font-body-md">{{ 'calculator.result.principal' | translate }}</span>
+    <span class="mat-font-label-lg">
+      <currency
+        [currency]="deposit().currency().symbol"
+        [value]="deposit().principal()"
+      ></currency>
     </span>
+  </div>
 
-    <span slot="text">{{ 'calculator.result.interest_taxed' | translate }}:</span>
-    <span slot="value">
-      <currency [currency]="deposit().currency().symbol" [value]="deposit().taxed()"></currency>
+  <div class="flex flex-row justify-between items-center py-[24px_4px] border-b border-[var(--mat-sys-surface-container-highest)]">
+    <span class="mat-font-body-md">{{ 'calculator.result.total_deposits' | translate }}</span>
+    <span class="mat-font-label-lg">
+      <currency
+        [currency]="deposit().currency().symbol"
+        [value]="deposit().deposited()"
+      ></currency>
     </span>
+  </div>
 
-    <span slot="text">{{ 'calculator.result.interest_net' | translate }}:</span>
-    <span slot="value">
-      <currency [currency]="deposit().currency().symbol" [value]="deposit().interest() - deposit().taxed()"></currency>
+  <div class="flex flex-row justify-between items-center py-[24px_4px] border-b border-[var(--mat-sys-surface-container-highest)]">
+    <span class="mat-font-body-md">{{ 'calculator.result.interest_gross' | translate }}</span>
+    <span class="mat-font-label-lg">
+      <currency
+        [currency]="deposit().currency().symbol"
+        [value]="deposit().interest()"
+      ></currency>
     </span>
-  </overview-column>
-</mat-card>
+  </div>
 
-<mat-card
-  appearance="filled"
-  class="flex flex-col flex-[1_1_auto] w-auto overflow-hidden mat-bg-surface-container-low"
->
-  <overview-column>
-    <span slot="title">
-      {{ 'calculator.result.net' | translate }}:
+  <div class="flex flex-row justify-between items-center py-[24px_4px] border-b border-[var(--mat-sys-surface-container-highest)]">
+    <span class="mat-font-body-md">{{ 'calculator.result.interest_taxed' | translate }}</span>
+    <span class="mat-text-error mat-font-label-lg flex flex-row ml-[-10px]">
+      <span>–&nbsp;</span>
+      <currency
+        [currency]="deposit().currency().symbol"
+        [value]="deposit().taxed()"
+      ></currency>
     </span>
+  </div>
 
-    <span slot="text">{{ 'calculator.result.principal' | translate }}:</span>
-    <span slot="value">
-      <currency [currency]="deposit().currency().symbol" [value]="deposit().principal()"></currency>
+  <div class="flex flex-row justify-between items-center py-[24px_4px] border-b border-[var(--mat-sys-surface-container-highest)]">
+    <span class="mat-font-body-md">{{ 'calculator.result.interest_net' | translate }}</span>
+    <span class="mat-font-label-lg">
+      <currency
+        [currency]="deposit().currency().symbol"
+        [value]="deposit().interest() - deposit().taxed()"
+      ></currency>
     </span>
-
-    <span slot="text">
-      {{ 'calculator.result.deposited' | translate }}:
-    </span>
-    <span slot="value">
-      <currency [currency]="deposit().currency().symbol" [value]="deposit().deposited()"></currency>
-    </span>
-
-    <span slot="text">{{ 'calculator.result.interest' | translate }}:</span>
-    <span slot="value">
-      <currency [currency]="deposit().currency().symbol" [value]="deposit().interest() - deposit().taxed()"></currency>
-    </span>
-
-    <span slot="text">{{ 'calculator.result.net' | translate }}:</span>
-    <span slot="value">
-      <currency [currency]="deposit().currency().symbol" [value]="deposit().net() - deposit().taxed()"></currency>
-    </span>
-  </overview-column>
+  </div>
 </mat-card>

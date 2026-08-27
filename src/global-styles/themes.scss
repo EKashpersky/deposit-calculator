@@ -10,6 +10,17 @@ html {
 
 
 :root {
+  @include mat.slide-toggle-overrides((
+    pressed-handle-size: 20px,
+    handle-width: 48px,
+    handle-height: 20px,
+    selected-handle-size: 20px,
+    unselected-handle-size: 20px,
+    with-icon-handle-size: 20px,
+    track-height: 28px,
+    state-layer-size: 40px,
+  ));
+
   body.light {
     @include mat.theme((
       color: (
