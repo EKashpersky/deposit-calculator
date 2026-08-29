@@ -78,6 +78,19 @@ export class App implements OnInit {
   });
 
   public readonly size = signal<'' | 'sm' | 'md' | 'lg' | 'xlg'>('');
+  public readonly sizePx = computed(() => {
+    const size = this.size();
+
+    let sizeInPx = 0;
+    switch (size) {
+      case 'sm':  sizeInPx = 600; break;
+      case 'md':  sizeInPx = 800; break;
+      case 'lg':
+      case 'xlg': sizeInPx = 1200; break;
+    }
+
+    return sizeInPx;
+  });
 
   public readonly appVersion = signal('');
 
@@ -213,5 +226,11 @@ export class App implements OnInit {
 
   public selectLanguage(language: LanguageShape) {
     this._translate.use(language.locale);
+  }
+
+  public openGithub() {
+    const githubUrl = 'https://github.com/ekashpersky/deposit-calculator';
+
+    window.open(githubUrl, '_blank', 'noopener,noreferrer');
   }
 }
