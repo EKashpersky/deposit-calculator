@@ -62,6 +62,14 @@
     "currency": "Валюта",
     "version": "вер."
   },
+  "preferences_dialog": {
+    "title": "Налаштування",
+    "theme": "Тема",
+    "language": "Мова додатку",
+    "preferred_currency": "Ваша валюта",
+    "preferred_currency_tooltip": "В цій валюті буде відображатись грошовий еквівалент ваших депозитів",
+    "close": "Закрити"
+  },
   "dashboard": {
     "add_deposit": "Додати депозит",
     "deposits": "Депозити",

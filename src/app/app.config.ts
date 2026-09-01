@@ -4,6 +4,7 @@ import {
   provideAppInitializer,
   provideBrowserGlobalErrorListeners
 } from '@angular/core';
+import { MAT_ICON_DEFAULT_OPTIONS } from '@angular/material/icon';
 import { provideRouter } from '@angular/router';
 import {
   lumberjackLogDriverToken,
@@ -26,10 +27,10 @@ import { ColoredConsoleDriver, LoggerService } from '@shared/logger';
 import { PreferencesService } from '@shared/preferences';
 import { ShortcutsService } from '@shared/shortcuts.service';
 import { StorageService } from '@shared/Storage';
+import { ThemeService } from '@shared/theme.service';
 
 import { appStartup } from './app-startup';
 import { routes } from './app.routes';
-import { ThemeService } from '@shared/theme.service';
 
 
 
@@ -45,6 +46,11 @@ export const appConfig: ApplicationConfig = {
         'trace',
       ] : [],
     }),
+
+    {
+      provide: MAT_ICON_DEFAULT_OPTIONS,
+      useValue: { fontSet: 'material-symbols-outlined' },
+    },
 
     {
       provide: lumberjackLogDriverToken,

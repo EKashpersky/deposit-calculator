@@ -62,12 +62,15 @@
     "currency": "Currency",
     "version": "ver."
   },
+  "preferences_dialog": {
+    "title": "Preferences",
+    "theme": "Theme",
+    "language": "App language",
+    "preferred_currency": "Preferred currency",
+    "preferred_currency_tooltip": "The currency to display your deposits in",
+    "close": "Close"
+  },
   "dashboard": {
-    "snackbar": {
-      "deposit_added": "Deposit added",
-      "deposit_removed": "Deposit removed",
-      "deposit_renamed": "Deposit renamed"
-    },
     "add_deposit": "Add deposit",
     "deposits": "Deposits",
     "no_deposit": "There are no deposits here <a>yet</a>...",

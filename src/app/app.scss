@@ -2,10 +2,22 @@
 
 
 
-mat-sidenav,
-.mat-drawer {
-  background-color: var(--mat-sys-surface-container-low);
+.calc {
+  .screen {
+    background-color: var(--mat-sys-secondary);
+    border-radius: 2px;
+  }
+  .key {
+    border-radius: 2px;
+    width: 100%;
+    height: 100%;
+    background-color: var(--mat-sys-tertiary);
+  }
+  .key.op {
+    background-color: var(--mat-sys-secondary);
+  }
 }
+
 
 .mx-auto {
   transition-property: width;

@@ -5,10 +5,10 @@ import {
   computed,
   effect,
   inject,
+  Injector,
   OnInit,
   Renderer2,
   signal,
-  Signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -20,21 +20,19 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { environment } from '@environment/development';
 
+import { MatDialog } from '@angular/material/dialog';
 import { CurrencyApiService } from '@api/currency-api.service';
-import {
-  LanguageShape,
-  SUPPORTED_LANGUAGES
-} from '@config/supported-languages';
+import { SUPPORTED_LANGUAGES } from '@config/supported-languages';
+import { PreferencesDialog } from '@features/preferences';
 import {
   CurrencyRatesService,
   CurrencyService,
-  CurrencyShape
 } from '@shared/Currency';
 import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { PreferencesService } from '@shared/preferences';
 import { ShortcutsService } from '@shared/shortcuts.service';
-import { ThemeEnum, ThemeService } from '@shared/theme.service';
+import { ThemeService } from '@shared/theme.service';
 
 
 
@@ -48,13 +46,13 @@ import { ThemeEnum, ThemeService } from '@shared/theme.service';
   ],
   imports: [
     RouterOutlet,
+    RouterLink,
 
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
     MatSidenavModule,
     MatToolbarModule,
-    RouterLink,
 
     TranslatePipe,
   ],
@@ -62,20 +60,15 @@ import { ThemeEnum, ThemeService } from '@shared/theme.service';
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
   host: {
-    class: 'block h-full w-full overflow-auto',
+    class: 'flex flex-col items-center h-full grow shrink overflow-auto',
   },
 })
 export class App implements OnInit {
   private _breakpoint2SizeMap: Record<string, string>;
+  private _injector: Injector;
 
-  public languages: LanguageShape[];
-  public currencies: CurrencyShape[];
-
-  public readonly preferredCurrency: Signal<CurrencyShape>;
-
-  public themeIcon = computed(() => {
-    return this._theme.theme() === ThemeEnum.Light ? 'dark_mode' : 'light_mode';
-  });
+  public readonly githubUrl: string;
+  public readonly linkedInUrl: string;
 
   public readonly size = signal<'' | 'sm' | 'md' | 'lg' | 'xlg'>('');
   public readonly sizePx = computed(() => {
@@ -109,11 +102,17 @@ export class App implements OnInit {
     private _currencyRates: CurrencyRatesService,
     private _depositsManager: DepositsManagerService,
     private _depositBridge: DepositBridgeService,
+    private _dialog: MatDialog,
     private _preferences: PreferencesService,
   ) {
+    this._injector = inject(Injector);
+
+    this.githubUrl    = 'https://github.com/ekashpersky/deposit-calculator';
+    this.linkedInUrl  = 'https://linkedin.com/in/ekashpersky';
+
     Promise.allSettled([
       document.fonts.ready,
-      document.fonts.load('18px "Material Icons"'),
+      document.fonts.load('18px "Material Symbols Outlined"'),
     ]).then(() => {
       const loader = document.querySelector('body .boot-loader');
 
@@ -124,8 +123,6 @@ export class App implements OnInit {
       }, 350);
     });
 
-    this.languages = SUPPORTED_LANGUAGES;
-
     this._breakpoint2SizeMap = {
       [Breakpoints.Small]: 'sm',
       [Breakpoints.Medium]: 'md',
@@ -133,17 +130,12 @@ export class App implements OnInit {
       [Breakpoints.XLarge]: 'xlg'
     };
 
-    this.currencies = [];
-
-    this.preferredCurrency = this._currency.preferredCurrency as Signal<CurrencyShape>;
-
     this._currency.changePreferredCurrency(
       this._currency.getPreferredOrFallbackCurrency()
     );
 
     inject(CurrencyApiService).getCurrencyRates().then((rates) => {
       this._currencyRates.setRates(rates);
-      this.currencies = this._currency.getCurrenciesWithRates();
     });
 
     this._depositBridge.deposit.subscribe((deposit) => {
@@ -216,16 +208,34 @@ export class App implements OnInit {
     }
   }
 
-  public changePreferredCurrency(currency: CurrencyShape) {
-    this._currency.changePreferredCurrency(currency);
+  public openPreferences() {
+    const dialogRef = this._dialog.open(PreferencesDialog, {
+      data: {
+        i18nTitle: 'preferences_dialog.title',
+        i18nAction: 'preferences_dialog.create',
+        currencies: this._currency.getCurrenciesWithRates(),
+        preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
+        languages: SUPPORTED_LANGUAGES,
+        language: this._translate.currentLang(),
+        theme: this._theme
+      },
+    });
+
+    effect(() => {
+      this._currency.changePreferredCurrency(
+        dialogRef.componentInstance.preferredCurrency()
+      );
+    }, { injector: this._injector });
+
+    effect(() => {
+      this._translate.use(dialogRef.componentInstance.language().locale);
+    }, { injector: this._injector });
   }
 
-  public toggleTheme() {
-    this._theme.cycleTheme();
-  }
+  public openLinkedIn() {
+    const linkedInUrl = 'https://linkedin.com/in/ekashpersky';
 
-  public selectLanguage(language: LanguageShape) {
-    this._translate.use(language.locale);
+    window.open(linkedInUrl, '_blank', 'noopener,noreferrer');
   }
 
   public openGithub() {
