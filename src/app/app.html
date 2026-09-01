@@ -34,7 +34,7 @@
 
 <footer class="mat-bg-surface-container-low w-full flex flex-col items-center mt-[80px] py-[28px]">
   <div class="flex flex-row justify-between items-center p-[0px_16px] min-w-[280px] w-full max-w-[1080px]">
-    <div class="flex flex-row items-center gap-[8px]">
+    <div class="flex flex-row flex-wrap md:flex-nowrap items-center gap-[8px]">
       <a
         matButton
         [href]="linkedInUrl"
@@ -73,15 +73,15 @@
       </a>
     </div>
 
-    <span class="items-baseline">
+    <span class="flex flex-row items-baseline flex-wrap md:flex-nowrap">
       <span class="mat-font-title-md mat-text-on-surface-variant">
         {{'toolbar.deposit_calculator' | translate}}
       </span>
 
-      <span class="mat-font-label-md mat-text-disabled">· 2026</span>
+      <span class="mat-font-label-md mat-text-disabled"> · 2026</span>
     </span>
 
-    <span class=" mat-text-disabled cursor-default select-none">
+    <span class="flex flex-row flex-wrap md:flex-nowrap mat-text-disabled cursor-default select-none">
       <span class="mat-font-body-md">Angular</span>
       <span class="mat-font-label-lg">
         · {{ 'toolbar.version' | translate }} {{ appVersion() }}
