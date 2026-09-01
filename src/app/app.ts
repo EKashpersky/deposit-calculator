@@ -1,12 +1,10 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   effect,
   inject,
   Injector,
-  OnInit,
   Renderer2,
   signal,
 } from '@angular/core';
@@ -63,27 +61,11 @@ import { ThemeService } from '@shared/theme.service';
     class: 'flex flex-col items-center h-full grow shrink overflow-auto',
   },
 })
-export class App implements OnInit {
-  private _breakpoint2SizeMap: Record<string, string>;
+export class App {
   private _injector: Injector;
 
   public readonly githubUrl: string;
   public readonly linkedInUrl: string;
-
-  public readonly size = signal<'' | 'sm' | 'md' | 'lg' | 'xlg'>('');
-  public readonly sizePx = computed(() => {
-    const size = this.size();
-
-    let sizeInPx = 0;
-    switch (size) {
-      case 'sm':  sizeInPx = 600; break;
-      case 'md':  sizeInPx = 800; break;
-      case 'lg':
-      case 'xlg': sizeInPx = 1200; break;
-    }
-
-    return sizeInPx;
-  });
 
   public readonly appVersion = signal('');
 
@@ -95,7 +77,6 @@ export class App implements OnInit {
     private _translate: TranslateService,
     private _history: HistoryService,
     private _shortcuts: ShortcutsService,
-    private _breakpoint: BreakpointObserver,
     private _theme: ThemeService,
     private _renderer: Renderer2,
     private _currency: CurrencyService,
@@ -122,13 +103,6 @@ export class App implements OnInit {
         this._renderer.removeChild(document.body, loader);
       }, 350);
     });
-
-    this._breakpoint2SizeMap = {
-      [Breakpoints.Small]: 'sm',
-      [Breakpoints.Medium]: 'md',
-      [Breakpoints.Large]: 'lg',
-      [Breakpoints.XLarge]: 'xlg'
-    };
 
     this._currency.changePreferredCurrency(
       this._currency.getPreferredOrFallbackCurrency()
@@ -176,36 +150,6 @@ export class App implements OnInit {
     effect(() => {
       this.appVersion.set(environment.version())
     });
-  }
-
-  public ngOnInit(): void {
-    const breakpoints = [
-      Breakpoints.Small,
-      Breakpoints.Medium,
-      Breakpoints.Large,
-      Breakpoints.XLarge,
-    ];
-
-    this._breakpoint
-      .observe(breakpoints)
-      .pipe()
-      .subscribe((state) => {
-        for (const breakpoint of breakpoints) {
-          if (state.breakpoints[breakpoint]) {
-            this.size.set(
-              this._breakpoint2SizeMap[breakpoint] as '' | 'sm' | 'md' | 'lg' | 'xlg'
-            );
-            break;
-          }
-        }
-      });
-
-    findBreakpoint: for (const breakpoint of breakpoints) {
-      if (this._breakpoint.isMatched(breakpoint)) {
-        this.size.set(this._breakpoint2SizeMap[breakpoint] as '' | 'sm' | 'md' | 'lg');
-        break findBreakpoint;
-      }
-    }
   }
 
   public openPreferences() {

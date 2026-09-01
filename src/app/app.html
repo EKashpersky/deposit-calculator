@@ -1,5 +1,5 @@
 <mat-toolbar class="justify-between shrink-0 mat-bg-surface-container-low relative">
-  <div class="flex flex-row justify-between mx-auto {{ size() }}">
+  <div class="flex flex-row justify-between mx-auto min-w-[280px] w-full max-w-[1080px]">
     <div class="start flex flex-row items-center gap-[8px]">
       <div class="calc grid grid-rows-[6px_1fr] gap-[2px] mat-bg-secondary-container box-border rounded-[4px] size-[24px] p-[3px]">
         <div class="screen"></div>
@@ -28,12 +28,12 @@
 
 </mat-toolbar>
 
-<main class="mx-auto pt-[24px] {{ size() }} grow">
+<main class="mx-auto p-[16px_0px_24px] grow min-w-[280px] w-full max-w-[1080px]">
   <router-outlet></router-outlet>
 </main>
 
 <footer class="mat-bg-surface-container-low w-full flex flex-col items-center mt-[80px] py-[28px]">
-  <div class="flex flex-row justify-between {{size()}} items-center">
+  <div class="flex flex-row justify-between items-center min-w-[280px] w-full max-w-[1080px]">
     <div class="flex flex-row items-center gap-[8px]">
       <a
         matButton

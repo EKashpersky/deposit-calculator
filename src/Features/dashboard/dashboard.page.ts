@@ -62,7 +62,7 @@ function templateDeposit() {
   styleUrl: './dashboard.page.scss',
 
   host: {
-    class: 'flex flex-col gap-[20px]',
+    class: 'flex flex-col gap-[16px]',
   },
 
   changeDetection: ChangeDetectionStrategy.Eager,

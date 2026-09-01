@@ -23,15 +23,3 @@
   transition-property: width;
   @include transition('fast', 'spatial', 'standard');
 }
-
-.sm {
-  width: 600px;
-}
-
-.md {
-  width: 800px;
-}
-
-.lg, .xlg {
-  width: 1200px;
-}

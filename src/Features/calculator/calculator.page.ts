@@ -58,7 +58,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: 'calculator.page.html',
   styleUrl: 'calculator.page.scss',
   host: {
-    class: 'flex flex-col gap-[24px]'
+    class: 'flex flex-col gap-[16px]'
   },
 
   imports: [
