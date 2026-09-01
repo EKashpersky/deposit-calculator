@@ -26,90 +26,13 @@
   }
 
   @for (deposit of deposits(); track deposit.name()) {
-    <div class="mat-card-wrapper pb-[20px] box-border" animate.leave="fade-out" animate.enter="fade-in">
-      <mat-card
-        appearance="filled"
-        matRipple
-        class="flex flex-col gap-[12px] cursor-pointer select-none mat-bg-surface-container mat-text-on-surface-variant"
-        [routerLink]="['/calculator/', deposit.name()]"
-      >
-        <mat-card-header class="flex flex-row justify-between">
-          <mat-card-title-group>
-            <mat-card-subtitle class="mat-text-on-surface-variant">{{ 'dashboard.deposit.name' | translate }}:</mat-card-subtitle>
-            <mat-card-title>{{ deposit.name() }}</mat-card-title>
-          </mat-card-title-group>
-
-          <div class="flex">
-            <button matIconButton (click)="editDeposit($event, deposit)">
-              <mat-icon class="mat-text-on-surface-variant">edit</mat-icon>
-            </button>
-
-            <button matIconButton (click)="removeDeposit($event, deposit)">
-              <mat-icon class="mat-text-on-surface-variant">delete</mat-icon>
-            </button>
-          </div>
-        </mat-card-header>
-
-        <mat-card-content class="grid! grid-cols-4">
-          <div class="flex flex-col">
-            <p class="mat-font-body-md">{{ 'dashboard.deposit.duration' | translate }}:</p>
-            <p class="mat-font-title-md">
-              {{ deposit.durationValue() }}
-              {{ deposit.durationValue() | duration:deposit.durationScale() | translate }}
-            </p>
-          </div>
-
-          <div class="flex flex-col">
-            <p class="mat-font-body-md">{{ 'dashboard.deposit.annual_rate' | translate }}:</p>
-            <p class="mat-font-title-md">{{ deposit.annualRate() / 100 | percent:'1.0-2' }}</p>
-          </div>
-
-          <div class="flex flex-col">
-            <p class="mat-font-body-md">{{ 'dashboard.deposit.principal' | translate }}:</p>
-            <p class="mat-font-title-md">
-              <currency [currency]="deposit.currency().symbol" [value]="deposit.principal()"></currency>
-            </p>
-          </div>
-
-          <div class="flex flex-col">
-            <p class="mat-font-body-md">{{ 'dashboard.deposit.monthly_payment' | translate }}:</p>
-
-            <p class="mat-font-title-md">
-              <currency [currency]="deposit.currency().symbol" [value]="deposit.monthlyDeposit()"></currency>
-            </p>
-          </div>
-
-          <div class="flex flex-col">
-            <p class="mat-font-body-md">{{ 'dashboard.deposit.total_deposits' | translate }}:</p>
-            <p class="mat-font-title-md">
-              <currency [currency]="deposit.currency().symbol" [value]="deposit.deposited()"></currency>
-            </p>
-          </div>
-
-          <div class="flex flex-col">
-            <p class="mat-font-body-md">{{ 'dashboard.deposit.interest' | translate }}:</p>
-            <p class="mat-font-title-md">
-              <currency [currency]="deposit.currency().symbol" [value]="deposit.interest()"></currency>
-            </p>
-          </div>
-
-          <div class="flex flex-col">
-            <p class="mat-font-body-md">{{ 'dashboard.deposit.taxed' | translate }}:</p>
-            <p class="mat-font-title-md">
-              <currency [currency]="deposit.currency().symbol" [value]="deposit.taxed()"></currency>
-            </p>
-          </div>
-
-          <div class="flex flex-col">
-            <p class="mat-font-body-md">{{ 'dashboard.deposit.net' | translate }}:</p>
-            <p class="mat-font-title-md">
-              <currency [currency]="deposit.currency().symbol" [value]="deposit.net()"></currency>
-            </p>
-          </div>
-        </mat-card-content>
-
-        <mat-card-footer></mat-card-footer>
-      </mat-card>
-    </div>
+    <deposit-card
+      class="mat-card-wrapper pb-[20px] box-border"
+      animate.leave="fade-out" animate.enter="fade-in"
+      [deposit]="deposit"
+      (editDeposit)="editDeposit($event, deposit)"
+      (removeDeposit)="removeDeposit($event, deposit)"
+      [routerLink]="['/calculator/', deposit.name()]"
+    ></deposit-card>
   }
 </div>

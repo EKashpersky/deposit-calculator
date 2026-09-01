@@ -1,4 +1,3 @@
-import { PercentPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,7 +23,7 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 
-import { CurrencyComponent } from '@components/currency';
+import { DepositCardComponent } from '@components/deposit-card';
 import {
   CompoundRate,
   DepositFlags,
@@ -34,7 +33,6 @@ import {
 } from '@features/calculator/model';
 import { CurrencyService } from '@shared/Currency';
 import { DepositsManagerService } from '@shared/deposits';
-import { DurationPipe } from '@shared/duration.pipe';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
 
@@ -69,7 +67,6 @@ function templateDeposit() {
 
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    PercentPipe,
     RouterLink,
 
     MatButtonModule,
@@ -81,8 +78,7 @@ function templateDeposit() {
     MatSnackBarModule,
     TranslatePipe,
 
-    CurrencyComponent,
-    DurationPipe,
+    DepositCardComponent,
   ],
 })
 export class DashboardPage {
