@@ -1,5 +1,5 @@
-<mat-toolbar class="justify-between shrink-0 mat-bg-surface-container-low relative p-0!">
-  <div class="flex flex-row justify-between mx-auto min-w-[280px] w-full max-w-[1080px] p-[0px_16px]">
+<mat-toolbar class="justify-between shrink-0 mat-bg-surface-container-low relative p-0! h-auto! min-h-16">
+  <div class="flex flex-row justify-between items-center mx-auto min-w-[280px] w-full max-w-[1080px] p-[0px_16px]">
     <div class="start flex flex-row items-center gap-[8px]">
       <div class="calc grid grid-rows-[6px_1fr] gap-[2px] mat-bg-secondary-container box-border rounded-[4px] size-[24px] p-[3px]">
         <div class="screen"></div>
@@ -12,7 +12,7 @@
       </div>
 
       <span
-        class="mat-font-headline-md cursor-pointer select-none mat-text-on-surface"
+        class="mat-font-headline-md cursor-pointer select-none mat-text-on-surface whitespace-normal"
         routerLink="/"
       >
         {{ 'toolbar.deposit_calculator' | translate }}
@@ -34,7 +34,7 @@
 
 <footer class="mat-bg-surface-container-low w-full flex flex-col items-center mt-[80px] py-[28px]">
   <div class="flex flex-row justify-between items-center p-[0px_16px] min-w-[280px] w-full max-w-[1080px]">
-    <div class="flex flex-row flex-wrap md:flex-nowrap items-center gap-[8px]">
+    <div class="flex flex-row flex-wrap lg:flex-nowrap items-center gap-[8px]">
       <a
         matButton
         [href]="linkedInUrl"
@@ -73,18 +73,15 @@
       </a>
     </div>
 
-    <span class="flex flex-row items-baseline flex-wrap md:flex-nowrap">
+    <span class="flex flex-row items-baseline flex-wrap md:whitespace-normal">
       <span class="mat-font-title-md mat-text-on-surface-variant">
         {{'toolbar.deposit_calculator' | translate}}
       </span>
-
-      <span class="mat-font-label-md mat-text-disabled"> · 2026</span>
     </span>
 
-    <span class="flex flex-row flex-wrap md:flex-nowrap mat-text-disabled cursor-default select-none">
-      <span class="mat-font-body-md">Angular</span>
+    <span class="flex flex-row flex-wrap lg:flex-nowrap mat-text-disabled cursor-default select-none">
       <span class="mat-font-label-lg">
-        · {{ 'toolbar.version' | translate }} {{ appVersion() }}
+       {{ 'toolbar.version' | translate }} {{ appVersion() }}
       </span>
     </span>
   </div>
