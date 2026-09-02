@@ -36,7 +36,7 @@
     <span>+</span>
     <span>&nbsp;</span>
     <span>
-      {{ deposit().interest()
+      {{ (deposit().interest() - deposit().taxed())
         | currency : deposit().currency().code : 'symbol-narrow' : '1.2-2' : translate.currentLang()! }}
     </span>
   </span>
