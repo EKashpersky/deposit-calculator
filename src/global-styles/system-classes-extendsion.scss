@@ -1,0 +1,120 @@
+/// Extends `mat.system-classes()` with wrappers for color roles that
+/// Angular Material emits as `--mat-sys-*` tokens but does not wrap.
+///
+/// Source of truth for existing classes:
+/// https://github.com/angular/components/blob/main/src/material/core/tokens/_classes.scss
+///
+/// Include after the official mixin:
+///   html {
+///     @include mat.system-classes();
+///     @include system-classes-extend();
+///   }
+
+@mixin system-classes-extension() {
+
+  // ***********************************************************************************************
+  // Background — roles present on the M3 scheme board, missing from mat.system-classes()
+  // ***********************************************************************************************
+
+  // Tertiary accent. Contrasting hue against primary/secondary; use for badges, highlights.
+  .mat-bg-tertiary {
+    background-color: var(--mat-sys-tertiary);
+  }
+
+  .mat-bg-tertiary-container {
+    background-color: var(--mat-sys-tertiary-container);
+  }
+
+  // Fixed accents stay the same across light and dark. Dim is the darker/softer sibling.
+  .mat-bg-primary-fixed {
+    background-color: var(--mat-sys-primary-fixed);
+  }
+
+  .mat-bg-primary-fixed-dim {
+    background-color: var(--mat-sys-primary-fixed-dim);
+  }
+
+  .mat-bg-secondary-fixed {
+    background-color: var(--mat-sys-secondary-fixed);
+  }
+
+  .mat-bg-secondary-fixed-dim {
+    background-color: var(--mat-sys-secondary-fixed-dim);
+  }
+
+  .mat-bg-tertiary-fixed {
+    background-color: var(--mat-sys-tertiary-fixed);
+  }
+
+  .mat-bg-tertiary-fixed-dim {
+    background-color: var(--mat-sys-tertiary-fixed-dim);
+  }
+
+  // Surface tone endpoints. Dim = receded canvas, bright = lifted canvas.
+  .mat-bg-surface-dim {
+    background-color: var(--mat-sys-surface-dim);
+  }
+
+  .mat-bg-surface-bright {
+    background-color: var(--mat-sys-surface-bright);
+  }
+
+  // Inverse primary is the accent that sits on inverse-surface (snackbar / tooltip chips).
+  .mat-bg-inverse-primary {
+    background-color: var(--mat-sys-inverse-primary);
+  }
+
+  // Overlay fills from the scheme board. Not for large surfaces.
+  .mat-bg-scrim {
+    background-color: var(--mat-sys-scrim);
+  }
+
+  .mat-bg-shadow {
+    background-color: var(--mat-sys-shadow);
+  }
+
+  // ***********************************************************************************************
+  // Text — matching on-* / accent text, same naming as official classes
+  // Official exception kept: inverse uses `mat-text-inverse-*`, not `mat-text-on-inverse-*`
+  // ***********************************************************************************************
+
+  .mat-text-tertiary {
+    color: var(--mat-sys-tertiary);
+  }
+
+  .mat-text-on-tertiary {
+    color: var(--mat-sys-on-tertiary);
+  }
+
+  .mat-text-on-tertiary-container {
+    color: var(--mat-sys-on-tertiary-container);
+  }
+
+  .mat-text-on-primary-fixed {
+    color: var(--mat-sys-on-primary-fixed);
+  }
+
+  .mat-text-on-primary-fixed-variant {
+    color: var(--mat-sys-on-primary-fixed-variant);
+  }
+
+  .mat-text-on-secondary-fixed {
+    color: var(--mat-sys-on-secondary-fixed);
+  }
+
+  .mat-text-on-secondary-fixed-variant {
+    color: var(--mat-sys-on-secondary-fixed-variant);
+  }
+
+  .mat-text-on-tertiary-fixed {
+    color: var(--mat-sys-on-tertiary-fixed);
+  }
+
+  .mat-text-on-tertiary-fixed-variant {
+    color: var(--mat-sys-on-tertiary-fixed-variant);
+  }
+
+  .mat-text-inverse-primary {
+    color: var(--mat-sys-inverse-primary);
+  }
+}

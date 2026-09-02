@@ -1,10 +1,12 @@
 @use '@angular/material' as mat;
 
 @use 'palette_theme-colors.scss' as palette;
+@use 'system-classes-extendsion.scss' as matext;
 
 
 html {
   @include mat.system-classes();
+  @include matext.system-classes-extension();
 }
 
 
