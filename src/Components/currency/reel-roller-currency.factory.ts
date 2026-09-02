@@ -8,7 +8,8 @@ import { ReelRollerCurrencyModel } from './reel-roller.currency.model';
 export function reelRollerCurrencyFactory(
   currency: CurrencySymbolEnum,
   value: number,
-  withSpace: boolean
+  withSpace: boolean,
+  variable = false
 ) {
   const reels = [ reelRollerCurrencySignFactory(currency) ] as ReelModel<any>[];
 
@@ -16,7 +17,7 @@ export function reelRollerCurrencyFactory(
     reels.push(new ReelModel([ ' ' ], ' '));
   }
 
-  reels.push(...reelRollerCurrencyValueFactory(value));
+  reels.push(...reelRollerCurrencyValueFactory(value, variable));
 
   return new ReelRollerCurrencyModel(...reels);
 }
@@ -26,7 +27,7 @@ export function reelRollerCurrencySignFactory(currency: CurrencySymbolEnum) {
   return new ReelModel(Object.values(CurrencySymbolEnum), currency, true);
 }
 
-export function reelRollerCurrencyValueFactory(value: number) {
+export function reelRollerCurrencyValueFactory(value: number, variable = false) {
   const NUMBERS_DICTIONARY = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   const exceptions = [' ', '.', ',', '\''];
@@ -34,9 +35,9 @@ export function reelRollerCurrencyValueFactory(value: number) {
   return `${value}`.split('').map(
     (numberx) => {
       if (exceptions.includes(numberx)) {
-        return new ReelModel(exceptions, numberx);
+        return new ReelModel(exceptions, numberx, variable);
       } else {
-        return new ReelModel(NUMBERS_DICTIONARY, +numberx)
+        return new ReelModel(NUMBERS_DICTIONARY, +numberx, variable)
       }
     }
   );

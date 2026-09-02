@@ -17,12 +17,14 @@ import { reelRollerCurrencyFactory } from './reel-roller-currency.factory';
 export class CurrencyComponent {
   public readonly currency = input<CurrencySymbolEnum>();
   public readonly value = input<number>(0);
+  public readonly variable = input<boolean>(false);
 
   public readonly model = computed(
     () => reelRollerCurrencyFactory(
       this.currency()!,
       round(this.value(), 2),
-      true
+      true,
+      this.variable()
     )
   )
 }

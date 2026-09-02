@@ -56,6 +56,11 @@
     }
   },
 
+  "deposit_card": {
+    "a_month": "mo",
+    "label": "Deposit"
+  },
+
   "toolbar": {
     "deposit_calculator": "Deposit calculator",
     "language": "Language",

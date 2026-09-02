@@ -3,11 +3,11 @@
 @import 'tailwindcss';
 
 @theme {
-  --breakpoint-sm: 600px;
-  --breakpoint-md: 840px;
-  --breakpoint-lg: 960px;
-  --breakpoint-xl: 1280px;
-  --breakpoint-2xl: 1920px;
+  --breakpoint-sm: 375px;
+  --breakpoint-md: 600px;
+  --breakpoint-lg: 840px;
+  --breakpoint-xl: 960px;
+  --breakpoint-2xl: 1280px;
 }
 
 input::-webkit-outer-spin-button,

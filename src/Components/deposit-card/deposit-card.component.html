@@ -1,82 +1,96 @@
+<ng-template #inputFragment>
+  <span class="mat-font-title-lg mat-text-on-surface truncate">
+    {{ deposit().name() }}
+  </span>
+
+  <span class="mat-font-label-sm mat-text-on-surface-variant break md:flex md:flex-row">
+    <div>
+      {{ deposit().durationValue() }}
+      {{ deposit().durationValue() | duration:deposit().durationScale() | translate }}
+      ·
+      {{ deposit().annualRate() / 100 | percent:'1.0-2' }}
+    </div>
+
+    <span class="hidden md:inline">&nbsp;·&nbsp;</span>
+
+    <span>
+      {{ deposit().principal()
+        | currency : deposit().currency().code : 'symbol-narrow': '1.0-0' : translate.currentLang()!
+      }}
+
+      &nbsp;+&nbsp;
+      {{ deposit().monthlyDeposit()
+        | currency : deposit().currency().code : 'symbol-narrow' : '1.0-0' : translate.currentLang()!
+      }}/{{ 'deposit_card.a_month' | translate }}
+    </span>
+  </span>
+</ng-template>
+
+<ng-template #outputFragment>
+  <span class="mat-font-title-lg mat-text-on-surface">
+    {{ deposit().net()
+      | currency : deposit().currency().code : 'symbol-narrow' : '1.2-2' : translate.currentLang()! }}
+  </span>
+
+  <span class="mat-font-body-sm mat-text-on-surface-variant">
+    <span>+</span>
+    <span>&nbsp;</span>
+    <span>
+      {{ deposit().interest()
+        | currency : deposit().currency().code : 'symbol-narrow' : '1.2-2' : translate.currentLang()! }}
+    </span>
+  </span>
+</ng-template>
+
+<ng-template #buttons>
+  <button class="mat-text-primary" matIconButton (click)="editDeposit.emit($event)">
+    <mat-icon class="flex! justify-center items-baseline">edit</mat-icon>
+  </button>
+
+  <button class="mat-text-primary" matIconButton (click)="removeDeposit.emit($event)">
+    <mat-icon class="flex! justify-center items-baseline">delete</mat-icon>
+  </button>
+</ng-template>
+
+
+
 <mat-card
   appearance="filled"
   matRipple
-  class="flex flex-col gap-[12px] cursor-pointer select-none mat-bg-surface-container mat-text-on-surface-variant min-h-0"
+  role="link"
+  tabindex="0"
+  class="cursor-pointer select-none mat-bg-surface-container-high"
 >
-  <mat-card-header class="flex flex-row justify-between">
-    <mat-card-title-group>
-      <mat-card-subtitle class="mat-text-on-surface-variant">{{ 'dashboard.deposit.name' | translate }}:</mat-card-subtitle>
-      <mat-card-title>{{ deposit().name() }}</mat-card-title>
-    </mat-card-title-group>
+  <mat-card-content class="p-[12px_12px]!">
+    <div class="flex flex-col justify-between items-center gap-1 flex-nowrap">
+      <div class="flex flex-row w-full justify-between items-center">
+        <span
+          class="mat-bg-primary-container mat-corner-sm mat-font-label-lg mat-text-on-primary-container px-2 py-1"
+        >
+          {{ 'deposit_card.label' | translate }}
+        </span>
 
-    <div class="flex">
-      <button matIconButton (click)="editDeposit.emit($event)">
-        <mat-icon class="mat-text-on-surface-variant">edit</mat-icon>
-      </button>
+        <div class="flex flex-row">
+          <ng-container *ngTemplateOutlet="buttons"></ng-container>
+        </div>
+      </div>
 
-      <button matIconButton (click)="removeDeposit.emit($event)">
-        <mat-icon class="mat-text-on-surface-variant">delete</mat-icon>
-      </button>
-    </div>
-  </mat-card-header>
 
-  <mat-card-content class="grid! grid-cols-4">
-    <div class="flex flex-col">
-      <p class="mat-font-body-md">{{ 'dashboard.deposit.duration' | translate }}:</p>
-      <p class="mat-font-title-md">
-        {{ deposit().durationValue() }}
-        {{ deposit().durationValue() | duration:deposit().durationScale() | translate }}
-      </p>
-    </div>
 
-    <div class="flex flex-col">
-      <p class="mat-font-body-md">{{ 'dashboard.deposit.annual_rate' | translate }}:</p>
-      <p class="mat-font-title-md">{{ deposit().annualRate() / 100 | percent:'1.0-2' }}</p>
-    </div>
+      <div class="flex flex-row justify-between items-center w-full">
+        <!-- Content -->
+        <div class="flex flex-row items-baseline justify-between w-full">
+          <!-- Text fragments -->
+          <div class="flex flex-col gap-1">
+            <ng-container *ngTemplateOutlet="inputFragment"></ng-container>
+          </div>
 
-    <div class="flex flex-col">
-      <p class="mat-font-body-md">{{ 'dashboard.deposit.principal' | translate }}:</p>
-      <p class="mat-font-title-md">
-        <currency [currency]="deposit().currency().symbol" [value]="deposit().principal()"></currency>
-      </p>
-    </div>
+          <div class="flex flex-col items-end gap-1">
+            <ng-container *ngTemplateOutlet="outputFragment"></ng-container>
+          </div>
+        </div>
+      </div>
 
-    <div class="flex flex-col">
-      <p class="mat-font-body-md">{{ 'dashboard.deposit.monthly_payment' | translate }}:</p>
-
-      <p class="mat-font-title-md">
-        <currency [currency]="deposit().currency().symbol" [value]="deposit().monthlyDeposit()"></currency>
-      </p>
-    </div>
-
-    <div class="flex flex-col">
-      <p class="mat-font-body-md">{{ 'dashboard.deposit.total_deposits' | translate }}:</p>
-      <p class="mat-font-title-md">
-        <currency [currency]="deposit().currency().symbol" [value]="deposit().deposited()"></currency>
-      </p>
-    </div>
-
-    <div class="flex flex-col">
-      <p class="mat-font-body-md">{{ 'dashboard.deposit.interest' | translate }}:</p>
-      <p class="mat-font-title-md">
-        <currency [currency]="deposit().currency().symbol" [value]="deposit().interest()"></currency>
-      </p>
-    </div>
-
-    <div class="flex flex-col">
-      <p class="mat-font-body-md">{{ 'dashboard.deposit.taxed' | translate }}:</p>
-      <p class="mat-font-title-md">
-        <currency [currency]="deposit().currency().symbol" [value]="deposit().taxed()"></currency>
-      </p>
-    </div>
-
-    <div class="flex flex-col">
-      <p class="mat-font-body-md">{{ 'dashboard.deposit.net' | translate }}:</p>
-      <p class="mat-font-title-md">
-        <currency [currency]="deposit().currency().symbol" [value]="deposit().net()"></currency>
-      </p>
     </div>
   </mat-card-content>
-
-  <mat-card-footer></mat-card-footer>
 </mat-card>

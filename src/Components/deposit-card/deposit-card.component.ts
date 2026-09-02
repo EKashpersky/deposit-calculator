@@ -1,12 +1,13 @@
-import { PercentPipe } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { CurrencyPipe, PercentPipe, NgTemplateOutlet } from '@angular/common';
+import { Component, inject, input, output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
-import { CurrencyComponent } from '@components/currency';
 import { DepositModel } from '@features/calculator/model';
 import { DurationPipe } from '@shared/duration.pipe';
+import { MatButtonModule } from "@angular/material/button";
 
 
 
@@ -14,12 +15,14 @@ import { DurationPipe } from '@shared/duration.pipe';
   imports: [
     MatCardModule,
     MatIconModule,
+    MatRippleModule,
     TranslatePipe,
+    CurrencyPipe,
     PercentPipe,
-
-    CurrencyComponent,
     DurationPipe,
-  ],
+    MatButtonModule,
+    NgTemplateOutlet
+],
 
   selector: 'deposit-card',
   templateUrl: 'deposit-card.component.html',
@@ -33,13 +36,8 @@ export class DepositCardComponent {
   public readonly editDeposit = output<Event>();
   public readonly removeDeposit = output<Event>();
 
+  public readonly translate = inject(TranslateService);
 
 
-  public emitEditDeposit(event: Event) {
-    this.editDeposit.emit(event);
-  }
 
-  public emitRemoveDeposit(event: Event) {
-    this.removeDeposit.emit(event);
-  }
 }
