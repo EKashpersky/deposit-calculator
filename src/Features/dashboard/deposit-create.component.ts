@@ -2,6 +2,7 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators
@@ -97,7 +98,10 @@ export class DepositNameComponent {
   public readonly i18nTitle: string;
   public readonly i18nAction: string; /// Create or Edit action
 
-  public readonly form: FormGroup;
+  public readonly form: FormGroup<{
+    name: FormControl<string>,
+    currency: FormControl<CurrencyShape>,
+  }>;
   public readonly errorStateMatcher: ErrorStateMatcher;
   public readonly depositNames: string[];
   public readonly currencies: CurrencyShape[];
@@ -109,28 +113,37 @@ export class DepositNameComponent {
 
     this.errorStateMatcher = new InstantErrorStateMatcher();
 
+    const depositName = data.depositName as string
+
     this.i18nTitle = data.i18nTitle;
     this.i18nAction = data.i18nAction;
 
     this.depositNames = data.depositNames;
     this.currencies = data.currencies;
 
-    const defaultCurrency = data.preferredCurrency;
+    const defaultCurrency = data.preferredCurrency as CurrencyShape;
 
     const fb = inject(FormBuilder);
 
     this.form = fb.group({
-      name: fb.control(data.depositName, {
+      name: fb.control(depositName, {
+        nonNullable: true,
         validators: Validators.compose([
           validatorUnique(this.depositNames, data.depositName),
           Validators.required,
         ]),
       }),
-      currency: fb.control(this.currencies.find(currencyx => currencyx.code === defaultCurrency.code))
+      currency: fb.control(
+        this.currencies.find(currencyx => currencyx.code === defaultCurrency.code)!,
+        { nonNullable: true }
+      )
     });
   }
 
   public save() {
-    this._dialogRef.close(this.form.value.name);
+    this._dialogRef.close({
+      depositName: this.form.controls.name.value,
+      currency: this.form.controls.currency.value
+    });
   }
 }

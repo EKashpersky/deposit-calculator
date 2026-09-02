@@ -31,7 +31,7 @@ import {
   DepositModel,
   Duration,
 } from '@features/calculator/model';
-import { CurrencyService } from '@shared/Currency';
+import { CurrencyService, CurrencyShape } from '@shared/Currency';
 import { DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
@@ -130,7 +130,7 @@ export class DashboardPage {
       },
     });
 
-    firstValueFrom(dialogRef.afterClosed()).then((depositName) => {
+    firstValueFrom(dialogRef.afterClosed()).then(({ depositName, currency }) => {
       if (typeof depositName !== 'string') {
         return;
       }
@@ -140,7 +140,7 @@ export class DashboardPage {
       const addDepositAction = this._depositsManager.addDeposit(
         new DepositModel(
           depositName,
-          this._currency.getPreferredOrFallbackCurrency(),
+          currency as CurrencyShape,
           false,
           depositInput,
           depositResult
