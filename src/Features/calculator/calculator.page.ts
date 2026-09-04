@@ -106,6 +106,7 @@ export class CalculatorPage {
     noFirstMonthDeposit: FormControl<boolean>,
   }>;
   public readonly accrualFrequencies: { value: number, label: string }[];
+  public readonly taxTimings: { value: number, label: string }[];
   public readonly duration = signal(new Duration('months', 24));
 
   public readonly currencies = signal<CurrencyShape[]>([]);
@@ -138,7 +139,15 @@ export class CalculatorPage {
     ] as const;
 
     this.accrualFrequencies = ACCRUAL_FREQUENCIES_MAP_FROM_I18N.map((value, i) => {
-      return { value, label: `calculator.compound_rates.${i}` };
+      return { value, label: `calculator.accrual_frequency.${i}` };
+    });
+
+    this.taxTimings = [
+      TaxTiming.None,
+      TaxTiming.PerPayout,
+      TaxTiming.AtMaturity,
+    ].map((value, i) => {
+      return { value, label: `calculator.tax_timing.${i}` };
     });
 
     this.currencies.set(this._currency.getCurrenciesWithRates());
@@ -317,7 +326,7 @@ export class CalculatorPage {
         capitalization,
 
         taxRate,
-        taxTiming && TaxTiming.AtMaturity || TaxTiming.None,
+        taxTiming,
 
         +noFirstMonthDeposit,
         0,

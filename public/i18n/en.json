@@ -118,12 +118,10 @@
       "annual_interest": "Annual interest",
       "deposit_duration": "Deposit duration",
       "capitalization_frequency": "Accrual frequency",
-
-      
       "capitalization": "Capitalization",
       "interest": "Interest",
-      "tax": "Tax",
-      "with_taxes": "With taxes",
+      "tax_rate": "Tax rate",
+      "taxation": "Taxation",
       "no_first_month_deposit": "No first month deposit"
     },
     "result": {
@@ -153,6 +151,11 @@
       "Quarterly",
       "Monthly",
       "Daily"
+    ],
+   "tax_timing": [
+      "No tax",
+      "At maturity",
+      "Each accrual"
     ]
   }
 }

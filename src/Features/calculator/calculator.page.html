@@ -80,7 +80,6 @@
         </div>
 
         <mat-slider
-          class="mat-slide-toggle-secondary"
           [max]="accrualFrequencies.length - 1"
           [showTickMarks]="true"
           aria-labelledby="compoundRateLabel"
@@ -112,13 +111,27 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>{{ 'calculator.inputs.tax' | translate }} (%)</mat-label>
+            <mat-label>{{ 'calculator.inputs.tax_rate' | translate }} (%)</mat-label>
             <input matInput inputmode="numeric" type="number" formControlName="taxRate" />
           </mat-form-field>
 
-          <mat-slide-toggle class="mb-[8px]" formControlName="taxTiming">
-            {{ 'calculator.inputs.with_taxes' | translate }}
-          </mat-slide-toggle>
+          <div class="flex flex-row justify-between items-baseline mx-[4px] mb-[4px]">
+            <mat-label id="compoundRateLabel" class="mat-font-label-md mat-text-secondary">
+              {{ 'calculator.inputs.taxation' | translate }}
+            </mat-label>
+
+            <mat-label class="mat-font-label-md">
+              {{ taxTimings[calculatorForm.controls.taxTiming.value].label | translate }}
+            </mat-label>
+          </div>
+
+          <mat-slider
+            [max]="2"
+            [showTickMarks]="true"
+            aria-labelledby="taxTiming"
+          >
+            <input matSliderThumb formControlName="taxTiming">
+          </mat-slider>
         </div>
       </mat-card-content>
     </mat-card>
