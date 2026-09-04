@@ -1,7 +1,8 @@
 import {
   DepositInput,
   DepositModel,
-  Duration
+  Duration,
+  TaxTiming
 } from '@features/calculator/model';
 import { DomainSerializer } from '@shared/Storage';
 
@@ -15,14 +16,20 @@ export class DepositSerializer implements DomainSerializer<DepositModel, Deposit
       name,
       deposit.currency,
       deposit.autoConversion,
-      DepositInput.New(
+      new DepositInput(
         deposit.input.principal,
         deposit.input.annualRate,
         new Duration(deposit.input.duration.scale, deposit.input.duration.duration),
         deposit.input.monthlyDeposit,
-        deposit.input.tax,
-        deposit.input.compoundRate,
-        deposit.input.flags
+        /// @ts-ignore
+        deposit.input.accrualFrequncy || deposit.input['compoundRate'],
+        deposit.input.capitalize,
+        /// @ts-ignore
+        deposit.input.taxRate || deposit.input['tax'],
+        /// @ts-ignore
+        deposit.input.taxTiming || deposit.input['withTaxes'] ? TaxTiming.AtMaturity : TaxTiming.None,
+        deposit.input.noStartDeposits,
+        deposit.input.noEndDeposits,
       ),
       deposit.result
     );
@@ -40,9 +47,15 @@ export class DepositSerializer implements DomainSerializer<DepositModel, Deposit
           duration: deposit.input().duration.duration()
         },
         monthlyDeposit: deposit.input().monthlyDeposit,
-        tax: deposit.input().tax,
-        compoundRate: deposit.input().compoundRate,
-        flags: deposit.input().flags,
+
+        taxRate: deposit.input().taxRate,
+        taxTiming: deposit.input().taxTiming,
+
+        accrualFrequncy: deposit.input().accrualFrequency,
+        capitalize: deposit.input().capitalize,
+
+        noStartDeposits: deposit.input().noStartDeposits,
+        noEndDeposits: deposit.input().noEndDeposits,
       },
       result: deposit.result(),
     }

@@ -18,6 +18,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
@@ -40,16 +41,14 @@ import { DurationPipe } from '@shared/duration.pipe';
 import { LoggerService, LoggerShape, ScopedLogger } from '@shared/logger';
 
 import {
+  AccrualFrequency,
   calculateDeposit,
   createDepositInput,
-} from './calculator.model';
-import {
-  CompoundRate,
   DepositInput,
   DepositModel,
   Duration,
+  TaxTiming,
 } from './model';
-import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -87,26 +86,26 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class CalculatorPage {
   public readonly calculatorForm: FormGroup<{
-    currency: FormControl<CurrencyShape>,
-    autoConversion: FormControl<boolean>,
-
     principal: FormControl<number>,
     annualRate: FormControl<number>,
-
-    monthlyDeposit: FormControl<number>,
-    noFirstMonthDeposit: FormControl<boolean>,
-
-    tax: FormControl<number>,
-    withTaxes: FormControl<boolean>,
-
     duration: FormGroup<{
       value: FormControl<number>,
       scale: FormControl<'years' | 'months'>,
     }>,
+    monthlyDeposit: FormControl<number>,
 
-    compoundRate: FormControl<CompoundRate>,
+    accrualFrequency: FormControl<AccrualFrequency>,
+    capitalization: FormControl<boolean>,
+
+    currency: FormControl<CurrencyShape>,
+    autoConversion: FormControl<boolean>,
+
+    taxRate: FormControl<number>,
+    taxTiming: FormControl<TaxTiming>,
+
+    noFirstMonthDeposit: FormControl<boolean>,
   }>;
-  public readonly compoundRates: { value: number, label: string }[];
+  public readonly accrualFrequencies: { value: number, label: string }[];
   public readonly duration = signal(new Duration('months', 24));
 
   public readonly currencies = signal<CurrencyShape[]>([]);
@@ -130,16 +129,15 @@ export class CalculatorPage {
   ) {
     this._logger = new ScopedLogger('CalculatorPage', inject(LoggerService));
 
-    const COMPOUND_RATES_MAP_FROM_I18N = [
-      CompoundRate.NO_COMPOUND,
-      CompoundRate.ANNUALLY,
-      CompoundRate.HALF_YEARLY,
-      CompoundRate.QUARTERLY,
-      CompoundRate.MONTHLY,
-      CompoundRate.DAILY
+    const ACCRUAL_FREQUENCIES_MAP_FROM_I18N = [
+      AccrualFrequency.ANNUALLY,
+      AccrualFrequency.HALF_YEARLY,
+      AccrualFrequency.QUARTERLY,
+      AccrualFrequency.MONTHLY,
+      AccrualFrequency.DAILY
     ] as const;
 
-    this.compoundRates = COMPOUND_RATES_MAP_FROM_I18N.map((value, i) => {
+    this.accrualFrequencies = ACCRUAL_FREQUENCIES_MAP_FROM_I18N.map((value, i) => {
       return { value, label: `calculator.compound_rates.${i}` };
     });
 
@@ -167,8 +165,8 @@ export class CalculatorPage {
       ]),
       noFirstMonthDeposit: this._fb.nonNullable.control(true),
 
-      tax: this._fb.nonNullable.control(23, Validators.min(0)),
-      withTaxes: this._fb.nonNullable.control(true),
+      taxRate: this._fb.nonNullable.control(23, Validators.min(0)),
+      taxTiming: this._fb.nonNullable.control(TaxTiming.AtMaturity),
 
       duration: this._fb.nonNullable.group({
         value: this._fb.nonNullable.control(this.duration().duration(), [
@@ -178,13 +176,12 @@ export class CalculatorPage {
         scale: this._fb.nonNullable.control(this.duration().scale()),
       }),
 
-      compoundRate: this._fb.nonNullable.control(4),
+      accrualFrequency: this._fb.nonNullable.control(4),
+      capitalization: this._fb.nonNullable.control(false),
     });
 
     this.calculatorForm.controls.currency.valueChanges
     .subscribe(currency => {
-      this._logger.d(`CalculatorForm.controls.currency.valueChanges`);
-
       if (this.calculatorForm.controls.autoConversion.value) {
         const principal = this._currencyConversion.convert(
           this._deposit().principal(),
@@ -217,8 +214,6 @@ export class CalculatorPage {
     });
 
     this.calculatorForm.controls.duration.valueChanges.subscribe(group => {
-      this._logger.d(`CalculatorForm#controls.duration#valueChanges`);
-
       this.duration.update(
         duration => duration.update(group.value!, group.scale!)
       );
@@ -230,14 +225,10 @@ export class CalculatorPage {
     });
 
     this.calculatorForm.valueChanges.subscribe(() => {
-      this._logger.d(`CalculatorForm#valueChanges, formChanged`);
-
       this.formChanged.set(true);
     });
 
     this.calculatorForm.valueChanges.pipe(debounceTime(500)).subscribe(() =>  {
-      this._logger.d(`CalculatorForm#valueChanges`);
-
       this._deposit.update(
         deposit => deposit.setAutoconversion(
           this.calculatorForm.controls.autoConversion.value
@@ -264,8 +255,8 @@ export class CalculatorPage {
 
       const depositCurrencyCode = data.currency().code;
 
-      const mappedCompoundIndex = this.compoundRates.findIndex(
-        x => x.value === input.compoundRate
+      const mappedAccrualFrequencyIndex = this.accrualFrequencies.findIndex(
+        x => x.value === input.accrualFrequency
       )!;
 
       this.calculatorForm.patchValue({
@@ -275,12 +266,13 @@ export class CalculatorPage {
         autoConversion: data.autoConversion(),
 
         principal: input.principal,
-        annualRate: input.annualRate,
+        annualRate: input.annualRate * 100,
         monthlyDeposit: input.monthlyDeposit,
-        tax: input.tax,
-        withTaxes: input.isTaxed(),
-        noFirstMonthDeposit: input.isNoFirstMonthDeposit(),
-        compoundRate: mappedCompoundIndex,
+        taxRate: input.taxRate * 100,
+        taxTiming: input.isTaxed() ? TaxTiming.AtMaturity : TaxTiming.None,
+        noFirstMonthDeposit: input.noStartDeposits === 1,
+        accrualFrequency: mappedAccrualFrequencyIndex,
+        capitalization: input.capitalize,
         duration: {
           value: input.duration.duration(),
           scale: input.duration.scale(),
@@ -300,17 +292,17 @@ export class CalculatorPage {
       principal,
       annualRate,
       monthlyDeposit,
-      tax,
-      compoundRate,
-      withTaxes,
+      accrualFrequency,
+      capitalization,
+      taxRate,
+      taxTiming,
       noFirstMonthDeposit,
     } = this.calculatorForm.getRawValue();
 
-    const annualRateValue   = annualRate;
-    const compoundRateValue = this.compoundRates[compoundRate].value;
-    const duration          = this.duration();
-    const taxValue          = tax;
-    const principalValue    = principal;
+    const annualRateValue       = annualRate;
+    const accrualFrequencyValue = this.accrualFrequencies[accrualFrequency].value;
+    const duration              = this.duration();
+    const principalValue        = principal;
 
     let depositInput: DepositInput | null = null;
 
@@ -320,10 +312,15 @@ export class CalculatorPage {
         annualRateValue,
         duration,
         monthlyDeposit,
-        taxValue,
-        compoundRateValue,
-        noFirstMonthDeposit,
-        withTaxes,
+
+        accrualFrequencyValue,
+        capitalization,
+
+        taxRate,
+        taxTiming && TaxTiming.AtMaturity || TaxTiming.None,
+
+        +noFirstMonthDeposit,
+        0,
       );
     } catch (e) {
       this._logger.e((e as Error).message);
