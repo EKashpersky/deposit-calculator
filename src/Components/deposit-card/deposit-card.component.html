@@ -8,7 +8,7 @@
       {{ deposit().durationValue() }}
       {{ deposit().durationValue() | duration:deposit().durationScale() | translate }}
       ·
-      {{ deposit().annualRate() / 100 | percent:'1.0-2' }}
+      {{ deposit().annualRate() | percent:'1.0-2' }}
     </div>
 
     <span class="hidden md:inline">&nbsp;·&nbsp;</span>

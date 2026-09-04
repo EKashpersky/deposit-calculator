@@ -1,7 +1,7 @@
-export function round(value: number, precision = 2) {
+export function round(value: number, precision = 4) {
   if (Number.isNaN(value) || !Number.isFinite(value)) {
     return -1;
   }
 
-  return Math.round(value * (10 ** 2)) / (10 ** precision);
+  return Math.round(value * (10 ** precision)) / (10 ** precision);
 }

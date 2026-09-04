@@ -1,9 +1,10 @@
 import { LoggerShape } from './logger.model';
+import { LoggerService } from './logger.service';
 
 
 
-export class ScopedLogger {
-  public constructor(private _scope: string, private _logger: LoggerShape) {}
+export class ScopedLogger implements LoggerShape {
+  public constructor(private _scope: string, private _logger: LoggerService) {}
 
   public a(condition: boolean, message: string, param?: any) {
     this._logger.a(condition, message, this._scope);

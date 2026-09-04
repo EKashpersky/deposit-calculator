@@ -117,7 +117,10 @@
       "monthly_deposit": "Monthly deposit",
       "annual_interest": "Annual interest",
       "deposit_duration": "Deposit duration",
-      "compound_rate": "Capitalization",
+      "capitalization_frequency": "Accrual frequency",
+
+      
+      "capitalization": "Capitalization",
       "interest": "Interest",
       "tax": "Tax",
       "with_taxes": "With taxes",
@@ -144,8 +147,7 @@
       "years": "Years",
       "months": "Months"
     },
-    "compound_rates": [
-      "On account",
+    "accrual_frequency": [
       "Annually",
       "Half-yearly",
       "Quarterly",
