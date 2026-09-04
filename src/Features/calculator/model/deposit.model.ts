@@ -1,8 +1,9 @@
 import { round } from '@utils/round';
 import { CurrencyShape, getDefaultCurrency } from '@shared/Currency';
 
-import { DepositInput } from './deposit-input.model';
+
 import { DepositResult } from './deposit-result.model';
+import { DepositInput } from './deposit-input.model';
 
 
 
@@ -108,11 +109,14 @@ export class DepositModel {
   }
 
   public tax(): number {
-    return this._input.tax;
+    return this._input.taxRate;
   }
 
   public timesDeposited(): number {
-    return this._input.duration.durationInMonths() - +this._input.isNoFirstMonthDeposit();
+    return (this._input.duration.durationInMonths()
+     - this._input.noEndDeposits
+     - this._input.noStartDeposits
+    );
   }
 
 

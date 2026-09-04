@@ -7,7 +7,7 @@
 
   <div id="amount">
     <span class="mat-font-display-md">
-      <currency [currency]="deposit().currency().symbol" [value]="deposit().net() - deposit().taxed()"></currency>
+      <currency [currency]="deposit().currency().symbol" [value]="deposit().net()"></currency>
     </span>
   </div>
 
@@ -18,12 +18,12 @@
     </span>
     <span> · </span>
     <span>
-      <span>{{ deposit().annualRate() / 100 | percent:'1.0-2' }}</span>
+      <span>{{ deposit().annualRate() | percent:'1.0-2' }}</span>
     </span>
     <span> · </span>
     <span>
       <span>{{ 'calculator.result.taxed' | translate }} </span>
-      <span>{{ deposit().tax() / 100 | percent:'1.0-2' }}</span>
+      <span>{{ deposit().tax() | percent:'1.0-2' }}</span>
     </span>
   </div>
 </mat-card>

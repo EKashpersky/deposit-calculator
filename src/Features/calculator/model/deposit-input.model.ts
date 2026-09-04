@@ -1,59 +1,68 @@
-import { DepositFlags } from './deposit-flags.model';
+import { AccrualFrequency, TaxTiming } from './common.enum';
 import { Duration } from './duration.model';
 
 
 
 export class DepositInput {
-  public readonly principal: number;      /// 10000
-  public readonly annualRate: number;     /// 12
-  public readonly duration: Duration;     /// new Duration('months', 12)
-  public readonly monthlyDeposit: number; /// 100
-  public readonly tax: number;            /// 23
-  public readonly compoundRate: number;   /// See CompoundRate enum
-  public readonly flags: number;
+  public readonly principal: number;
+  public readonly annualRate: number;
+  public readonly duration: Duration;
+  public readonly monthlyDeposit: number;
+
+  public readonly accrualFrequency: AccrualFrequency;
+  public readonly capitalize: boolean;
+
+  public readonly taxRate: number;
+  public readonly taxTiming: TaxTiming;
+
+  public readonly noStartDeposits: number;
+  public readonly noEndDeposits: number;
 
 
 
   public static Empty(): DepositInput {
-    return new DepositInput(0, 0, new Duration('months', 0), 0, 0, 0, 0);
-  }
-
-  public static New(
-    principal: number,
-    annualRate: number,
-    duration: Duration,
-    monthlyDeposit: number,
-    tax: number,
-    compoundRate: number,
-    flags: number,
-  ) {
     return new DepositInput(
-      principal,
-      annualRate,
-      duration,
-      monthlyDeposit,
-      tax,
-      compoundRate,
-      flags,
+      0,
+      0,
+      new Duration('months', 0),
+      0,
+      AccrualFrequency.MONTHLY,
+      false,
+      0,
+      TaxTiming.None,
+      0,
+      0
     );
   }
 
-  private constructor(
+  public constructor(
     principal: number,
     annualRate: number,
     duration: Duration,
     monthlyDeposit: number,
-    tax: number,
-    compoundRate: number,
-    flags: number,
+
+    accrualFrequency: AccrualFrequency,
+    capitalize: boolean,
+
+    taxRate: number,
+    taxTiming: TaxTiming,
+
+    noStartDeposits: number,
+    noEndDeposits: number,
   ) {
-    this.principal      = principal;
-    this.annualRate     = annualRate;
-    this.duration       = duration;
-    this.monthlyDeposit = monthlyDeposit;
-    this.tax            = tax;
-    this.compoundRate   = compoundRate;
-    this.flags          = flags;
+    this.principal         = principal;
+    this.annualRate        = annualRate;
+    this.duration          = duration;
+    this.monthlyDeposit    = monthlyDeposit;
+
+    this.accrualFrequency  = accrualFrequency;
+    this.capitalize        = capitalize;
+
+    this.taxRate           = taxRate;
+    this.taxTiming         = taxTiming;
+
+    this.noStartDeposits   = noStartDeposits;
+    this.noEndDeposits     = noEndDeposits;
   }
 
   public withCurrencyUpdate(principal: number, monthlyDeposit: number) {
@@ -62,17 +71,16 @@ export class DepositInput {
       this.annualRate,
       this.duration,
       monthlyDeposit,
-      this.tax,
-      this.compoundRate,
-      this.flags
+      this.accrualFrequency,
+      this.capitalize,
+      this.taxRate,
+      this.taxTiming,
+      this.noStartDeposits,
+      this.noEndDeposits,
     );
   }
 
   public isTaxed() {
-    return Boolean(DepositFlags.IsTaxed(this.flags));
-  }
-
-  public isNoFirstMonthDeposit() {
-    return Boolean(DepositFlags.IsNoFirstMonthDeposit(this.flags));
+    return this.taxTiming !== TaxTiming.None;
   }
 }

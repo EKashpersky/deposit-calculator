@@ -25,32 +25,38 @@ import { firstValueFrom } from 'rxjs';
 
 import { DepositCardComponent } from '@components/deposit-card';
 import {
-  CompoundRate,
-  DepositFlags,
-  DepositInput,
+  AccrualFrequency,
+  calculateDeposit,
+  createDepositInput,
   DepositModel,
   Duration,
+  TaxTiming,
 } from '@features/calculator/model';
 import { CurrencyService, CurrencyShape } from '@shared/Currency';
 import { DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
 
-import { calculateDeposit } from '../calculator';
 import { DepositNameComponent } from './deposit-create.component';
 import { UndoSnackbarComponent } from './undo-snackbar.component';
 
 
 
 function templateDeposit() {
-  const depositInput = DepositInput.New(
-    10000,
+  const depositInput = createDepositInput(
+    50000,
     12,
     new Duration('months', 12),
-    100,
+    500,
+
+    AccrualFrequency.MONTHLY,
+    true,
+
     23,
-    CompoundRate.MONTHLY,
-    DepositFlags.Create(true, true),
+    TaxTiming.PerPayout,
+
+    0,
+    0,
   );
 
   return depositInput;

@@ -117,7 +117,8 @@
       "monthly_deposit": "Щомісячний внесок",
       "annual_interest": "Річна відсоткова ставка",
       "deposit_duration": "Термін депозиту",
-      "compound_rate": "Капіталізація",
+      "capitalization_frequency": "Частота начислень",
+      "capitalization": "Капіталізація",
       "interest": "Відсоток",
       "tax": "Податок",
       "with_taxes": "З оподаткуванням",
@@ -145,7 +146,6 @@
       "months": "Місяці"
     },
     "compound_rates": [
-      "На рахунок",
       "Щорічно",
       "Щопіврічно",
       "Щоквартально",

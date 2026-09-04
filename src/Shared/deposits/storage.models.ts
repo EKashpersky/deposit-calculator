@@ -1,3 +1,4 @@
+import { TaxTiming } from '@features/calculator/model';
 import { CurrencyShape } from '@shared/Currency';
 
 
@@ -10,11 +11,14 @@ export interface DurationPOJO {
 export interface DepositInputPOJO {
   readonly principal: number;
   readonly annualRate: number;
-  readonly duration: DurationPOJO;
   readonly monthlyDeposit: number;
-  readonly tax: number;
-  readonly compoundRate: number;
-  readonly flags: number;
+  readonly duration: DurationPOJO;
+  readonly taxRate: number;
+  readonly taxTiming: TaxTiming;
+  readonly accrualFrequncy: number;
+  readonly capitalize: boolean;
+  readonly noStartDeposits: number;
+  readonly noEndDeposits: number;
 }
 
 export interface DepositResultPOJO {
