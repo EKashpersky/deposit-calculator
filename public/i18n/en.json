@@ -122,7 +122,11 @@
       "interest": "Interest",
       "tax_rate": "Tax rate",
       "taxation": "Taxation",
-      "no_first_month_deposit": "No first month deposit"
+      "deposit_on_month_beginning": "Deposit at month start",
+      "limitations": "Limited deposits",
+      "limitation_range": "{monthsa}mo. from {monthsb}",
+      "can_deposit": "Can deposit",
+      "cant_deposit": "Can't"
     },
     "result": {
       "inputs": "Inputs data",

@@ -122,7 +122,11 @@
       "interest": "Відсоток",
       "tax_rate": "Податок",
       "taxation": "Оподаткування",
-      "no_first_month_deposit": "Не враховувати перший місяць"
+      "deposit_on_month_beginning": "Внесок на початку місяця",
+      "limitations": "Обмеження поповнень",
+      "limitation_range": "{monthsa}міс. з {monthsb}",
+      "can_deposit": "Можна довкладати",
+      "cant_deposit": "Не можна"
     },
     "result": {
       "inputs": "Вхідні дані",

@@ -97,13 +97,15 @@ export class CalculatorPage {
     accrualFrequency: FormControl<AccrualFrequency>,
     capitalization: FormControl<boolean>,
 
-    currency: FormControl<CurrencyShape>,
-    autoConversion: FormControl<boolean>,
-
     taxRate: FormControl<number>,
     taxTiming: FormControl<TaxTiming>,
 
-    noFirstMonthDeposit: FormControl<boolean>,
+    depositingMonthBegin: FormControl<number>,
+    depositingMonthEnd: FormControl<number>,
+    depositAtMonthStart: FormControl<boolean>,
+
+    currency: FormControl<CurrencyShape>,
+    autoConversion: FormControl<boolean>,
   }>;
   public readonly accrualFrequencies: { value: number, label: string }[];
   public readonly taxTimings: { value: number, label: string }[];
@@ -156,9 +158,6 @@ export class CalculatorPage {
      * Form initialisation, along with wiring up recalculation on form update
     **/
     this.calculatorForm = this._fb.nonNullable.group({
-      currency: this._fb.nonNullable.control(getDefaultCurrency()),
-      autoConversion: this._fb.nonNullable.control(false),
-
       principal: this._fb.nonNullable.control(10000, Validators.compose([
         Validators.required,
         Validators.min(0)
@@ -167,16 +166,6 @@ export class CalculatorPage {
         Validators.required,
         Validators.min(0)
       ])),
-
-      monthlyDeposit: this._fb.nonNullable.control(0, [
-        Validators.required,
-        Validators.min(0)
-      ]),
-      noFirstMonthDeposit: this._fb.nonNullable.control(true),
-
-      taxRate: this._fb.nonNullable.control(23, Validators.min(0)),
-      taxTiming: this._fb.nonNullable.control(TaxTiming.AtMaturity),
-
       duration: this._fb.nonNullable.group({
         value: this._fb.nonNullable.control(this.duration().duration(), [
           Validators.required,
@@ -184,9 +173,23 @@ export class CalculatorPage {
         ]),
         scale: this._fb.nonNullable.control(this.duration().scale()),
       }),
+      monthlyDeposit: this._fb.nonNullable.control(0, [
+        Validators.required,
+        Validators.min(0)
+      ]),
 
       accrualFrequency: this._fb.nonNullable.control(4),
       capitalization: this._fb.nonNullable.control(false),
+
+      taxRate: this._fb.nonNullable.control(23, Validators.min(0)),
+      taxTiming: this._fb.nonNullable.control(TaxTiming.AtMaturity),
+
+      depositingMonthBegin: this._fb.nonNullable.control(0),
+      depositingMonthEnd: this._fb.nonNullable.control(0),
+      depositAtMonthStart: this._fb.nonNullable.control(true),
+
+      currency: this._fb.nonNullable.control(getDefaultCurrency()),
+      autoConversion: this._fb.nonNullable.control(false),
     });
 
     this.calculatorForm.controls.currency.valueChanges
@@ -279,7 +282,11 @@ export class CalculatorPage {
         monthlyDeposit: input.monthlyDeposit,
         taxRate: input.taxRate * 100,
         taxTiming: input.isTaxed() ? TaxTiming.AtMaturity : TaxTiming.None,
-        noFirstMonthDeposit: input.noStartDeposits === 1,
+
+        depositingMonthBegin: input.depositingMonthBegin - 1,
+        depositingMonthEnd: input.depositingMonthEnd,
+        depositAtMonthStart: input.depositAtMonthStart,
+
         accrualFrequency: mappedAccrualFrequencyIndex,
         capitalization: input.capitalize,
         duration: {
@@ -304,8 +311,10 @@ export class CalculatorPage {
       accrualFrequency,
       capitalization,
       taxRate,
+      depositingMonthBegin,
+      depositingMonthEnd,
+      depositAtMonthStart,
       taxTiming,
-      noFirstMonthDeposit,
     } = this.calculatorForm.getRawValue();
 
     const annualRateValue       = annualRate;
@@ -328,8 +337,10 @@ export class CalculatorPage {
         taxRate,
         taxTiming,
 
-        +noFirstMonthDeposit,
-        0,
+        /// +1 fixes range of deposit months
+        depositingMonthBegin + 1,
+        depositingMonthEnd,
+        depositAtMonthStart
       );
     } catch (e) {
       this._logger.e((e as Error).message);

@@ -56,7 +56,8 @@ function templateDeposit() {
     TaxTiming.PerPayout,
 
     0,
-    0,
+    12,
+    true,
   );
 
   return depositInput;

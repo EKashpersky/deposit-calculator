@@ -1,26 +1,29 @@
 import { DepositInput } from './deposit-input.model';
 
-export function depositMonths(
-  termMonths: number,
-  noStartDeposits: number,
-  noEndDeposits: number
-): number {
-  return termMonths - noStartDeposits - noEndDeposits;
+
+
+/**
+ * Returns amount of months when user will put money on deposit
+**/
+export function depositMonths(begin: number, end: number): number {
+  return end - begin + 1;
 }
 
-export function isDepositMonth(
+export function isDepositMonth(month: number, begin: number, end: number): boolean {
+  return month >= begin && month <= end;
+}
+
+export function remainingMonthsAfterDeposit(
   month: number,
   termMonths: number,
-  noStartDeposits: number,
-  noEndDeposits: number
-): boolean {
-  return month > noStartDeposits && month <= termMonths - noEndDeposits;
+  depositAtMonthStart: boolean,
+): number {
+  return termMonths - month + +depositAtMonthStart;
 }
 
-/** i = (1 + r/f)^(f/12) - 1 */
 export function effectiveMonthlyRate(
   annualRate: number,
-  accrualFrequency: number
+  accrualFrequency: number,
 ): number {
   return Math.pow(1 + annualRate / accrualFrequency, accrualFrequency / 12) - 1;
 }
@@ -28,7 +31,7 @@ export function effectiveMonthlyRate(
 export function futurePrincipal(
   principal: number,
   monthlyRate: number,
-  months: number
+  months: number,
 ): number {
   return principal * Math.pow(1 + monthlyRate, months);
 }
@@ -39,7 +42,7 @@ export function futurePrincipal(
 export function futureAnnuity(
   payment: number,
   monthlyRate: number,
-  payments: number
+  payments: number,
 ): number {
   if (monthlyRate === 0) {
     return payment * payments;
@@ -51,20 +54,26 @@ export function futureAnnuity(
 export function futureAnnuityToTerm(
   payment: number,
   monthlyRate: number,
-  payments: number,
-  noEndDeposits: number,
+  begin: number,
+  end: number,
+  termMonths: number,
+  depositAtMonthStart: boolean,
 ): number {
+  const payments = depositMonths(begin, end);
+  const tail = remainingMonthsAfterDeposit(end, termMonths, depositAtMonthStart);
+
   return futurePrincipal(
     futureAnnuity(payment, monthlyRate, payments),
     monthlyRate,
-    noEndDeposits
+    tail,
   );
 }
+
 
 export function simplePrincipalInterest(
   principal: number,
   annualRate: number,
-  termMonths: number
+  termMonths: number,
 ): number {
   return principal * annualRate * (termMonths / 12);
 }
@@ -77,32 +86,33 @@ export function simpleAnnuityInterest(
   payment: number,
   annualRate: number,
   termMonths: number,
-  noStartDeposits: number,
-  noEndDeposits: number,
+  begin: number,
+  end: number,
+  depositAtMonthStart: boolean,
 ): number {
-  const payments = depositMonths(termMonths, noStartDeposits, noEndDeposits);
+  const payments = depositMonths(begin, end);
   if (payments <= 0) {
     return 0;
   }
 
-  const remainingSum = payments * (
-    noEndDeposits + termMonths - noStartDeposits - 1
-  ) / 2;
+  const due = +depositAtMonthStart;
+  const remainingSum =
+    payments * (2 * termMonths - begin - end + 2 * due) / 2;
+
   return payment * (annualRate / 12) * remainingSum;
 }
 
 export function futureValueGross(input: DepositInput): {
   deposited: number;
   interest: number;
-  fvGross: number
+  fvGross: number;
 } {
   const termMonths = input.duration.durationInMonths();
+  const begin = input.depositingMonthBegin;
+  const end = input.depositingMonthEnd;
+  const due = input.depositAtMonthStart;
 
-  const deposited = input.monthlyDeposit * depositMonths(
-    termMonths,
-    input.noStartDeposits,
-    input.noEndDeposits,
-  );
+  const deposited = input.monthlyDeposit * depositMonths(begin, end);
 
   let interest: number;
 
@@ -113,19 +123,22 @@ export function futureValueGross(input: DepositInput): {
         input.monthlyDeposit,
         input.annualRate,
         termMonths,
-        input.noStartDeposits,
-        input.noEndDeposits,
+        begin,
+        end,
+        due,
       );
   } else {
     const rate = effectiveMonthlyRate(input.annualRate, input.accrualFrequency);
-    const payments = depositMonths(
-      termMonths,
-      input.noStartDeposits,
-      input.noEndDeposits
-    );
     const fv =
       futurePrincipal(input.principal, rate, termMonths) +
-      futureAnnuityToTerm(input.monthlyDeposit, rate, payments, input.noEndDeposits);
+      futureAnnuityToTerm(
+        input.monthlyDeposit,
+        rate,
+        begin,
+        end,
+        termMonths,
+        due,
+      );
     interest = fv - input.principal - deposited;
   }
 
@@ -136,10 +149,6 @@ export function futureValueGross(input: DepositInput): {
   };
 }
 
-/**
- * Місяць: спочатку відсоток (і податок, якщо PerPayout), потім внесок.
- * Тому внесок цього місяця відсотка ще не бачить.
- */
 export function simulateCapitalized(
   input: DepositInput,
   monthlyRate: number,
@@ -148,16 +157,21 @@ export function simulateCapitalized(
   const taxRate = taxPerPayout ? input.taxRate : 0;
   let balance = input.principal;
   let withheld = 0;
-
   const termMonths = input.duration.durationInMonths();
+  const begin = input.depositingMonthBegin;
+  const end = input.depositingMonthEnd;
 
   for (let month = 1; month <= termMonths; month++) {
+    if (input.depositAtMonthStart && isDepositMonth(month, begin, end)) {
+      balance += input.monthlyDeposit;
+    }
+
     const interest = balance * monthlyRate;
     const tax = interest * taxRate;
     withheld += tax;
     balance += interest - tax;
 
-    if (isDepositMonth(month, termMonths, input.noStartDeposits, input.noEndDeposits)) {
+    if (!input.depositAtMonthStart && isDepositMonth(month, begin, end)) {
       balance += input.monthlyDeposit;
     }
   }

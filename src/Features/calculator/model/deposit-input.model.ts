@@ -15,8 +15,13 @@ export class DepositInput {
   public readonly taxRate: number;
   public readonly taxTiming: TaxTiming;
 
-  public readonly noStartDeposits: number;
-  public readonly noEndDeposits: number;
+  /**
+   * Twese two define a period within this.duration.durationInMonths() duration
+   * of how long can the deposit be top-up
+  **/
+  public readonly depositingMonthBegin: number;
+  public readonly depositingMonthEnd: number;
+  public readonly depositAtMonthStart: boolean;
 
 
 
@@ -31,7 +36,8 @@ export class DepositInput {
       0,
       TaxTiming.None,
       0,
-      0
+      0,
+      true,
     );
   }
 
@@ -47,8 +53,9 @@ export class DepositInput {
     taxRate: number,
     taxTiming: TaxTiming,
 
-    noStartDeposits: number,
-    noEndDeposits: number,
+    depositingMonthBegin: number,
+    depositingMonthEnd: number,
+    depositAtMonthBeginning: boolean,
   ) {
     this.principal         = principal;
     this.annualRate        = annualRate;
@@ -61,8 +68,9 @@ export class DepositInput {
     this.taxRate           = taxRate;
     this.taxTiming         = taxTiming;
 
-    this.noStartDeposits   = noStartDeposits;
-    this.noEndDeposits     = noEndDeposits;
+    this.depositingMonthBegin = depositingMonthBegin;
+    this.depositingMonthEnd   = depositingMonthEnd;
+    this.depositAtMonthStart  = depositAtMonthBeginning;
   }
 
   public withCurrencyUpdate(principal: number, monthlyDeposit: number) {
@@ -75,8 +83,9 @@ export class DepositInput {
       this.capitalize,
       this.taxRate,
       this.taxTiming,
-      this.noStartDeposits,
-      this.noEndDeposits,
+      this.depositingMonthBegin,
+      this.depositingMonthEnd,
+      this.depositAtMonthStart,
     );
   }
 

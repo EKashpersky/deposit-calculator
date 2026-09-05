@@ -114,8 +114,8 @@ export class DepositModel {
 
   public timesDeposited(): number {
     return (this._input.duration.durationInMonths()
-     - this._input.noEndDeposits
-     - this._input.noStartDeposits
+     - this._input.depositingMonthEnd
+     - this._input.depositingMonthBegin
     );
   }
 
