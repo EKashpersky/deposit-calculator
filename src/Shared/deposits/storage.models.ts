@@ -17,8 +17,9 @@ export interface DepositInputPOJO {
   readonly taxTiming: TaxTiming;
   readonly accrualFrequncy: number;
   readonly capitalize: boolean;
-  readonly noStartDeposits: number;
-  readonly noEndDeposits: number;
+  readonly depositingMonthBegin: number;
+  readonly depositingMonthEnd: number;
+  readonly depositAtMonthStart: boolean;
 }
 
 export interface DepositResultPOJO {

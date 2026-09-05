@@ -5,15 +5,12 @@ import {
   DepositInput,
   DepositResult,
   Duration,
-  TaxTiming,
-} from '.';
-import {
-  depositMonths,
   effectiveMonthlyRate,
   futureAnnuityToTerm,
   futurePrincipal,
   futureValueGross,
-  simulateCapitalized
+  simulateCapitalized,
+  TaxTiming,
 } from '.';
 
 
@@ -48,8 +45,9 @@ export function createDepositInput(
   taxRate: number,
   taxTiming: TaxTiming,
 
-  noStartDeposits: number,
-  noEndDeposits: number,
+  depositingMonthBegin: number,
+  depositingMonthEnd: number,
+  depositAtMonthBeginning: boolean,
 ) {
   const durationInMonths = duration.durationInMonths();
   validateDepositInput(principal, annualRate, monthlyDeposit, durationInMonths);
@@ -66,33 +64,37 @@ export function createDepositInput(
     round(taxRate / 100),
     taxTiming,
 
-    noStartDeposits,
-    noEndDeposits,
+    depositingMonthBegin,
+    depositingMonthEnd,
+    depositAtMonthBeginning
   );
 }
 
 export function computeInterest(input: DepositInput) {
   const termMonths = input.duration.durationInMonths();
-
   const { deposited, interest, fvGross } = futureValueGross(input);
 
   if (input.taxTiming === TaxTiming.None || input.taxRate === 0) {
-    /// Simple interest no tax
     return DepositResult.build(deposited, interest, 0, fvGross);
-  } else if (input.taxTiming === TaxTiming.AtMaturity || !input.capitalize) {
-    /// Simple interest with tax
+  }
+
+  if (input.taxTiming === TaxTiming.AtMaturity || !input.capitalize) {
     const taxed = interest * input.taxRate;
     return DepositResult.build(deposited, interest, taxed, fvGross - taxed);
   }
 
-  // Compound interest + tax/no tax
-  const rate      = effectiveMonthlyRate(input.annualRate, input.accrualFrequency);
-  const netRate   = rate * (1 - input.taxRate);
-  const payments  = depositMonths(termMonths, input.noStartDeposits, input.noEndDeposits);
-  const net       =
+  const rate = effectiveMonthlyRate(input.annualRate, input.accrualFrequency);
+  const netRate = rate * (1 - input.taxRate);
+  const net =
     futurePrincipal(input.principal, netRate, termMonths) +
-    futureAnnuityToTerm(input.monthlyDeposit, netRate, payments, input.noEndDeposits);
-
+    futureAnnuityToTerm(
+      input.monthlyDeposit,
+      netRate,
+      input.depositingMonthBegin,
+      input.depositingMonthEnd,
+      termMonths,
+      input.depositAtMonthStart,
+    );
   const { withheld } = simulateCapitalized(input, rate, true);
 
   return DepositResult.build(deposited, interest, withheld, net);
