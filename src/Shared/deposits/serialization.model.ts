@@ -21,15 +21,13 @@ export class DepositSerializer implements DomainSerializer<DepositModel, Deposit
         deposit.input.annualRate,
         new Duration(deposit.input.duration.scale, deposit.input.duration.duration),
         deposit.input.monthlyDeposit,
-        /// @ts-ignore
-        deposit.input.accrualFrequncy || deposit.input['compoundRate'],
+        deposit.input.accrualFrequncy,
         deposit.input.capitalize,
-        /// @ts-ignore
-        deposit.input.taxRate || deposit.input['tax'],
-        /// @ts-ignore
-        deposit.input.taxTiming || deposit.input['withTaxes'] ? TaxTiming.AtMaturity : TaxTiming.None,
-        deposit.input.noStartDeposits,
-        deposit.input.noEndDeposits,
+        deposit.input.taxRate,
+        deposit.input.taxTiming,
+        deposit.input.depositingMonthBegin,
+        deposit.input.depositingMonthEnd,
+        deposit.input.depositAtMonthStart
       ),
       deposit.result
     );
@@ -54,8 +52,9 @@ export class DepositSerializer implements DomainSerializer<DepositModel, Deposit
         accrualFrequncy: deposit.input().accrualFrequency,
         capitalize: deposit.input().capitalize,
 
-        noStartDeposits: deposit.input().noStartDeposits,
-        noEndDeposits: deposit.input().noEndDeposits,
+        depositingMonthBegin: deposit.input().depositingMonthBegin,
+        depositingMonthEnd: deposit.input().depositingMonthEnd,
+        depositAtMonthStart: deposit.input().depositAtMonthStart,
       },
       result: deposit.result(),
     }

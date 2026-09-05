@@ -34,10 +34,6 @@
             </mat-label>
             <input matInput inputmode="numeric" type="number" formControlName="monthlyDeposit" />
           </mat-form-field>
-  
-          <mat-slide-toggle class="mb-[8px]" formControlName="noFirstMonthDeposit">
-            {{ 'calculator.inputs.no_first_month_deposit' | translate }}
-          </mat-slide-toggle>
         </div>
       </mat-card-content>
 
@@ -133,6 +129,81 @@
             <input matSliderThumb formControlName="taxTiming">
           </mat-slider>
         </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container-low">
+      <mat-card-header class="p-[12px_12px_0px]!">
+        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[8px]">
+          {{ 'calculator.inputs.limitations' | translate }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="content-fix flex flex-col gap-[12px] pt-[8px]">
+          <div class="flex flex-row justify-between items-baseline mx-[4px] mb-[4px]">
+            <mat-label id="compoundRateLabel" class="mat-font-label-md mat-text-secondary">
+              {{ 'calculator.inputs.capitalization_frequency' | translate }}
+            </mat-label>
+
+            <mat-label class="mat-font-label-md">
+              <span>
+                {{ (duration().durationInMonths() - calculatorForm.controls.depositingMonthBegin.value)
+                  - (duration().durationInMonths() - calculatorForm.controls.depositingMonthEnd.value)
+                }}
+              </span>
+
+              <span>
+                {{ 'deposit_card.a_month' | translate }}
+              </span>
+
+              <span>
+                з
+              </span>
+              <span>
+                {{ duration().durationInMonths() }}
+              </span>
+            </mat-label>
+          </div>
+
+          <mat-slider
+            [max]="duration().durationInMonths()"
+            [showTickMarks]="true"
+            aria-labelledby="taxTiming"
+          >
+            <input matSliderStartThumb formControlName="depositingMonthBegin">
+            <input matSliderEndThumb formControlName="depositingMonthEnd">
+          </mat-slider>
+
+          <div class="flex flex-row justify-between items-baseline mx-[4px] mb-[4px]">
+            <mat-label class="mat-font-label-md mat-text-disabled">
+              Відкриття
+            </mat-label>
+
+            <mat-label class="mat-font-label-md mat-text-disabled">
+              Закриття
+            </mat-label>
+          </div>
+
+          <div class="flex flex-row gap-2 items-baseline mx-[4px] mb-[4px]">
+            <div class="w-4 h-1 mat-bg-primary mat-corner-sm"></div>
+
+            <mat-label class="mat-font-label-md mat-text-disabled">
+              {{ "calculator.inputs.can_deposit" | translate }}
+            </mat-label>
+
+            <div class="w-4 h-1 mat-bg-surface-variant mat-corner-sm"></div>
+
+            <mat-label class="mat-font-label-md mat-text-disabled">
+              {{ "calculator.inputs.cant_deposit" | translate }}
+            </mat-label>
+          </div>
+
+        </div>
+
+        <mat-slide-toggle class="mb-[8px]" formControlName="depositAtMonthStart">
+          {{ 'calculator.inputs.deposit_on_month_beginning' | translate }}
+        </mat-slide-toggle>
       </mat-card-content>
     </mat-card>
 
