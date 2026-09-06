@@ -281,7 +281,7 @@ export class CalculatorPage {
         annualRate: input.annualRate * 100,
         monthlyDeposit: input.monthlyDeposit,
         taxRate: input.taxRate * 100,
-        taxTiming: input.isTaxed() ? TaxTiming.AtMaturity : TaxTiming.None,
+        taxTiming: input.taxTiming,
 
         depositingMonthBegin: input.depositingMonthBegin - 1,
         depositingMonthEnd: input.depositingMonthEnd,
