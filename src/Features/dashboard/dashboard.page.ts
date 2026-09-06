@@ -53,9 +53,9 @@ function templateDeposit() {
     true,
 
     23,
-    TaxTiming.PerPayout,
+    TaxTiming.AtMaturity,
 
-    0,
+    1,
     12,
     true,
   );
