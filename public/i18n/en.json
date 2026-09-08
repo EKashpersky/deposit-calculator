@@ -124,7 +124,7 @@
       "tax_rate": "Tax rate",
       "tax_timing": "When to withhold",
       "deposit_on_month_beginning": "Deposit at month start",
-      "limitation_range": "Top-ups from month {montha} to {monthb}",
+      "limitation_range": "Top-ups from {{montha}} to {{monthb}} mo.",
       "months": "{{months}}mo."
     },
     "result": {
