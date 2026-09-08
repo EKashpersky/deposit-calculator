@@ -72,24 +72,21 @@
 
           <mat-label class="mat-font-label-md">
             <span>
-              {{ calculatorForm.controls.depositingMonthEnd.value - calculatorForm.controls.depositingMonthBegin.value }}
+              {{
+                'calculator.inputs.months' | translate: {
+                  months: calculatorForm.controls.depositingMonthEnd.value - calculatorForm.controls.depositingMonthBegin.value + 1
+                }
+              }}
             </span>
 
             <span>
-              {{ 'deposit_card.a_month' | translate }}
-            </span>
-
-            <span>
-              з
-            </span>
-            <span>
-              {{ duration().durationInMonths() }}
             </span>
           </mat-label>
         </div>
 
         <mat-slider
           class="flex flex-col h-8! justify-center mt-[-8px]!"
+          [min]="1"
           [max]="duration().durationInMonths()"
           [showTickMarks]="true"
           aria-labelledby="taxTiming"

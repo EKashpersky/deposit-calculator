@@ -7,7 +7,11 @@
 
   <div id="amount">
     <span class="mat-font-display-md">
-      <currency [currency]="deposit().currency().symbol" [value]="deposit().net()"></currency>
+      <currency
+        [currency]="deposit().currency().symbol"
+        [value]="deposit().net()"
+        [variable]="true"
+      ></currency>
     </span>
   </div>
 
