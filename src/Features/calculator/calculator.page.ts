@@ -283,7 +283,7 @@ export class CalculatorPage {
         taxRate: input.taxRate * 100,
         taxTiming: input.taxTiming,
 
-        depositingMonthBegin: input.depositingMonthBegin - 1,
+        depositingMonthBegin: input.depositingMonthBegin,
         depositingMonthEnd: input.depositingMonthEnd,
         depositAtMonthStart: input.depositAtMonthStart,
 
@@ -338,7 +338,7 @@ export class CalculatorPage {
         taxTiming,
 
         /// +1 fixes range of deposit months
-        depositingMonthBegin + 1,
+        depositingMonthBegin,
         depositingMonthEnd,
         depositAtMonthStart
       );

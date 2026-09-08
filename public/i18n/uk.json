@@ -57,7 +57,7 @@
   },
 
   "deposit_card": {
-    "a_month": "міс",
+    "a_month": "міс.",
     "label": "Депозит"
   },
 
@@ -125,8 +125,7 @@
       "tax_timing": "Момент оподаткування",
       "deposit_on_month_beginning": "Внесок на початку місяця",
       "limitation_range": "Поповнення з {{montha}}-го по {{monthb}}-й міс",
-      "can_deposit": "Можна довкладати",
-      "cant_deposit": "Не можна"
+      "months": "{{months}}міс."
     },
     "result": {
       "inputs": "Вхідні дані",
