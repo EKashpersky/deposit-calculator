@@ -1,6 +1,6 @@
 <div class="flex flex-row justify-between">
   <!-- Header block -->
-  <h2 class="mat-font-headline-md mat-text-on-surface-variant">
+  <h2 class="mat-font-headline-md mat-text-on-surface">
     {{ deposit().name() }}
   </h2>
 
@@ -10,226 +10,191 @@
   </button>
 </div>
 
-<section class="flex flex-row gap-[16px] flex-wrap-reverse md:flex-nowrap">
-  <form [formGroup]="calculatorForm" class="flex flex-col flex-[1_2_100%] gap-[16px]">
-    <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container-low">
+<section class="flex flex-row gap-4 flex-wrap-reverse md:flex-nowrap">
+  <form [formGroup]="calculatorForm" class="flex flex-col flex-[1_2_100%] gap-4">
+    <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container">
       <mat-card-header class="p-[12px_12px_0px]!">
-        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[8px]">
+        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[16px]">
           {{ 'calculator.inputs.contributions' | translate }}
         </mat-card-subtitle>
       </mat-card-header>
 
-      <mat-card-content>
-        <div class="flex flex-col gap-[12px] pt-[8px]">
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>
-              {{ 'calculator.inputs.initial_deposit' | translate }} ({{ deposit().currency().symbol }})
-            </mat-label>
-            <input matInput inputmode="numeric" type="number" formControlName="principal" />
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>
-              {{ 'calculator.inputs.monthly_deposit' | translate }} ({{ deposit().currency().symbol }})
-            </mat-label>
-            <input matInput inputmode="numeric" type="number" formControlName="monthlyDeposit" />
-          </mat-form-field>
+      <mat-card-content class="flex! flex-col gap-3">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>
+            {{ 'calculator.inputs.initial_deposit' | translate }} ({{ deposit().currency().symbol }})
+          </mat-label>
+          <input matInput inputmode="numeric" type="number" formControlName="principal" />
+        </mat-form-field>
 
-          <mat-slide-toggle class="mb-[8px]"  formControlName="depositAtMonthStart">
-            {{ 'calculator.inputs.deposit_on_month_beginning' | translate }}
-          </mat-slide-toggle>
-        </div>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>
+            {{ 'calculator.inputs.monthly_deposit' | translate }} ({{ deposit().currency().symbol }})
+          </mat-label>
+          <input matInput inputmode="numeric" type="number" formControlName="monthlyDeposit" />
+        </mat-form-field>
+
+        <mat-slide-toggle class="mb-[8px]"  formControlName="depositAtMonthStart">
+          {{ 'calculator.inputs.deposit_on_month_beginning' | translate }}
+        </mat-slide-toggle>
       </mat-card-content>
-
-      <mat-card-footer></mat-card-footer>
     </mat-card>
 
-    <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container-low">
+    <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container">
       <mat-card-header class="p-[12px_12px_0px]!">
-        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[8px]">
+        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[16px]">
           {{ 'calculator.inputs.term' | translate }}
         </mat-card-subtitle>
       </mat-card-header>
 
-      <mat-card-content class="flex flex-col">
-        <div class="flex flex-col gap-[12px] pt-[8px]">
-
-          <div class="flex flex-col gap-[12px]" formGroupName="duration">
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>{{ 'calculator.inputs.deposit_duration' | translate }}</mat-label>
-              <input matInput inputmode="numeric" type="number" formControlName="value" />
-            </mat-form-field>
+      <mat-card-content class="flex! flex-col gap-3">
+        <ng-container formGroupName="duration">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>{{ 'calculator.inputs.deposit_duration' | translate }}</mat-label>
+            <input matInput inputmode="numeric" type="number" formControlName="value" />
+          </mat-form-field>
   
-            <mat-button-toggle-group formControlName="scale">
-              <mat-button-toggle class="w-full" value='months'>
-                {{ duration().duration() | duration:'months' | translate | titlecase }}
-              </mat-button-toggle>
+          <mat-button-toggle-group formControlName="scale">
+            <mat-button-toggle class="w-full" value='months'>
+              {{ duration().duration() | duration:'months' | translate | titlecase }}
+            </mat-button-toggle>
   
-              <mat-button-toggle class="w-full" value='years'>
-                {{ duration().duration() | duration:'years' | translate | titlecase }}
-              </mat-button-toggle>
-            </mat-button-toggle-group>
+            <mat-button-toggle class="w-full" value='years'>
+              {{ duration().duration() | duration:'years' | translate | titlecase }}
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </ng-container>
 
-          </div>
+        <div class="flex flex-row justify-between items-baseline">
+          <mat-label id="compoundRateLabel" class="mat-font-label-md mat-text-secondary">
+            {{ 'calculator.inputs.limitation_range' | translate:({ montha: calculatorForm.controls.depositingMonthBegin.value, monthb: calculatorForm.controls.depositingMonthEnd.value }) }}
+          </mat-label>
 
-          <div class="flex flex-row justify-between items-baseline">
-            <mat-label id="compoundRateLabel" class="mat-font-label-md mat-text-secondary">
-              {{ 'calculator.inputs.limitation_range' | translate:({ montha: calculatorForm.controls.depositingMonthBegin.value, monthb: calculatorForm.controls.depositingMonthEnd.value }) }}
-            </mat-label>
+          <mat-label class="mat-font-label-md">
+            <span>
+              {{ calculatorForm.controls.depositingMonthEnd.value - calculatorForm.controls.depositingMonthBegin.value }}
+            </span>
 
-            <mat-label class="mat-font-label-md">
-              <span>
-                {{ (duration().durationInMonths() - calculatorForm.controls.depositingMonthBegin.value)
-                  - (duration().durationInMonths() - calculatorForm.controls.depositingMonthEnd.value)
-                }}
-              </span>
+            <span>
+              {{ 'deposit_card.a_month' | translate }}
+            </span>
 
-              <span>
-                {{ 'deposit_card.a_month' | translate }}
-              </span>
-
-              <span>
-                з
-              </span>
-              <span>
-                {{ duration().durationInMonths() }}
-              </span>
-            </mat-label>
-          </div>
-
-          <mat-slider
-            class="flex flex-col h-8! justify-center mt-[-8px]!"
-            [max]="duration().durationInMonths()"
-            [showTickMarks]="true"
-            aria-labelledby="taxTiming"
-          >
-            <input matSliderStartThumb formControlName="depositingMonthBegin">
-            <input matSliderEndThumb formControlName="depositingMonthEnd">
-          </mat-slider>
+            <span>
+              з
+            </span>
+            <span>
+              {{ duration().durationInMonths() }}
+            </span>
+          </mat-label>
         </div>
+
+        <mat-slider
+          class="flex flex-col h-8! justify-center mt-[-8px]!"
+          [max]="duration().durationInMonths()"
+          [showTickMarks]="true"
+          aria-labelledby="taxTiming"
+        >
+          <input matSliderStartThumb formControlName="depositingMonthBegin">
+          <input matSliderEndThumb formControlName="depositingMonthEnd">
+        </mat-slider>
+      
       </mat-card-content>
     </mat-card>
 
-    <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container-low">
+    <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container">
       <mat-card-header class="p-[12px_12px_0px]!">
-        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[8px]">
+        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[16px]">
           {{ 'calculator.inputs.accrual' | translate }}
         </mat-card-subtitle>
       </mat-card-header>
 
-      <mat-card-content>
-        <div class="flex flex-col gap-[12px] pt-[8px]">
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>{{ 'calculator.inputs.annual_interest' | translate }} (%)</mat-label>
-            <input matInput inputmode="numeric" type="number" formControlName="annualRate" />
-          </mat-form-field>
+      <mat-card-content class="flex! flex-col gap-3">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'calculator.inputs.annual_interest' | translate }} (%)</mat-label>
+          <input matInput inputmode="numeric" type="number" formControlName="annualRate" />
+        </mat-form-field>
 
-          <mat-slide-toggle formControlName="capitalization">
-            {{ 'calculator.inputs.capitalization' | translate }}
-          </mat-slide-toggle>
+        <mat-slide-toggle formControlName="capitalization">
+          {{ 'calculator.inputs.capitalization' | translate }}
+        </mat-slide-toggle>
 
-          <div class="flex flex-row justify-between items-baseline">
-            <mat-label id="compoundRateLabel" class="mat-font-label-md mat-text-secondary">
-              {{ 'calculator.inputs.accrual_frequency' | translate }}
-            </mat-label>
+        <div class="flex flex-row justify-between items-baseline">
+          <mat-label id="compoundRateLabel" class="mat-font-label-md mat-text-secondary">
+            {{ 'calculator.inputs.accrual_frequency' | translate }}
+          </mat-label>
 
-            <mat-label class="mat-font-label-md">
-              {{ accrualFrequencies[calculatorForm.controls.accrualFrequency.value].label | translate }}
-            </mat-label>
-          </div>
-
-          <mat-slider
-            class="flex flex-col h-8! justify-center mt-[-8px]!"
-            [max]="accrualFrequencies.length - 1"
-            [showTickMarks]="true"
-            aria-labelledby="compoundRateLabel"
-          >
-            <input matSliderThumb formControlName="accrualFrequency">
-          </mat-slider>
+          <mat-label class="mat-font-label-md">
+            {{ accrualFrequencies[calculatorForm.controls.accrualFrequency.value].label | translate }}
+          </mat-label>
         </div>
+
+        <mat-slider
+          class="flex flex-col h-8! justify-center mt-[-8px]!"
+          [max]="accrualFrequencies.length - 1"
+          [showTickMarks]="true"
+          aria-labelledby="compoundRateLabel"
+        >
+          <input matSliderThumb formControlName="accrualFrequency">
+        </mat-slider>
+      
       </mat-card-content>
     </mat-card>
 
-    <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container-low">
+    <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container">
       <mat-card-header class="p-[12px_12px_0px]!">
-        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[8px]">
+        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[16px]">
           {{ 'calculator.inputs.taxation' | translate }}
         </mat-card-subtitle>
       </mat-card-header>
 
-      <mat-card-content>
-        <div class="flex flex-col gap-[12px] pt-[8px]">
-          <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>{{ 'calculator.inputs.tax_rate' | translate }} (%)</mat-label>
-            <input matInput inputmode="numeric" type="number" formControlName="taxRate" />
-          </mat-form-field>
+      <mat-card-content class="flex! flex-col gap-3">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>{{ 'calculator.inputs.tax_rate' | translate }} (%)</mat-label>
+          <input matInput inputmode="numeric" type="number" formControlName="taxRate" />
+        </mat-form-field>
 
-          <div class="flex flex-row justify-between items-baseline mx-[4px]">
-            <mat-label id="compoundRateLabel" class="mat-font-label-md mat-text-secondary">
-              {{ 'calculator.inputs.tax_timing' | translate }}
-            </mat-label>
+        <div class="flex flex-row justify-between items-baseline mx-[4px]">
+          <mat-label id="compoundRateLabel" class="mat-font-label-md mat-text-secondary">
+            {{ 'calculator.inputs.tax_timing' | translate }}
+          </mat-label>
 
-            <mat-label class="mat-font-label-md">
-              {{ taxTimings[calculatorForm.controls.taxTiming.value].label | translate }}
-            </mat-label>
-          </div>
-
-          <mat-slider
-            class="flex flex-col h-8! justify-center mt-[-8px]!"
-            [max]="2"
-            [showTickMarks]="true"
-          >
-            <input matSliderThumb formControlName="taxTiming">
-          </mat-slider>
-
-
-
-          <!-- <div class="flex flex-row gap-2 items-baseline mx-[4px] mb-[4px]">
-            <div class="w-4 h-1 mat-bg-primary mat-corner-sm"></div>
-
-            <mat-label class="mat-font-label-md mat-text-disabled">
-              {{ "calculator.inputs.can_deposit" | translate }}
-            </mat-label>
-
-            <div class="w-4 h-1 mat-bg-surface-variant mat-corner-sm"></div>
-
-            <mat-label class="mat-font-label-md mat-text-disabled">
-              {{ "calculator.inputs.cant_deposit" | translate }}
-            </mat-label>
-          </div> -->
-
+          <mat-label class="mat-font-label-md">
+            {{ taxTimings[calculatorForm.controls.taxTiming.value].label | translate }}
+          </mat-label>
         </div>
+
+        <mat-slider
+          class="flex flex-col h-8! justify-center mt-[-8px]!"
+          [max]="2"
+          [showTickMarks]="true"
+        >
+          <input matSliderThumb formControlName="taxTiming">
+        </mat-slider>
       </mat-card-content>
     </mat-card>
 
-
-    
-    
-    <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container-low">
+    <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container">
       <mat-card-header class="p-[12px_12px_0px]!">
-        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[8px]">
+        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[16px]">
           {{ 'calculator.inputs.currency' | translate }}
         </mat-card-subtitle>
       </mat-card-header>
 
-      <mat-card-content>
-        <div class="flex flex-col gap-[12px] pt-[8px]">
-          <mat-form-field subscriptSizing="dynamic">
-            <mat-select formControlName="currency">
-              @for (currency of currencies(); track $index) {
-                <mat-option [value]="currency">
-                  <span>{{ currency.symbol }} – </span>
-                  <span>{{ 'units.currency.' + currency.code | translate }}</span>
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+      <mat-card-content class="flex flex-col gap-3">
+        <mat-form-field class="w-full" subscriptSizing="dynamic">
+          <mat-select formControlName="currency">
+            @for (currency of currencies(); track $index) {
+              <mat-option [value]="currency">
+                <span>{{ currency.symbol }} – </span>
+                <span>{{ 'units.currency.' + currency.code | translate }}</span>
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-          <mat-checkbox formControlName="autoConversion">
-            {{ 'calculator.inputs.auto_exchange' | translate }}
-          </mat-checkbox>
-        </div>
-
+        <mat-checkbox formControlName="autoConversion">
+          {{ 'calculator.inputs.auto_exchange' | translate }}
+        </mat-checkbox>
       </mat-card-content>
     </mat-card>
   </form>
