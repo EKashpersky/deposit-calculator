@@ -5,7 +5,14 @@
 .roller-strip {
   transition-property: transform;
 
-  @include transition('fast', 'spatial', 'expressive');
+  // @include transition('slow', 'effects', 'expressive');
 
-  // @include transition('fast', 'spatial', 'standard');
+
+  &.big {
+    @include transition('default', 'spatial', 'standard')
+  }
+
+  &.small {
+    @include transition('fast', 'effects', 'standard')
+  }
 }

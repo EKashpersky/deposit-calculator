@@ -33,5 +33,10 @@ export class ReelModel<const T extends any[]> {
   public indexOfValueInDictionary() {
     return this._dictionary.indexOf(this._value);
   }
+
+
+  public clone() {
+    return new ReelModel(this._dictionary, this._value, this._variable);
+  }
 }
 
