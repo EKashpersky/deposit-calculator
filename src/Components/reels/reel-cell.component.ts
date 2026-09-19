@@ -1,12 +1,9 @@
 import {
   Component,
   computed,
-  effect,
   ElementRef,
-  inject,
-  Injector,
   input,
-  signal
+  signal,
 } from '@angular/core';
 
 import { ReelModel } from './reel.model';
@@ -23,36 +20,40 @@ import { ReelModel } from './reel.model';
   }
 })
 export class ReelCellComponent {
-  private _injector = inject(Injector);
-
   public readonly reel = input<ReelModel<any>>(new ReelModel([]));
+
+  /**
+   * Used to decide on animation type
+  **/
+  public readonly size = input<'big' | 'small' | ''>('');
+
 
   public readonly reelIndex = computed(() => {
     return this.reel().indexOfValueInDictionary();
   });
 
-  public readonly resize = input(false);
-
   private _width = signal<string>('unset');
-  public width   = this._width.asReadonly();
+
+
 
   public constructor(private _host: ElementRef<HTMLElement>) { }
 
-  public ngAfterViewInit() {
-    if (this.reel().variable()) { 
-      this._initReelWindowResize();
-    }
+  public width() {
+    return this._width();
   }
 
 
 
-  private _initReelWindowResize() {
+  public measure() {
+    if (this.reel().variable()) {
+      this._updateReelWindowSize(this.reel().indexOfValueInDictionary());
+    }
+  }
+
+  private _updateReelWindowSize(reelIndex: number) {
     const reels = this._host.nativeElement.children[0];
 
-    effect(() => {
-      const reelCellElement = reels.children.item(this.reelIndex())
-
-      this._width.set(`${reelCellElement!.clientWidth}px`);
-    }, { injector: this._injector });
+    const reelCellElement = reels.children.item(reelIndex) as HTMLElement;
+    reelCellElement && this._width.set(`${reelCellElement.clientWidth}px`);
   }
 }
