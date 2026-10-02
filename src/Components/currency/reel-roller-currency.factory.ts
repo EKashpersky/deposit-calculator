@@ -14,7 +14,9 @@ export function reelRollerCurrencyFactory(
 
   const exceptions = [' ', '.', ',', '\''];
 
-  const reels2 = `${value}`.split('').map(
+  /// Find and replace the currency with a dollar to fix multiple currency
+  /// symbols in case of multiple symbols as a currency symbol
+  const reels2 = `${value.replace(currency, '$').trim()}`.split('').map(
     charx => {
       if (exceptions.includes(charx)) {
         return new ReelModel(exceptions, charx, variable);
