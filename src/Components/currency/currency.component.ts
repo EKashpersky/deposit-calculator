@@ -27,32 +27,19 @@ export class CurrencyComponent {
 
 
   public readonly model = computed(() => {
-    const value = round(this.value(), 2);
     const formattedValue = formatCurrency(
-      value,
+      round(this.value(), 2),
       this._translate.currentLang()!,
       this.currency()!.symbol,
       this.currency()!.code,
       '0.2'
     );
 
-
-
-    const useRawValue = false;
-    const usedValue = useRawValue ? `${value}` : formattedValue;
-
     const result = reelRollerCurrencyFactory(
       this.currency()!.symbol,
-      usedValue,
+      formattedValue,
       this.variable()
     );
-
-    // console.log(
-    //   `Difference for currency formatting: `,
-    //   `${value}`,
-    //   `| ${formattedValue}`,
-    //   `| ${result.value()}`
-    // );
 
     return result;
   })
