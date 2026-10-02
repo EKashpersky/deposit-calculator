@@ -32,6 +32,7 @@ import { DepositSummaryComponent } from '@features/deposit-summary';
 import {
   CurrencyConverterService,
   CurrencyConvertSide,
+  CurrencyInflationService,
   CurrencyService,
   CurrencyShape,
   getDefaultCurrency,
@@ -122,6 +123,8 @@ export class CalculatorPage {
 
   private _logger: LoggerShape;
 
+  private _inflation = signal<number>(0);
+
 
 
   public constructor(
@@ -129,6 +132,7 @@ export class CalculatorPage {
     private _depositBridge: DepositBridgeService,
     private _currency: CurrencyService,
     private _currencyConversion: CurrencyConverterService,
+    private _currencyInflation: CurrencyInflationService,
   ) {
     this._logger = new ScopedLogger('CalculatorPage', inject(LoggerService));
 
@@ -261,6 +265,11 @@ export class CalculatorPage {
       map(x => x['calculator'] as DepositModel)
     ).subscribe(data => {
       this._deposit.set(data);
+
+      this._inflation.set(
+        this._currencyInflation.getOneSafe(this.deposit().currency().code)
+      );
+
       this.duration.set(data.input().duration);
 
       const input = data.input();
@@ -295,6 +304,10 @@ export class CalculatorPage {
         },
       }, { emitEvent: true });
     });
+  }
+
+  public inflation() {
+    return this._inflation();
   }
 
   public save() {
@@ -348,7 +361,9 @@ export class CalculatorPage {
       return;
     }
 
-    const depositResult = calculateDeposit(depositInput);
+
+
+    const depositResult = calculateDeposit(depositInput, this._inflation());
 
     this._deposit.set(
       new DepositModel(

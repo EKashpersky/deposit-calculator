@@ -136,4 +136,8 @@ export class DepositModel {
   public net() {
     return round(this._result.net);
   }
+
+  public realNet() {
+    return round(this._result.realNet);
+  }
 }

@@ -142,7 +142,9 @@
       "total_deposits": "Monthly deposits",
       "interest": "Accrued",
       "taxed": "Taxed",
-      "net": "Net future value"
+      "net": "Net future value",
+      "inflation_loss": "due to inflation of {{ inflation }}",
+      "today_money": "In today's money"
     },
     "duration": {
       "years": "Years",

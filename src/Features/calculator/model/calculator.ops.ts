@@ -178,3 +178,15 @@ export function simulateCapitalized(
 
   return { net: balance, withheld };
 }
+
+export function inflateToPresent(
+  nominal: number,
+  annualInflation: number,
+  termMonths: number,
+): number {
+  if (annualInflation === 0 || termMonths === 0) {
+    return nominal;
+  }
+
+  return nominal / Math.pow(1 + annualInflation, termMonths / 12);
+}
