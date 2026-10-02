@@ -23,6 +23,7 @@ import { CurrencyApiService } from '@api/currency-api.service';
 import { SUPPORTED_LANGUAGES } from '@config/supported-languages';
 import { PreferencesDialog } from '@features/preferences';
 import {
+  CurrencyInflationService,
   CurrencyRatesService,
   CurrencyService,
 } from '@shared/Currency';
@@ -85,6 +86,7 @@ export class App {
     private _depositBridge: DepositBridgeService,
     private _dialog: MatDialog,
     private _preferences: PreferencesService,
+    private _currencyInflation: CurrencyInflationService,
   ) {
     this._injector = inject(Injector);
 
@@ -108,8 +110,14 @@ export class App {
       this._currency.getPreferredOrFallbackCurrency()
     );
 
-    inject(CurrencyApiService).getCurrencyRates().then((rates) => {
+    const currencyApi = inject(CurrencyApiService);
+
+    currencyApi.getCurrencyRates().then((rates) => {
       this._currencyRates.setRates(rates);
+    });
+
+    currencyApi.getCurrenciesInflation().then(inflations => {
+      this._currencyInflation.setBatch(inflations);
     });
 
     this._depositBridge.deposit.subscribe((deposit) => {

@@ -9,6 +9,7 @@ import {
   futureAnnuityToTerm,
   futurePrincipal,
   futureValueGross,
+  inflateToPresent,
   simulateCapitalized,
   TaxTiming,
 } from '.';
@@ -75,12 +76,12 @@ export function computeInterest(input: DepositInput) {
   const { deposited, interest, fvGross } = futureValueGross(input);
 
   if (input.taxTiming === TaxTiming.None || input.taxRate === 0) {
-    return DepositResult.build(deposited, interest, 0, fvGross);
+    return DepositResult.build(deposited, interest, 0, fvGross, 0);
   }
 
   if (input.taxTiming === TaxTiming.AtMaturity || !input.capitalize) {
     const taxed = interest * input.taxRate;
-    return DepositResult.build(deposited, interest, taxed, fvGross - taxed);
+    return DepositResult.build(deposited, interest, taxed, fvGross - taxed, 0);
   }
 
   const rate = effectiveMonthlyRate(input.annualRate, input.accrualFrequency);
@@ -97,9 +98,26 @@ export function computeInterest(input: DepositInput) {
     );
   const { withheld } = simulateCapitalized(input, rate, true);
 
-  return DepositResult.build(deposited, interest, withheld, net);
+  const interestOnAccount = net - input.principal - deposited + withheld;
+  return DepositResult.build(deposited, interestOnAccount, withheld, net, 0);
 }
 
-export function calculateDeposit(depositInput: DepositInput): DepositResult {
-  return computeInterest(depositInput)
+export function calculateDeposit(
+  depositInput: DepositInput,
+  inflationRate: number,
+): DepositResult {
+  const nominal = computeInterest(depositInput)
+  const realNet  = inflateToPresent(
+    nominal.net,
+    inflationRate,
+    depositInput.duration.durationInMonths()
+  );
+
+  return DepositResult.build(
+    nominal.deposited,
+    nominal.interest,
+    nominal.taxed,
+    nominal.net,
+    realNet
+  );
 }

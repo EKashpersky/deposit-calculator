@@ -15,6 +15,7 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import {
   CurrencyConverterService,
+  CurrencyInflationService,
   CurrencyRatesService,
   CurrencyService
 } from '@shared/Currency';
@@ -76,6 +77,7 @@ export const appConfig: ApplicationConfig = {
     PreferencesService,
     DepositsManagerService,
     CurrencyService,
+    CurrencyInflationService,
     CurrencyRatesService,
     CurrencyConverterService,
 

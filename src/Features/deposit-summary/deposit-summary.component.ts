@@ -1,4 +1,4 @@
-import { PercentPipe } from '@angular/common';
+import { CurrencyPipe, PercentPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -12,6 +12,7 @@ import { DurationPipe } from '@shared/duration.pipe';
 @Component({
   imports: [
     PercentPipe,
+    CurrencyPipe,
 
     MatCardModule,
     TranslatePipe,
@@ -30,6 +31,7 @@ import { DurationPipe } from '@shared/duration.pipe';
 })
 export class DepositSummaryComponent {
   public readonly deposit = input<DepositModel>(DepositModel.Empty());
+  public readonly inflation = input<number>(0);
 
   public constructor() {}
 }

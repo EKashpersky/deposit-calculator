@@ -27,6 +27,7 @@ export interface DepositResultPOJO {
   readonly interest: number;
   readonly taxed: number;
   readonly net: number;
+  readonly realNet: number;
 }
 
 

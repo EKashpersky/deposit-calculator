@@ -137,12 +137,14 @@
       "interest_gross": "Нараховано",
       "interest_taxed": "Податок",
       "breakdown": "Розбивка",
-      "interest_net": "Чистими",
+      "interest_net": "Чисті відсотки",
       "principal": "Початковий внесок",
       "total_deposits": "Щомісячні поповнення",
       "interest": "Нараховано",
       "taxed": "Податок",
-      "net": "Чиста майбутня вартість"
+      "net": "Чиста майбутня вартість",
+      "inflation_loss": "через інфляцію у {{ inflation }}",
+      "today_money": "У сьогоднішніх цінах"
     },
     "duration": {
       "years": "Роки",

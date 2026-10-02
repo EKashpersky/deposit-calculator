@@ -32,7 +32,11 @@ import {
   Duration,
   TaxTiming,
 } from '@features/calculator/model';
-import { CurrencyService, CurrencyShape } from '@shared/Currency';
+import {
+  CurrencyInflationService,
+  CurrencyService,
+  CurrencyShape
+} from '@shared/Currency';
 import { DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
@@ -103,6 +107,7 @@ export class DashboardPage {
     private _history: HistoryService,
     private _shortcuts: ShortcutsService,
     private _currency: CurrencyService,
+    private _currencyInflation: CurrencyInflationService,
   ) {
     const collator = new Intl.Collator(void 0, { usage: 'sort', numeric: true });
     this.deposits = computed(() => {
@@ -143,7 +148,8 @@ export class DashboardPage {
       }
 
       const depositInput = templateDeposit();
-      const depositResult = calculateDeposit(depositInput);
+      const inflation = this._currencyInflation.getOneSafe(currency.code);
+      const depositResult = calculateDeposit(depositInput, inflation);
       const addDepositAction = this._depositsManager.addDeposit(
         new DepositModel(
           depositName,
