@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { lastValueFrom, of } from 'rxjs';
 
 import { CurrencyCodeEnum } from '@config/supported-currencies';
+import { CurrencyMap } from '@shared/Currency';
 
 
 
@@ -29,5 +30,17 @@ export class CurrencyApiService {
     ];
 
     return lastValueFrom(of(MIN_OF_FIN_UA));
+  }
+
+  public getCurrenciesInflation() {
+    const INFLATIONS_PER_CURRENCY = {
+      [CurrencyCodeEnum.EUR]: 0.033,
+      [CurrencyCodeEnum.PLN]: 0.034,
+      [CurrencyCodeEnum.TRY]: 0.32,
+      [CurrencyCodeEnum.UAH]: 0.1,
+      [CurrencyCodeEnum.USD]: 0.034,
+    } satisfies Partial<CurrencyMap>;
+
+    return lastValueFrom(of(INFLATIONS_PER_CURRENCY));
   }
 }
