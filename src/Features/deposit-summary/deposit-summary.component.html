@@ -1,16 +1,17 @@
-<mat-card appearance="filled" class="flex flex-col gap-3 mat-bg-primary-container mat-text-on-primary-container p-[20px_40px]">
-  <!-- <div class="fv">
-    <span class="mat-font-label-lg">
-      {{ 'calculator.result.net' | translate }}
-    </span>
+<mat-card appearance="filled" class="flex flex-col mat-bg-primary-container mat-text-on-primary-container p-[20px_40px]">
+  <mat-card-content class="p-0!">
+    <div class="mat-font-body-md">
+      {{ 'calculator.result.today_money' | translate }}
+    </div>
 
-    <currency
-      [currency]="deposit().currency()"
-      [value]="deposit().net()"
-      [variable]="true"
-      size="big"
-      class="block mat-font-display-md"
-    ></currency>
+    <div class="mat-font-display-sm">
+      <currency
+        [currency]="deposit().currency()"
+        [value]="deposit().realNet()"
+        [variable]="true"
+        size="big"
+      ></currency>
+    </div>
 
     <div class="mat-font-body-md">
       <span>
@@ -27,25 +28,9 @@
         <span>{{ deposit().tax() | percent:'1.0-2' }}</span>
       </span>
     </div>
-  </div>
- -->
 
-
-  <!-- inflation part -->
-  <!-- <div class="border-t border-[var(--mat-sys-outline)] pt-3"> -->
-  <div>
-    <div class="mat-font-body-md">
-      {{ 'calculator.result.today_money' | translate }}
-    </div>
-
-    <div class="mat-font-display-sm">
-      <currency
-        [currency]="deposit().currency()"
-        [value]="deposit().realNet()"
-        [variable]="true"
-        size="big"
-      ></currency>
-    </div>
+    <!-- hairline divider -->
+    <div class="h-px w-full bg-[var(--mat-sys-on-primary-container)] opacity-25 my-2"></div>
 
     <div class="mat-font-body-md">
       –<currency
@@ -63,7 +48,7 @@
         }}
       </span>
     </div>
-  </div>
+  </mat-card-content>
 </mat-card>
 
 

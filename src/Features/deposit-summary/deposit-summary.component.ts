@@ -1,4 +1,4 @@
-import { CurrencyPipe, PercentPipe } from '@angular/common';
+import { PercentPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -12,13 +12,12 @@ import { DurationPipe } from '@shared/duration.pipe';
 @Component({
   imports: [
     PercentPipe,
-    CurrencyPipe,
+    DurationPipe,
 
     MatCardModule,
     TranslatePipe,
 
     CurrencyComponent,
-    DurationPipe,
   ],
 
   selector: 'deposit-summary',
