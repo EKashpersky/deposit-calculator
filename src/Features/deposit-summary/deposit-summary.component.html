@@ -43,7 +43,7 @@
 
       <span>
         {{ 'calculator.result.inflation_loss' | translate : {
-            inflation: inflation() | percent
+            inflation: inflation() | percent : '0.0-2'
           }
         }}
       </span>

@@ -50,6 +50,7 @@ import {
   Duration,
   TaxTiming,
 } from './model';
+import { round } from '@utils/round';
 
 
 
@@ -287,9 +288,9 @@ export class CalculatorPage {
         autoConversion: data.autoConversion(),
 
         principal: input.principal,
-        annualRate: input.annualRate * 100,
+        annualRate: round(input.annualRate * 100, 2),
         monthlyDeposit: input.monthlyDeposit,
-        taxRate: input.taxRate * 100,
+        taxRate: round(input.taxRate * 100, 2),
         taxTiming: input.taxTiming,
 
         depositingMonthBegin: input.depositingMonthBegin,

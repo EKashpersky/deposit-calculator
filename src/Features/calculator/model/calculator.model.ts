@@ -76,12 +76,24 @@ export function computeInterest(input: DepositInput) {
   const { deposited, interest, fvGross } = futureValueGross(input);
 
   if (input.taxTiming === TaxTiming.None || input.taxRate === 0) {
-    return DepositResult.build(deposited, interest, 0, fvGross, 0);
+    return DepositResult.build(
+      round(deposited, 2),
+      round(interest, 2),
+      0,
+      round(fvGross, 2),
+      0
+    );
   }
 
   if (input.taxTiming === TaxTiming.AtMaturity || !input.capitalize) {
     const taxed = interest * input.taxRate;
-    return DepositResult.build(deposited, interest, taxed, fvGross - taxed, 0);
+    return DepositResult.build(
+      round(deposited, 2),
+      round(interest, 2),
+      round(taxed, 2),
+      round(fvGross - taxed, 2),
+      0
+    );
   }
 
   const rate = effectiveMonthlyRate(input.annualRate, input.accrualFrequency);
@@ -99,7 +111,13 @@ export function computeInterest(input: DepositInput) {
   const { withheld } = simulateCapitalized(input, rate, true);
 
   const interestOnAccount = net - input.principal - deposited + withheld;
-  return DepositResult.build(deposited, interestOnAccount, withheld, net, 0);
+  return DepositResult.build(
+    round(deposited, 2),
+    round(interestOnAccount, 2),
+    round(withheld, 2),
+    round(net, 2),
+    0
+  );
 }
 
 export function calculateDeposit(
@@ -114,10 +132,10 @@ export function calculateDeposit(
   );
 
   return DepositResult.build(
-    nominal.deposited,
-    nominal.interest,
-    nominal.taxed,
-    nominal.net,
-    realNet
+    round(nominal.deposited, 2),
+    round(nominal.interest, 2),
+    round(nominal.taxed, 2),
+    round(nominal.net, 2),
+    round(realNet, 2)
   );
 }
