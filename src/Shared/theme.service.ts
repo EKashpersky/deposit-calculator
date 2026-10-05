@@ -1,36 +1,75 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal, Signal, WritableSignal } from '@angular/core';
 
 import { LoggerService } from './logger';
 
 
 
 export enum ThemeEnum {
-  Light = 'light',
   Dark  = 'dark',
+  Light = 'light',
+  System  = 'system',
 }
 
 @Injectable()
 export class ThemeService {
-  private _lastTheme: ThemeEnum;
+  private _systemThemeMediaQuery: MediaQueryList;
 
-  private _theme = signal<ThemeEnum>(ThemeEnum.Dark);
+  private _lastAppTheme: ThemeEnum;
+
+  /// Can be dark, light and system. It is the element the user can change
+  private _userTheme: WritableSignal<ThemeEnum>;
+  /// Can be dark or light. Initial value .System is to be immediately replaced
+  /// with detected value
+  private _systemTheme: WritableSignal<ThemeEnum>;
+  /// Can be dark or light
+  private _appTheme: Signal<ThemeEnum>;
 
 
 
   public constructor(private _logger: LoggerService) {
-    this._lastTheme = this._theme();
-  }
+    this._systemThemeMediaQuery = matchMedia('(prefers-color-scheme: light)');
 
-  public cycleTheme() {
-    this._lastTheme = this._theme();
+    const systemTheme = this._systemThemeMediaQuery.matches
+      ? ThemeEnum.Light
+      : ThemeEnum.Dark
 
-    this._theme.set(
-      this._lastTheme === ThemeEnum.Light ? ThemeEnum.Dark : ThemeEnum.Light
+    this._userTheme   = signal<ThemeEnum>(ThemeEnum.System);
+    this._systemTheme = signal<ThemeEnum>(systemTheme);
+
+    this._appTheme = computed(
+      () => this._userTheme() === ThemeEnum.System
+        ? this._systemTheme()
+        : this._userTheme()
     );
+
+
+
+    this._systemThemeMediaQuery.addEventListener('change', event => {
+      /// Keep track of system theme
+      this._systemTheme.set(event.matches ? ThemeEnum.Light : ThemeEnum.Dark);
+    });
+
+    this._lastAppTheme = this._appTheme();
   }
 
-  public lastTheme() {
-    return this._lastTheme;
+  public cycleUserTheme() {
+    let nextUserTheme = this._userTheme();
+    switch (nextUserTheme) {
+      case ThemeEnum.System:  nextUserTheme = ThemeEnum.Dark; break;
+      case ThemeEnum.Dark:    nextUserTheme = ThemeEnum.Light; break;
+      case ThemeEnum.Light:   nextUserTheme = ThemeEnum.System; break;
+    }
+
+    this.setUserTheme(nextUserTheme);
+  }
+
+  /**
+   * Actual theme switching 2-step process
+  **/
+  public setUserTheme(theme: ThemeEnum) {
+    this._lastAppTheme = this._appTheme();
+
+    this._userTheme.set(theme);
   }
 
   public canDetectTheme() {
@@ -43,27 +82,15 @@ export class ThemeService {
     return canDetectTheme;
   }
 
-  public setTheme(theme: ThemeEnum) {
-    this._lastTheme = this._theme();
-
-    this._theme.set(theme);
+  public lastTheme() {
+    return this._lastAppTheme;
   }
 
-  public theme() {
-    return this._theme();
+  public appTheme() {
+    return this._appTheme();
   }
 
-  public detectTheme() {
-    const darkTheme  = matchMedia('(prefers-color-scheme: dark)').matches;
-    const lightTheme = matchMedia('(prefers-color-scheme: light)').matches;
-
-    if (darkTheme) {
-      return ThemeEnum.Dark;
-    } else if (lightTheme) {
-      return ThemeEnum.Light;
-    } else {
-      this._logger.w(`Unknown preferred color scheme`, 'ThemeService');
-      return ThemeEnum.Light;
-    }
+  public userTheme() {
+    return this._userTheme();
   }
 }

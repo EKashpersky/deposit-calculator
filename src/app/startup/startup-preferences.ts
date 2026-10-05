@@ -20,7 +20,7 @@ export function appStartupPreferences(
       if (prefs !== null) {
         currency.changePreferredCurrency(currencyShapeFromCode(prefs.currency as CurrencyCodeEnum));
         language.use(prefs.language!);
-        theme.setTheme(prefs.theme as ThemeEnum);
+        theme.setUserTheme(prefs.theme as ThemeEnum);
       }
 
       resolve();

@@ -114,7 +114,7 @@ export class PreferencesDialog {
   public readonly languages: LanguageShape[];
   public readonly language: WritableSignal<LanguageShape>;
 
-  public readonly themeIcon: Signal<'dark_mode' | 'light_mode'>;
+  public readonly themeIcon: Signal<'dark_mode' | 'light_mode' | 'routine'>;
 
 
 
@@ -136,8 +136,15 @@ export class PreferencesDialog {
     this.language   = signal(this.languages.find(
       lx => lx.locale === language
     )!);
+
+    const themeMode2ThemeIcon = {
+      [ThemeEnum.System]: 'routine',
+      [ThemeEnum.Dark]:   'dark_mode',
+      [ThemeEnum.Light]:  'light_mode',
+    } as const;
+
     this.themeIcon  = computed(() => {
-      return this._theme.theme() === ThemeEnum.Light ? 'light_mode' : 'dark_mode';
+      return themeMode2ThemeIcon[this._theme.userTheme()];
     });
   }
 
@@ -150,6 +157,6 @@ export class PreferencesDialog {
   }
 
   public cycleTheme() {
-    this._theme.cycleTheme();
+    this._theme.cycleUserTheme();
   }
 }

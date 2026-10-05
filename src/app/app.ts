@@ -131,7 +131,7 @@ export class App {
     /// Keep track of user preferences on user storage level
     effect(() => {
       this._preferences.patch({
-        theme: this._theme.theme(),
+        theme: this._theme.userTheme(),
         language:  this._translate.currentLang(),
         currency: this._currency.preferredCurrency()!.code
       });
@@ -151,7 +151,8 @@ export class App {
 
     effect(() => {
       this._renderer.removeClass(document.body, this._theme.lastTheme());
-      this._renderer.addClass(document.body, this._theme.theme());
+
+      this._renderer.addClass(document.body, this._theme.appTheme());
     });
 
     /// Set up application version once

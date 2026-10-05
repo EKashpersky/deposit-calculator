@@ -8,7 +8,6 @@ import { ThemeService } from '@shared/theme.service';
 import { appStartupSetupCurrency } from './startup/currency';
 import { appStartupSetupLocale } from './startup/locale';
 import { appStartupPreferences } from './startup/startup-preferences';
-import { appStartupSetupTheme } from './startup/theme';
 
 
 
@@ -21,7 +20,6 @@ export function appStartup() {
   return Promise.all([
     appStartupSetupLocale(translateService),
     appStartupSetupCurrency(currencyService),
-    appStartupSetupTheme(themeService),
     appStartupPreferences(
       preferences,
       currencyService,
