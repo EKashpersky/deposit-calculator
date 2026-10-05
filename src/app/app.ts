@@ -150,7 +150,8 @@ export class App {
     });
 
     effect(() => {
-      this._renderer.removeClass(document.body, this._theme.lastTheme());
+      this._renderer.removeClass(document.body, 'dark');
+      this._renderer.removeClass(document.body, 'light');
 
       this._renderer.addClass(document.body, this._theme.appTheme());
     });

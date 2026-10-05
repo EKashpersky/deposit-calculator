@@ -1,4 +1,12 @@
-import { computed, Injectable, signal, Signal, WritableSignal } from '@angular/core';
+import {
+  computed,
+  inject,
+  Injectable,
+  signal,
+  Signal,
+  WritableSignal
+} from '@angular/core';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 import { LoggerService } from './logger';
 
@@ -14,8 +22,6 @@ export enum ThemeEnum {
 export class ThemeService {
   private _systemThemeMediaQuery: MediaQueryList;
 
-  private _lastAppTheme: ThemeEnum;
-
   /// Can be dark, light and system. It is the element the user can change
   private _userTheme: WritableSignal<ThemeEnum>;
   /// Can be dark or light. Initial value .System is to be immediately replaced
@@ -27,7 +33,9 @@ export class ThemeService {
 
 
   public constructor(private _logger: LoggerService) {
-    this._systemThemeMediaQuery = matchMedia('(prefers-color-scheme: light)');
+    this._systemThemeMediaQuery = inject(MediaMatcher).matchMedia(
+      '(prefers-color-scheme: light)'
+    );
 
     const systemTheme = this._systemThemeMediaQuery.matches
       ? ThemeEnum.Light
@@ -48,8 +56,6 @@ export class ThemeService {
       /// Keep track of system theme
       this._systemTheme.set(event.matches ? ThemeEnum.Light : ThemeEnum.Dark);
     });
-
-    this._lastAppTheme = this._appTheme();
   }
 
   public cycleUserTheme() {
@@ -67,8 +73,6 @@ export class ThemeService {
    * Actual theme switching 2-step process
   **/
   public setUserTheme(theme: ThemeEnum) {
-    this._lastAppTheme = this._appTheme();
-
     this._userTheme.set(theme);
   }
 
@@ -80,10 +84,6 @@ export class ThemeService {
     }
 
     return canDetectTheme;
-  }
-
-  public lastTheme() {
-    return this._lastAppTheme;
   }
 
   public appTheme() {
