@@ -31,7 +31,7 @@ import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { PreferencesService } from '@shared/preferences';
 import { ShortcutsService } from '@shared/shortcuts.service';
-import { ThemeService } from '@shared/theme.service';
+import { ThemeEnum, ThemeService } from '@shared/theme.service';
 
 
 
@@ -150,10 +150,12 @@ export class App {
     });
 
     effect(() => {
-      this._renderer.removeClass(document.body, 'dark');
-      this._renderer.removeClass(document.body, 'light');
+      if (!document.startViewTransition) {
+        this._applyTheme(this._theme.appTheme());
+        return;
+      }
 
-      this._renderer.addClass(document.body, this._theme.appTheme());
+      document.startViewTransition(this._applyTheme.bind(this, this._theme.appTheme()));
     });
 
     /// Set up application version once
@@ -196,5 +198,12 @@ export class App {
     const githubUrl = 'https://github.com/ekashpersky/deposit-calculator';
 
     window.open(githubUrl, '_blank', 'noopener,noreferrer');
+  }
+
+  private _applyTheme(theme: ThemeEnum) {
+    this._renderer.removeClass(document.body, 'dark');
+    this._renderer.removeClass(document.body, 'light');
+
+    this._renderer.addClass(document.body, theme);
   }
 }

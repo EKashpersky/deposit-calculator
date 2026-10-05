@@ -11,3 +11,9 @@
 mat-slider.mat-mdc-slider {
   display: flex;
 }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 475ms;
+  animation-timing-function: ease-in-out;
+}
