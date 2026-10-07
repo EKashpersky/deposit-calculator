@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1254 1254" role="img" aria-labelledby="icon-title icon-description">
+  <title id="icon-title">Deposit Calculator</title>
+
+  <!-- <rect width="1254" height="1254" fill="#134b6a"/> -->
+
+  <g id="side-coins" fill="#667a86">
+    <ellipse cx="297" cy="594" rx="142" ry="72"/>
+    <path d="M158 641C181 674 237 693 297 693S413 674 438 641V704C438 742 375 772 297 772S158 742 158 704Z"/>
+    <path d="M158 747C181 780 237 798 297 798S413 780 438 747V810C438 846 375 874 297 874S158 846 158 810Z"/>
+
+    <ellipse cx="957" cy="687" rx="142" ry="72"/>
+    <path d="M818 732C841 763 897 780 957 780S1073 763 1096 732V795C1096 831 1035 859 957 859S818 831 818 795Z"/>
+  </g>
+
+  <g id="selected-coins" fill="#0080aa">
+    <ellipse cx="627" cy="436" rx="159" ry="95"/>
+    <path d="M470 493C498 532 559 552 627 552S756 532 784 493V579C784 611 714 638 627 638S470 611 470 579Z"/>
+    <path d="M470 599C498 638 559 658 627 658S756 638 784 599V685C784 717 714 744 627 744S470 717 470 685Z"/>
+    <path d="M470 705C498 744 559 764 627 764S756 744 784 705V791C784 823 714 850 627 850S470 823 470 791Z"/>
+  </g>
+
+  <path id="selection-check" d="M568 444L609 482L693 398" fill="none" stroke="#ffffff" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
