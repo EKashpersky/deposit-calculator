@@ -143,6 +143,7 @@
       "interest": "Accrued",
       "taxed": "Taxed",
       "net": "Net future value",
+      "at_rate": "at rate",
       "inflation_loss": "due to inflation of {{ inflation }}",
       "today_money": "In today's money"
     },

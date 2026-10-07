@@ -31,16 +31,13 @@ export class CurrencyConverterService {
       return amount;
     }
 
-    const fromRate = this._currencyRates.getRate(from)!;
-    const toRate = this._currencyRates.getRate(to)!;
-
     let result = 0;
     if (side === CurrencyConvertSide.Equal) {
-      const amountInUah = amount * ((fromRate.buy + fromRate.sell) / 2);
-      result = amountInUah / ((toRate.buy + toRate.sell) / 2);
+      const amountInUah = amount * this._currencyRates.mid(from);
+      result = amountInUah / this._currencyRates.mid(to);
     } else {
-      const amountInUah = amount * fromRate[side];
-      result = amountInUah / toRate[side];
+      const amountInUah = amount * this._currencyRates.getRate(from)![side];
+      result = amountInUah / this._currencyRates.getRate(to)![side];
     }
 
     return Math.round(result * 100) / 100;

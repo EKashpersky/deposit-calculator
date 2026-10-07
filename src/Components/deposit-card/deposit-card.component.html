@@ -28,9 +28,23 @@
 
 <ng-template #outputFragment>
   <span class="mat-font-title-lg mat-text-on-surface">
-    {{ deposit().realNet()
-      | currency : deposit().currency().code : 'symbol-narrow' : '1.2-2' : translate.currentLang()! }}
+    <span>
+      @if (depositCurrencyRate() > -1) {
+        ≈
+      }
+      {{
+        depositAmount() | currency : depositCurrency().code : 'symbol-narrow' : '1.2-2' : translate.currentLang()!
+      }}
+    </span>
   </span>
+
+  @if (depositCurrencyRate() > -1) {
+    <span class="mat-font-body-md mat-text-on-surface-variant">
+      {{ deposit().realNet() | currency : deposit().currency().code : 'symbol-narrow': '1.0-2' : translate.currentLang()! }}
+      ·
+      {{ depositCurrencyRate() }}
+    </span>
+  }
 
   <span class="mat-font-body-sm mat-text-on-surface-variant">
     <span>+</span>

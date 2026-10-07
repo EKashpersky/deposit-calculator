@@ -22,7 +22,8 @@ export function getDefaultCurrency() {
 @Injectable()
 export class CurrencyService {
   private _preferredCurrency = signal<CurrencyShape | null>(null);
-  public preferredCurrency = this._preferredCurrency.asReadonly();
+
+
 
   public constructor(private _currencyRates: CurrencyRatesService) { }
 
@@ -47,5 +48,9 @@ export class CurrencyService {
 
   public changePreferredCurrency(currency: CurrencyShape) {
     this._preferredCurrency.set(currency);
+  }
+
+  public preferredCurrency() {
+    return this._preferredCurrency();
   }
 }

@@ -13,6 +13,21 @@
       ></currency>
     </div>
 
+    @if (depositInUserCurrency() > -1) {
+      <div class="mat-font-body-md pb-1">
+        ≈<currency
+          class="inline-block"
+          [currency]="userCurrency"
+          [value]="depositInUserCurrency()"
+          [variable]="true"
+          size="small"
+        ></currency>
+
+        <span> {{ "calculator.result.at_rate" | translate }} {{ depositCurrencyRate() }}</span>
+      </div>
+    }
+
+
     <div class="mat-font-body-md">
       <span>
         {{ deposit().durationValue() }}
@@ -33,7 +48,7 @@
     <div class="h-px w-full bg-[var(--mat-sys-on-primary-container)] opacity-25 my-2"></div>
 
     <div class="mat-font-body-md">
-      –<currency
+      −<currency
         [currency]="deposit().currency()"
         [value]="deposit().net() - deposit().realNet()"
         [variable]="true"
@@ -96,7 +111,7 @@
   <div class="flex flex-row justify-between items-center py-[24px_4px] border-b border-[var(--mat-sys-outline-variant)]">
     <span class="mat-font-body-md">{{ 'calculator.result.interest_taxed' | translate }}</span>
     <span class="mat-font-label-lg flex flex-row ml-[-10px]">
-      <span>–&nbsp;</span>
+      <span>−</span>
       <currency
         [currency]="deposit().currency()"
         [value]="deposit().taxed()"
