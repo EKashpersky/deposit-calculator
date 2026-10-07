@@ -1,6 +1,9 @@
 # Deposit Calculator
 
-Compare bank deposits with compound or simple interest, tax, and monthly contributions. Save scenarios, undo changes, switch language (EN / UK) and theme.
+Compare what the same money becomes in a bank deposit or under the mattress — after interest, tax, and inflation.
+
+Create different currency deposits, see them in preferred currency, choose what
+suits you better.
 
 **[Live demo](https://ekashpersky.github.io/deposit-calculator/)**
 
