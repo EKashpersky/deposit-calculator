@@ -5,7 +5,7 @@
 
   @if (deposits().length > 0) {
     <button
-      matButton="text"
+      matButton="tonal"
       class="flex cursor-pointer select-none"
       (click)="addDeposit($event)"
     >
@@ -27,7 +27,7 @@
 
   @for (deposit of deposits(); track deposit.name()) {
     <deposit-card
-      class="mat-card-wrapper pb-[20px] box-border"
+      class="mat-card-wrapper pb-[20px] box-border last-of-type:pb-0"
       animate.leave="fade-out" animate.enter="fade-in"
       [deposit]="deposit"
       (editDeposit)="editDeposit($event, deposit)"
