@@ -17,16 +17,18 @@ Compare bank deposits with compound or simple interest, tax, and monthly contrib
 ---
 
 ## What it does
-- Calculates simple and compound interest
-- Allows to manage monthly top-ups, first month skip
-- Tax on interest (on/off, rate)
-- Dashboard of created deposits (stored in the browser)
-- Currency switcher with rates
 
-#### Features
-- Dashboard actions history with undo/redo shortcuts
-- Currency, language and theme switchers
-- Animated currency amounts
+- Simple or compound interest, with a compounding frequency
+- Monthly top-ups, including a window that can skip the first and last months
+- Tax on interest, on or off, with its own rate
+- Inflation per currency: nominal balance, and the same balance in today's money
+- Several saved deposits, each in its own currency, compared in a preferred currency
+
+## Features
+
+- Undo and redo for dashboard actions, with shortcuts
+- Language (EN / UK) and light / dark theme
+- Exchange rates, with the deposit kept in its own currency and an equivalent beside it
 
 ---
 
