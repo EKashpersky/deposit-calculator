@@ -1,18 +1,18 @@
 import { round } from '@utils/round';
 
 import {
-  AccrualFrequency,
-  DepositInput,
-  DepositResult,
-  Duration,
   effectiveMonthlyRate,
   futureAnnuityToTerm,
   futurePrincipal,
   futureValueGross,
   inflateToPresent,
-  simulateCapitalized,
-  TaxTiming,
-} from '.';
+  simulateCapitalized
+} from './calculator.ops';
+import { AccrualFrequency, TaxTiming } from './common.enum';
+import { DepositInput } from './deposit-input.model';
+import { DepositResult } from './deposit-result.model';
+import { Duration } from './duration.model';
+
 
 
 

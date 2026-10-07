@@ -40,6 +40,7 @@ import {
 import { DepositBridgeService } from '@shared/deposits';
 import { DurationPipe } from '@shared/duration.pipe';
 import { LoggerService, LoggerShape, ScopedLogger } from '@shared/logger';
+import { round } from '@utils/round';
 
 import {
   AccrualFrequency,
@@ -50,7 +51,6 @@ import {
   Duration,
   TaxTiming,
 } from './model';
-import { round } from '@utils/round';
 
 
 
