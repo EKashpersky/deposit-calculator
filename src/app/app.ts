@@ -32,6 +32,7 @@ import { HistoryService } from '@shared/history';
 import { PreferencesService } from '@shared/preferences';
 import { ShortcutsService } from '@shared/shortcuts.service';
 import { ThemeEnum, ThemeService } from '@shared/theme.service';
+import { Title } from '@angular/platform-browser';
 
 
 
@@ -87,6 +88,7 @@ export class App {
     private _dialog: MatDialog,
     private _preferences: PreferencesService,
     private _currencyInflation: CurrencyInflationService,
+    private _title: Title,
   ) {
     this._injector = inject(Injector);
 
@@ -126,6 +128,10 @@ export class App {
 
         this._history.addAction(updateDepositAction);
       }
+    });
+
+    effect(() => {
+      this._title.setTitle(this._translate.instant('app_title'));
     });
 
     /// Keep track of user preferences on user storage level

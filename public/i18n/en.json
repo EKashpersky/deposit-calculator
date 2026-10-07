@@ -1,4 +1,6 @@
 {
+  "app_title": "Deposit calculator",
+
   "common_buttons": {
     "restore": "Restore",
     "save": "Save"
