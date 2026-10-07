@@ -41,7 +41,7 @@ import { DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { ShortcutsService } from '@shared/shortcuts.service';
 
-import { DepositNameComponent } from './deposit-create.component';
+import { DepositModalResult, DepositNameComponent } from './deposit-create.component';
 import { UndoSnackbarComponent } from './undo-snackbar.component';
 
 
@@ -184,12 +184,12 @@ export class DashboardPage {
       .then((dialog) => {
         return firstValueFrom(dialog.afterClosed());
       })
-      .then((newName: string) => {
-        if (typeof newName !== 'string') {
+      .then((result: DepositModalResult) => {
+        if (typeof result !== 'object') {
           return;
         }
 
-        const renameDepositAction = this._depositsManager.renameDeposit(deposit.name(), newName);
+        const renameDepositAction = this._depositsManager.renameDeposit(deposit.name(), result.depositName);
         this._history.addAction(renameDepositAction);
 
         this._snackRef = this._snack.openFromComponent(UndoSnackbarComponent, {

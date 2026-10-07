@@ -23,6 +23,15 @@ import { CurrencyShape } from '@shared/Currency';
 
 
 
+
+
+export interface DepositModalResult {
+  depositName: string;
+  currency: CurrencyShape;
+}
+
+
+
 function validatorUnique(strings: string[], uniqueString: string) {
   return (control: AbstractControl) => {
     return strings.includes(control.value) && control.value !== uniqueString
