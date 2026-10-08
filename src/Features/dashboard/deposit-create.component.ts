@@ -32,9 +32,9 @@ export interface DepositModalResult {
 
 
 
-function validatorUnique(strings: string[]) {
+function validatorUnique(strings: string[], exception: string) {
   return (control: AbstractControl) => {
-    return strings.includes(control.value)
+    return strings.includes(control.value) && control.value !== exception
       ? { notUnique: true }
       : null;
   };
@@ -138,7 +138,7 @@ export class DepositNameComponent {
       name: fb.control(depositName, {
         nonNullable: true,
         validators: Validators.compose([
-          validatorUnique(this.depositNames),
+          validatorUnique(this.depositNames, depositName),
           Validators.required,
         ]),
       }),
@@ -150,6 +150,10 @@ export class DepositNameComponent {
   }
 
   public save() {
+    if (!this.form.valid) {
+      return;
+    }
+
     this._dialogRef.close({
       depositName: this.form.controls.name.value,
       currency: this.form.controls.currency.value
