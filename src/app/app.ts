@@ -9,16 +9,17 @@ import {
   signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { Title } from '@angular/platform-browser';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { environment } from '@environment/development';
 
-import { MatDialog } from '@angular/material/dialog';
 import { CurrencyApiService } from '@api/currency-api.service';
 import { SUPPORTED_LANGUAGES } from '@config/supported-languages';
 import { PreferencesDialog } from '@features/preferences';
@@ -29,10 +30,11 @@ import {
 } from '@shared/Currency';
 import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
+import { PaneManagerService } from '@shared/pane-manager.service';
 import { PreferencesService } from '@shared/preferences';
 import { ShortcutsService } from '@shared/shortcuts.service';
 import { ThemeEnum, ThemeService } from '@shared/theme.service';
-import { Title } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -47,6 +49,7 @@ import { Title } from '@angular/platform-browser';
   imports: [
     RouterOutlet,
     RouterLink,
+    CommonModule,
 
     MatButtonModule,
     MatIconModule,
@@ -76,19 +79,20 @@ export class App {
 
 
   public constructor(
-    private _translate: TranslateService,
+    private _currency: CurrencyService,
+    private _currencyInflation: CurrencyInflationService,
+    private _currencyRates: CurrencyRatesService,
+    private _depositBridge: DepositBridgeService,
+    private _depositsManager: DepositsManagerService,
+    private _dialog: MatDialog,
     private _history: HistoryService,
+    private _preferences: PreferencesService,
+    private _renderer: Renderer2,
     private _shortcuts: ShortcutsService,
     private _theme: ThemeService,
-    private _renderer: Renderer2,
-    private _currency: CurrencyService,
-    private _currencyRates: CurrencyRatesService,
-    private _depositsManager: DepositsManagerService,
-    private _depositBridge: DepositBridgeService,
-    private _dialog: MatDialog,
-    private _preferences: PreferencesService,
-    private _currencyInflation: CurrencyInflationService,
     private _title: Title,
+    private _translate: TranslateService,
+    public pane: PaneManagerService,
   ) {
     this._injector = inject(Injector);
 

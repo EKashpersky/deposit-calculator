@@ -1,4 +1,8 @@
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, Routes } from '@angular/router';
+import { DepositResolver } from '@features/calculator/deposit.resolver';
+import { DepositsManagerService } from '@shared/deposits';
+import { PaneManagerService } from '@shared/pane-manager.service';
 
 
 
@@ -7,12 +11,18 @@ export const routes: Routes = [
     path: 'dashboard',
     loadComponent: () => import('../Features/dashboard/dashboard.page')
       .then(m => m.DashboardPage),
-  },
 
-  {
-    path: 'calculator',
-    loadChildren: () => import('../Features/calculator/calculator.routes')
-      .then(m => m.CALCULATOR_ROUTES),
+    children: [
+      {
+        path: ':name/calculator',
+        loadComponent: () => import('../Features/calculator/calculator.page').then(m => m.CalculatorPage),
+        providers: [ DepositResolver, DepositsManagerService ],
+        resolve: {
+          calculator: (route: ActivatedRouteSnapshot) => inject(DepositResolver).resolve(route),
+        },
+        canDeactivate: [ () => inject(PaneManagerService).close() ]
+      }
+    ],
   },
 
   {

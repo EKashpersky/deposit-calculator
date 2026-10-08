@@ -1,38 +1,56 @@
-<div class="flex flex-row justify-between">
-  <h1 class="mat-font-headline-md mat-text-on-surface">
-    {{ 'dashboard.deposits' | translate }}
-  </h1>
+<!-- panes -->
+<div #panes class="panes grid gap-4 w-full" [ngClass]="{ 'is-open': pane.opened() }">
+  <!-- Dashboard pane -->
+  <div class="flex flex-col gap-4 mat-bg-surface rounded-3xl p-4 self-start">
+    <div class="flex flex-row justify-between">
+      <h1 class="mat-font-headline-md mat-text-on-surface">
+        {{ 'dashboard.deposits' | translate }}
+      </h1>
 
-  @if (deposits().length > 0) {
-    <button
-      matButton="tonal"
-      class="flex cursor-pointer select-none"
-      (click)="addDeposit($event)"
-    >
-      <span class="mat-font-label-lg">{{ 'dashboard.add_deposit' | translate }}</span>
-      <mat-icon>add2</mat-icon>
-    </button>
-  }
-</div>
+      @if (deposits().length > 0) {
+        <button
+          matButton="tonal"
+          class="flex cursor-pointer select-none"
+          (click)="addDeposit($event)"
+        >
+          <span class="mat-font-label-lg">{{ 'dashboard.add_deposit' | translate }}</span>
+          <mat-icon>add2</mat-icon>
+        </button>
+      }
+    </div>
 
-<div class="card-list flex flex-col transition">
-  @if (deposits().length === 0) {
-    <span
-      class="empty-state mat-font-body-lg mat-text-disabled"
-      [innerHTML]="'dashboard.no_deposit' | translate"
-      (click)="addDeposit($event)"
-    >
-    </span>
-  }
+    <div class="card-list flex flex-col transition">
+      @if (deposits().length === 0) {
+        <span
+          class="empty-state mat-font-body-lg mat-text-disabled"
+          [innerHTML]="'dashboard.no_deposit' | translate"
+          (click)="addDeposit($event)"
+        >
+        </span>
+      }
 
-  @for (deposit of deposits(); track deposit.name()) {
-    <deposit-card
-      class="mat-card-wrapper pb-[20px] box-border last-of-type:pb-0"
-      animate.leave="fade-out" animate.enter="fade-in"
-      [deposit]="deposit"
-      (editDeposit)="editDeposit($event, deposit)"
-      (removeDeposit)="removeDeposit($event, deposit)"
-      [routerLink]="['/calculator/', deposit.name()]"
-    ></deposit-card>
-  }
+      @for (deposit of deposits(); track deposit.name()) {
+        <deposit-card
+          class="mat-card-wrapper pb-[20px] box-border last-of-type:pb-0"
+          animate.leave="fade-out" animate.enter="fade-in"
+          [deposit]="deposit"
+          (editDeposit)="editDeposit($event, deposit)"
+          (removeDeposit)="removeDeposit($event, deposit)"
+          [routerLink]="[deposit.name(), 'calculator']"
+        ></deposit-card>
+      }
+    </div>
+  </div>
+
+  <!-- Calculator pane -->
+  <div
+    class="mat-bg-surface overflow-hidden min-w-0 rounded-3xl p-4"
+    [ngClass]="{ 'p-4': pane.opened() }"
+  >
+    <router-outlet
+      (activate)="pane.opened.set(true)"
+      (deactivate)="pane.close()"
+      #outlet="outlet"
+    ></router-outlet>
+  </div>
 </div>
