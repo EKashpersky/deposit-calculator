@@ -200,6 +200,8 @@ export class CalculatorPage {
     this.calculatorForm.controls.currency.valueChanges
     .subscribe(currency => {
       if (this.calculatorForm.controls.autoConversion.value) {
+        this._inflation.set(this._currencyInflation.getOneSafe(currency.code));
+
         const principal = this._currencyConversion.convert(
           this._deposit().principal(),
           this._deposit().currency().code,
