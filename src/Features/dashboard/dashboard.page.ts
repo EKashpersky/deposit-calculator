@@ -131,18 +131,22 @@ export class DashboardPage {
     event.preventDefault();
     event.stopImmediatePropagation();
 
-    const dialogRef = this._dialog.open(DepositNameComponent, {
-      data: {
-        i18nTitle: 'dashboard.deposit_dialog.create_title',
-        i18nAction: 'dashboard.deposit_dialog.create',
-        depositName: '',
-        depositNames: [],
-        currencies: this._currency.getCurrenciesWithRates(),
-        preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
-      },
-    });
-
-    firstValueFrom(dialogRef.afterClosed()).then(({ depositName, currency }) => {
+    return Promise.resolve(
+      this._depositsManager.deposits().map((deposit) => deposit.name())
+    ).then(depositNames => {
+      return this._dialog.open(DepositNameComponent, {
+        data: {
+          i18nTitle: 'dashboard.deposit_dialog.create_title',
+          i18nAction: 'dashboard.deposit_dialog.create',
+          depositName: '',
+          depositNames,
+          currencies: this._currency.getCurrenciesWithRates(),
+          preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
+        },
+      })
+    }).then(dialogRef => {
+      return firstValueFrom(dialogRef.afterClosed());
+    }).then(({ depositName, currency }) => {
       if (typeof depositName !== 'string') {
         return;
       }
@@ -168,42 +172,46 @@ export class DashboardPage {
     event.preventDefault();
     event.stopImmediatePropagation();
 
-    return Promise.resolve(this._depositsManager.deposits().map((deposit) => deposit.name()))
-      .then((depositNames) => {
-        return this._dialog.open(DepositNameComponent, {
-          data: {
-            i18nTitle: 'dashboard.deposit_dialog.edit_title',
-            i18nAction: 'dashboard.deposit_dialog.edit',
-            depositName: deposit.name(),
-            depositNames,
-            currencies: this._currency.getCurrenciesWithRates(),
-            preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
-          },
-        });
-      })
-      .then((dialog) => {
-        return firstValueFrom(dialog.afterClosed());
-      })
-      .then((result: DepositModalResult) => {
-        if (typeof result !== 'object') {
-          return;
-        }
-
-        const renameDepositAction = this._depositsManager.renameDeposit(deposit.name(), result.depositName);
-        this._history.addAction(renameDepositAction);
-
-        this._snackRef = this._snack.openFromComponent(UndoSnackbarComponent, {
-          duration: 5000,
-          data: {
-            i18nTitle: 'dashboard.deposit_dialog.snackbar.deposit_renamed',
-            i18nAction: 'common_buttons.restore',
-          },
-        });
-
-        this._snackRef.onAction().subscribe(() => {
-          this._history.tryUndo(renameDepositAction);
-        });
+    return Promise.resolve(
+      this._depositsManager.deposits().map((deposit) => deposit.name())
+    ).then((depositNames) => {
+      return this._dialog.open(DepositNameComponent, {
+        data: {
+          i18nTitle: 'dashboard.deposit_dialog.edit_title',
+          i18nAction: 'dashboard.deposit_dialog.edit',
+          depositName: deposit.name(),
+          depositNames,
+          currencies: this._currency.getCurrenciesWithRates(),
+          preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
+        },
       });
+    })
+    .then((dialog) => {
+      return firstValueFrom(dialog.afterClosed());
+    })
+    .then((result: DepositModalResult) => {
+      if (typeof result !== 'object') {
+        return;
+      }
+
+      const renameDepositAction = this._depositsManager.renameDeposit(
+        deposit.name(),
+        result.depositName
+      );
+      this._history.addAction(renameDepositAction);
+
+      this._snackRef = this._snack.openFromComponent(UndoSnackbarComponent, {
+        duration: 5000,
+        data: {
+          i18nTitle: 'dashboard.deposit_dialog.snackbar.deposit_renamed',
+          i18nAction: 'common_buttons.restore',
+        },
+      });
+
+      this._snackRef.onAction().subscribe(() => {
+        this._history.tryUndo(renameDepositAction);
+      });
+    });
   }
 
   public removeDeposit(event: Event, deposit: DepositModel) {

@@ -32,9 +32,9 @@ export interface DepositModalResult {
 
 
 
-function validatorUnique(strings: string[], uniqueString: string) {
+function validatorUnique(strings: string[]) {
   return (control: AbstractControl) => {
-    return strings.includes(control.value) && control.value !== uniqueString
+    return strings.includes(control.value)
       ? { notUnique: true }
       : null;
   };
@@ -138,7 +138,7 @@ export class DepositNameComponent {
       name: fb.control(depositName, {
         nonNullable: true,
         validators: Validators.compose([
-          validatorUnique(this.depositNames, data.depositName),
+          validatorUnique(this.depositNames),
           Validators.required,
         ]),
       }),
