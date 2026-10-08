@@ -32,6 +32,7 @@ import { ThemeService } from '@shared/theme.service';
 
 import { appStartup } from './app-startup';
 import { routes } from './app.routes';
+import { PaneManagerService } from '@shared/pane-manager.service';
 
 
 
@@ -84,5 +85,6 @@ export const appConfig: ApplicationConfig = {
     DepositBridgeService,
     HistoryService,
     ShortcutsService,
+    PaneManagerService,
   ]
 };

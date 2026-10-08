@@ -1,11 +1,14 @@
+import { CommonModule } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
+  AfterViewInit,
   Component,
   computed,
   effect,
+  ElementRef,
   inject,
   Signal,
   signal,
+  viewChild,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -19,7 +22,7 @@ import {
   MatSnackBarModule,
   MatSnackBarRef,
 } from '@angular/material/snack-bar';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 
@@ -43,6 +46,7 @@ import { ShortcutsService } from '@shared/shortcuts.service';
 
 import { DepositModalResult, DepositNameComponent } from './deposit-create.component';
 import { UndoSnackbarComponent } from './undo-snackbar.component';
+import { PaneManagerService } from '@shared/pane-manager.service';
 
 
 
@@ -73,13 +77,13 @@ function templateDeposit() {
   styleUrl: './dashboard.page.scss',
 
   host: {
-    class: 'flex flex-col gap-[16px]',
+    class: 'flex flex-row gap-2',
   },
 
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
+    CommonModule,
+    RouterOutlet,
     RouterLink,
-
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
@@ -88,16 +92,14 @@ function templateDeposit() {
     MatRippleModule,
     MatSnackBarModule,
     TranslatePipe,
-
     DepositCardComponent,
   ],
 })
-export class DashboardPage {
+export class DashboardPage implements AfterViewInit {
   private _snackRef: MatSnackBarRef<UndoSnackbarComponent> | null;
   private _depositsManager = inject(DepositsManagerService);
   public deposits: Signal<DepositModel[]>;
-
-  public isFlashing = signal(false);
+  private _panes  = viewChild<ElementRef>('panes');
 
 
 
@@ -108,6 +110,7 @@ export class DashboardPage {
     private _shortcuts: ShortcutsService,
     private _currency: CurrencyService,
     private _currencyInflation: CurrencyInflationService,
+    public pane: PaneManagerService,
   ) {
     const collator = new Intl.Collator(void 0, { usage: 'sort', numeric: true });
     this.deposits = computed(() => {
@@ -125,6 +128,16 @@ export class DashboardPage {
     });
 
     this._snackRef = null;
+  }
+
+  public ngAfterViewInit(): void {
+    this.pane.bindPane(
+      this._panes()!.nativeElement,
+      (event: TransitionEvent) => {
+        return event.propertyName === 'grid-template-columns'
+            && event.target === this._panes()!.nativeElement;
+      }
+    );
   }
 
   public addDeposit(event: Event) {

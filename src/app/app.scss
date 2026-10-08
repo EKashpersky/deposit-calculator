@@ -19,7 +19,12 @@
 }
 
 
-.mx-auto {
-  transition-property: width;
-  @include transition('fast', 'spatial', 'standard');
+.dynamic-width {
+  max-width: 1080px;
+  transition-property: width, max-width;
+  @include transition('slow', 'spatial', 'standard');
+
+  &.is-wide {
+    max-width: 100%;
+  }
 }

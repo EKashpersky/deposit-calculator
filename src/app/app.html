@@ -1,7 +1,10 @@
-<mat-toolbar class="justify-between shrink-0 mat-bg-surface-container-lowest relative p-0! h-auto! min-h-16">
-  <div class="flex flex-row justify-between items-center mx-auto min-w-[280px] w-full max-w-[1080px] p-[0px_16px]">
-    <div class="start flex flex-row items-center gap-[8px]">
-      <img src="favicon.svg" class="size-[24px]">
+<mat-toolbar class="justify-center shrink-0 relative p-0! h-auto! min-h-16 mat-bg-surface-container-lowest">
+  <div
+    class="flex flex-row justify-between items-center dynamic-width min-w-70 w-full p-[0px_16px]"
+    [ngClass]="{ 'is-wide': pane.opened() }"
+  >
+    <div class="start flex flex-row items-center gap-2">
+      <img src="favicon.svg" class="size-6">
 
       <span
         class="mat-font-headline-md cursor-pointer select-none mat-text-on-surface whitespace-normal"
@@ -11,7 +14,7 @@
       </span>
     </div>
 
-    <div class="flex flex-row gap-[8px] end">
+    <div class="flex flex-row gap-2 end">
       <button matIconButton (click)="openPreferences()">
         <mat-icon>user_attributes</mat-icon>
       </button>
@@ -20,15 +23,15 @@
 
 </mat-toolbar>
 
-<main class="mx-auto grow min-w-[280px] px-[16px] w-full max-w-[1080px]">
-  <!-- colored content -->
-  <div class="mat-bg-surface rounded-3xl p-[16px_16px_16px] ">
-    <router-outlet></router-outlet>
-  </div>
+<main
+  class="flex flex-col gap-6 dynamic-width min-w-70 w-full grow px-4"
+  [ngClass]="{ 'is-wide': pane.opened() }"
+>
+  <router-outlet></router-outlet>
 </main>
 
 <footer class="w-full flex flex-col items-center mt-[80px] py-[28px]">
-  <div class="flex flex-row justify-between items-center p-[0px_16px] min-w-[280px] w-full max-w-[1080px]">
+  <div class="flex flex-row justify-between items-center p-[0px_16px] min-w-[280px] w-full max-w-[1280px]">
     <div class="flex flex-row flex-wrap lg:flex-nowrap items-center gap-[8px]">
       <a
         matButton
