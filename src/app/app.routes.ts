@@ -1,8 +1,12 @@
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, Routes } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Routes
+} from '@angular/router';
+
 import { DepositResolver } from '@features/calculator/deposit.resolver';
+import { canDeactivateCalculator } from '@features/dashboard/calculator-cd';
 import { DepositsManagerService } from '@shared/deposits';
-import { PaneManagerService } from '@shared/pane-manager.service';
 
 
 
@@ -20,7 +24,8 @@ export const routes: Routes = [
         resolve: {
           calculator: (route: ActivatedRouteSnapshot) => inject(DepositResolver).resolve(route),
         },
-        canDeactivate: [ () => inject(PaneManagerService).close() ]
+
+        canDeactivate: [ canDeactivateCalculator ]
       }
     ],
   },

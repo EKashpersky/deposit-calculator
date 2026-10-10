@@ -36,7 +36,7 @@
           [deposit]="deposit"
           (editDeposit)="editDeposit($event, deposit)"
           (removeDeposit)="removeDeposit($event, deposit)"
-          [routerLink]="[deposit.name(), 'calculator']"
+          (click)="openDeposit(deposit.name())"
         ></deposit-card>
       }
     </div>
@@ -47,10 +47,6 @@
     class="mat-bg-surface overflow-hidden min-w-0 rounded-3xl p-4"
     [ngClass]="{ 'p-4': pane.opened() }"
   >
-    <router-outlet
-      (activate)="pane.opened.set(true)"
-      (deactivate)="pane.close()"
-      #outlet="outlet"
-    ></router-outlet>
+    <router-outlet (activate)="activate()" #outlet="outlet"></router-outlet>
   </div>
 </div>
