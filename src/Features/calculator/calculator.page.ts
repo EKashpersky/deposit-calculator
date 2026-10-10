@@ -2,6 +2,7 @@ import { TitleCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   inject,
   signal
 } from '@angular/core';
@@ -26,7 +27,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { ActivatedRoute } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { debounceTime, filter, map, take } from 'rxjs';
+import { debounceTime, filter, map, Subject, takeUntil } from 'rxjs';
 
 import { DepositSummaryComponent } from '@features/deposit-summary';
 import {
@@ -258,14 +259,20 @@ export class CalculatorPage {
       this.formChanged.set(false);
     });
 
+    const destroy$ = new Subject<void>();
+
+    inject(DestroyRef).onDestroy(() => {
+      destroy$.next();
+      destroy$.complete();
+    });
 
     /**
      * Pull up the correct deposit from deposit store to work with
     **/
     inject(ActivatedRoute).data.pipe(
       filter(x => Boolean(x?.['calculator'])),
-      take(1),
-      map(x => x['calculator'] as DepositModel)
+      map(x => x['calculator'] as DepositModel),
+      takeUntil(destroy$)
     ).subscribe(data => {
       this._deposit.set(data);
 
