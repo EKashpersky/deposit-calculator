@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   Component,
   computed,
   effect,
@@ -22,7 +21,7 @@ import {
   MatSnackBarModule,
   MatSnackBarRef,
 } from '@angular/material/snack-bar';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 
@@ -42,11 +41,14 @@ import {
 } from '@shared/Currency';
 import { DepositsManagerService } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
+import { PaneManagerService } from '@shared/pane-manager.service';
 import { ShortcutsService } from '@shared/shortcuts.service';
 
-import { DepositModalResult, DepositNameComponent } from './deposit-create.component';
+import {
+  DepositModalResult,
+  DepositNameComponent,
+} from './deposit-create.component';
 import { UndoSnackbarComponent } from './undo-snackbar.component';
-import { PaneManagerService } from '@shared/pane-manager.service';
 
 
 
@@ -95,7 +97,7 @@ function templateDeposit() {
     DepositCardComponent,
   ],
 })
-export class DashboardPage implements AfterViewInit {
+export class DashboardPage {
   private _snackRef: MatSnackBarRef<UndoSnackbarComponent> | null;
   private _depositsManager = inject(DepositsManagerService);
   public deposits: Signal<DepositModel[]>;
@@ -111,6 +113,7 @@ export class DashboardPage implements AfterViewInit {
     private _currency: CurrencyService,
     private _currencyInflation: CurrencyInflationService,
     public pane: PaneManagerService,
+    private _router: Router
   ) {
     const collator = new Intl.Collator(void 0, { usage: 'sort', numeric: true });
     this.deposits = computed(() => {
@@ -130,7 +133,8 @@ export class DashboardPage implements AfterViewInit {
     this._snackRef = null;
   }
 
-  public ngAfterViewInit(): void {
+  public activate() {
+    this.pane.openPane();
     this.pane.bindPane(
       this._panes()!.nativeElement,
       (event: TransitionEvent) => {
@@ -138,6 +142,20 @@ export class DashboardPage implements AfterViewInit {
             && event.target === this._panes()!.nativeElement;
       }
     );
+  }
+
+  public openDeposit(depositName: string) {
+    const targetUrl = this._router.serializeUrl(
+      this._router.createUrlTree(['/dashboard', depositName, 'calculator'])
+    );
+
+    /// If the same deposit been clicked during pane being closed
+    if (this._router.url === targetUrl && this.pane.isClosing()) {
+      this.pane.openPane();
+      return;
+    }
+
+    this._router.navigate(['/dashboard', depositName, 'calculator']);
   }
 
   public addDeposit(event: Event) {
