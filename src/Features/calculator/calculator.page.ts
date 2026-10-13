@@ -25,7 +25,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { debounceTime, filter, map, Subject, takeUntil } from 'rxjs';
 
@@ -130,11 +130,13 @@ export class CalculatorPage {
 
 
   public constructor(
-    private _fb: FormBuilder,
-    private _depositBridge: DepositBridgeService,
     private _currency: CurrencyService,
     private _currencyConversion: CurrencyConverterService,
     private _currencyInflation: CurrencyInflationService,
+    private _depositBridge: DepositBridgeService,
+    private _fb: FormBuilder,
+    private _route: ActivatedRoute,
+    private _router: Router,
   ) {
     this._logger = new ScopedLogger('CalculatorPage', inject(LoggerService));
 
@@ -269,7 +271,7 @@ export class CalculatorPage {
     /**
      * Pull up the correct deposit from deposit store to work with
     **/
-    inject(ActivatedRoute).data.pipe(
+    this._route.data.pipe(
       filter(x => Boolean(x?.['calculator'])),
       map(x => x['calculator'] as DepositModel),
       takeUntil(destroy$)
@@ -322,6 +324,11 @@ export class CalculatorPage {
 
   public save() {
     this._depositBridge.updateDeposit(this.deposit());
+  }
+
+  public close() {
+    /// Implies this._route is /dashboard/:deposit-name/calculator
+    this._router.navigate(['../../'], { relativeTo: this._route })
   }
 
 

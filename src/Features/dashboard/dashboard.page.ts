@@ -8,6 +8,7 @@ import {
   Signal,
   signal,
   viewChild,
+  WritableSignal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -85,7 +86,6 @@ function templateDeposit() {
   imports: [
     CommonModule,
     RouterOutlet,
-    RouterLink,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
@@ -98,10 +98,12 @@ function templateDeposit() {
   ],
 })
 export class DashboardPage {
-  private _snackRef: MatSnackBarRef<UndoSnackbarComponent> | null;
   private _depositsManager = inject(DepositsManagerService);
-  public deposits: Signal<DepositModel[]>;
   private _panes  = viewChild<ElementRef>('panes');
+  private _snackRef: MatSnackBarRef<UndoSnackbarComponent> | null;
+
+  public selectedDeposit: WritableSignal<string>;
+  public deposits: Signal<DepositModel[]>;
 
 
 
@@ -115,6 +117,8 @@ export class DashboardPage {
     public pane: PaneManagerService,
     private _router: Router
   ) {
+    this.selectedDeposit = signal('');
+
     const collator = new Intl.Collator(void 0, { usage: 'sort', numeric: true });
     this.deposits = computed(() => {
       return this._depositsManager.deposits().sort(
@@ -135,16 +139,27 @@ export class DashboardPage {
 
   public activate() {
     this.pane.openPane();
-    this.pane.bindPane(
-      this._panes()!.nativeElement,
-      (event: TransitionEvent) => {
-        return event.propertyName === 'grid-template-columns'
-            && event.target === this._panes()!.nativeElement;
+    this.pane.bindPane(this._panes()!.nativeElement, (event: TransitionEvent) => {
+      const compact = matchMedia('(max-width: 839px)').matches;
+
+      if (compact) {
+        return event.propertyName === 'transform'
+            && (event.target as HTMLElement).classList.contains('deposit-pane');
       }
-    );
+
+      return event.propertyName === 'grid-template-columns'
+          && event.target === this._panes()!.nativeElement;
+    });
+
+    // this.pane.onClose().then(() => {
+    //   consel
+    //   this.selectedDeposit.set('');
+    // });
   }
 
   public openDeposit(depositName: string) {
+    this.selectedDeposit.set(depositName);
+
     const targetUrl = this._router.serializeUrl(
       this._router.createUrlTree(['/dashboard', depositName, 'calculator'])
     );

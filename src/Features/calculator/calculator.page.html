@@ -1,8 +1,14 @@
 <div class="flex flex-row justify-between">
   <!-- Header block -->
-  <h2 class="mat-font-headline-md mat-text-on-surface">
-    {{ deposit().name() }}
-  </h2>
+  <div class="headline flex flex-row gap-2">
+    <button mat-icon-button class="flex!" (click)="close()">
+      <mat-icon aria-label="Close deposit">arrow_back</mat-icon>
+    </button>
+
+    <h2 class="mat-font-headline-md mat-text-on-surface">
+      {{ deposit().name() }}
+    </h2>
+  </div>
 
   <button matButton="outlined" (click)="save()">
     <mat-icon>save</mat-icon>
@@ -10,11 +16,14 @@
   </button>
 </div>
 
-<section class="flex flex-row-reverse gap-4 flex-wrap-reverse md:flex-nowrap">
-  <form [formGroup]="calculatorForm" class="flex flex-col flex-[1_2_100%] gap-4">
+<section class="grid grid-flow-dense lg:grid-flow-col 2xl:grid-flow-row gap-4">
+  <form
+    [formGroup]="calculatorForm"
+    class="grid 2xl:grid-cols-[repeat(auto-fit,minmax(min(250px,100%),1fr))] gap-4 order-last"
+  >
     <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container">
       <mat-card-header class="p-[12px_12px_0px]!">
-        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[16px]">
+        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-4">
           {{ 'calculator.inputs.contributions' | translate }}
         </mat-card-subtitle>
       </mat-card-header>
@@ -170,7 +179,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card appearance="filled" class="flex flex-col mat-bg-surface-container">
+    <!-- <mat-card appearance="filled" class="flex! flex-col mat-bg-surface-container">
       <mat-card-header class="p-[12px_12px_0px]!">
         <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[16px]">
           {{ 'calculator.inputs.currency' | translate }}
@@ -193,13 +202,13 @@
           {{ 'calculator.inputs.auto_exchange' | translate }}
         </mat-checkbox>
       </mat-card-content>
-    </mat-card>
+    </mat-card> -->
   </form>
 
   <deposit-summary
     [deposit]="deposit()"
     [inflation]="inflation()"
-    class="flex-[1_1_100%] overflow-hidden"
+    class="flex flex-col 2xl:flex-row gap-4 overflow-hidden"
   />
 </section>
 
