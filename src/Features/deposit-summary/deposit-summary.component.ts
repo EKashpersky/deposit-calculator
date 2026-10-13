@@ -1,6 +1,5 @@
 import { PercentPipe } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
   effect,
   input,
@@ -38,10 +37,6 @@ import { round } from '@utils/round';
   selector: 'deposit-summary',
   templateUrl: 'deposit-summary.component.html',
 
-  changeDetection: ChangeDetectionStrategy.Eager,
-  host: {
-    class: 'flex flex-col gap-[16px]'
-  },
 })
 export class DepositSummaryComponent {
   public readonly deposit = input<DepositModel>(DepositModel.Empty());

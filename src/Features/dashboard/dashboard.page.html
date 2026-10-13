@@ -1,7 +1,7 @@
 <!-- panes -->
 <div #panes class="panes grid gap-4 w-full" [ngClass]="{ 'is-open': pane.opened() }">
   <!-- Dashboard pane -->
-  <div class="flex flex-col gap-4 mat-bg-surface rounded-3xl p-4 self-start">
+  <div class="list-pane flex flex-col gap-4 mat-bg-surface rounded-3xl p-4 self-start">
     <div class="flex flex-row justify-between">
       <h1 class="mat-font-headline-md mat-text-on-surface">
         {{ 'dashboard.deposits' | translate }}
@@ -31,8 +31,9 @@
 
       @for (deposit of deposits(); track deposit.name()) {
         <deposit-card
-          class="mat-card-wrapper pb-[20px] box-border last-of-type:pb-0"
+          class="mat-card-wrapper pb-5 box-border last-of-type:pb-0"
           animate.leave="fade-out" animate.enter="fade-in"
+          [selected]="deposit.name() === selectedDeposit()"
           [deposit]="deposit"
           (editDeposit)="editDeposit($event, deposit)"
           (removeDeposit)="removeDeposit($event, deposit)"
@@ -42,9 +43,9 @@
     </div>
   </div>
 
-  <!-- Calculator pane -->
+  <!-- deposit pane -->
   <div
-    class="mat-bg-surface overflow-hidden min-w-0 rounded-3xl p-4"
+    class="deposit-pane mat-bg-surface overflow-hidden min-w-0 rounded-3xl p-4"
     [ngClass]="{ 'p-4': pane.opened() }"
   >
     <router-outlet (activate)="activate()" #outlet="outlet"></router-outlet>
