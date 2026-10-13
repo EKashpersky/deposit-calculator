@@ -45,8 +45,7 @@
 
   <!-- deposit pane -->
   <div
-    class="deposit-pane mat-bg-surface overflow-hidden min-w-0 rounded-3xl p-4"
-    [ngClass]="{ 'p-4': pane.opened() }"
+    class="deposit-pane mat-bg-surface overflow-hidden min-w-0 rounded-3xl"
   >
     <router-outlet (activate)="activate()" #outlet="outlet"></router-outlet>
   </div>
