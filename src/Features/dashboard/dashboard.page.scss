@@ -55,7 +55,7 @@
   @include transition('slow', 'spatial', 'standard');
 }
 
-@media screen and (width > 1280px) {
+@media screen and (1279px < width) {
   .panes {
     grid-template-columns: minmax(460px, 100%) 0px;
 
@@ -65,9 +65,9 @@
   }
 }
 
-@media screen and (width < 1280px) {
+@media screen and (1279px >= width) {
   .panes.is-open .list-pane {
-    display: none;
+    opacity: 0;
   }
 
   .panes { display: grid; grid-template-columns: 1fr; }
@@ -84,12 +84,7 @@
       var(--mat-motion-fast-effects-standard-cb);
   }
 
-
-  // .deposit-pane { transform: translateX(30px); }
-  // .panes.is-open .list-pane { transform: translateX(-30px); }
-  // .panes.is-open .deposit-pane { transform: translateX(0px); }
-
-  .deposit-pane { transform: translateX(24px); opacity: 0; pointer-events: none; }
-  .panes.is-open .list-pane { transform: translateX(-24px); opacity: 0; pointer-events: none; }
+  .deposit-pane { transform: translateX(30px); opacity: 0; pointer-events: none; }
+  .panes.is-open .list-pane { transform: translateX(-30px); opacity: 0; pointer-events: none; }
   .panes.is-open .deposit-pane { transform: none; opacity: 1; pointer-events: auto; }
 }

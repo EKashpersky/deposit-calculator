@@ -140,7 +140,7 @@ export class DashboardPage {
   public activate() {
     this.pane.openPane();
     this.pane.bindPane(this._panes()!.nativeElement, (event: TransitionEvent) => {
-      const compact = matchMedia('(max-width: 839px)').matches;
+      const compact = matchMedia('(max-width: 1279px)').matches;
 
       if (compact) {
         return event.propertyName === 'transform'
