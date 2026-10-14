@@ -294,6 +294,11 @@ export class DashboardPage implements AfterViewInit {
     event.preventDefault();
     event.stopImmediatePropagation();
 
+    if (this.selectedDeposit() === deposit.name()) {
+      this.selectedDeposit.set('');
+      this._router.navigate(['/dashboard'], { replaceUrl: true });
+    }
+
     const removeDepositAction = this._depositsManager.removeDeposit(deposit);
     this._history.addAction(removeDepositAction);
 
