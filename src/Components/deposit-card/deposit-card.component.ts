@@ -1,4 +1,4 @@
-import { CurrencyPipe, NgTemplateOutlet, PercentPipe } from '@angular/common';
+import { CurrencyPipe, NgTemplateOutlet, PercentPipe, NgClass } from '@angular/common';
 import {
   Component,
   effect,
@@ -38,8 +38,9 @@ import { round } from '@utils/round';
     PercentPipe,
     DurationPipe,
     MatButtonModule,
-    NgTemplateOutlet
-  ],
+    NgTemplateOutlet,
+    NgClass
+],
 
   selector: 'deposit-card',
   templateUrl: 'deposit-card.component.html',
@@ -49,11 +50,13 @@ import { round } from '@utils/round';
 })
 export class DepositCardComponent {
   public readonly deposit = input<DepositModel>(DepositModel.Empty());
+  public readonly selected = input<boolean>(false);
 
   public readonly editDeposit = output<Event>();
   public readonly removeDeposit = output<Event>();
 
   public readonly translate = inject(TranslateService);
+
 
   private _depositAmount: WritableSignal<number>;
   private _depositCurrency: WritableSignal<CurrencyShape>;
