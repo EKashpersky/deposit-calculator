@@ -60,6 +60,10 @@
   .panes {
     grid-template-columns: minmax(460px, 100%) 0px;
 
+    .deposit-pane .deposit-frame {
+      width: var(--deposit-frame-width);
+    }
+
     &.is-open {
       grid-template-columns: minmax(460px, 100%) 66%;
       column-gap: 16px;
