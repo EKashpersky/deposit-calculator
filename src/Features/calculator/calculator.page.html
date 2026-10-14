@@ -1,4 +1,4 @@
-<div class="flex flex-row justify-between">
+<div class="flex flex-row justify-between items-center gap-2">
   <!-- Header block -->
   <div class="headline flex flex-row gap-2">
     <button mat-icon-button class="flex!" (click)="close()">
@@ -10,10 +10,17 @@
     </h2>
   </div>
 
-  <button matButton="outlined" (click)="save()">
-    <mat-icon>save</mat-icon>
-    {{ 'common_buttons.save' | translate }}
-  </button>
+  <div class="flex flex-row gap-2 ms-auto">
+    <button matButton="outlined" (click)="openCurrencyDialog()">
+      <mat-icon>currency_exchange</mat-icon>
+      {{ 'calculator.currency_dialog.convert' | translate }}
+    </button>
+
+    <button matButton="outlined" (click)="save()">
+      <mat-icon>save</mat-icon>
+      {{ 'common_buttons.save' | translate }}
+    </button>
+  </div>
 </div>
 
 <section class="grid grid-flow-dense lg:grid-flow-col 2xl:grid-flow-row gap-4">
@@ -178,31 +185,6 @@
         </mat-slider>
       </mat-card-content>
     </mat-card>
-
-    <!-- <mat-card appearance="filled" class="flex! flex-col mat-bg-surface-container">
-      <mat-card-header class="p-[12px_12px_0px]!">
-        <mat-card-subtitle class="mat-text-on-surface mat-font-label-lg pb-[16px]">
-          {{ 'calculator.inputs.currency' | translate }}
-        </mat-card-subtitle>
-      </mat-card-header>
-
-      <mat-card-content class="flex flex-col gap-3">
-        <mat-form-field class="w-full" subscriptSizing="dynamic">
-          <mat-select formControlName="currency">
-            @for (currency of currencies(); track $index) {
-              <mat-option [value]="currency">
-                <span>{{ currency.symbol }} – </span>
-                <span>{{ 'units.currency.' + currency.code | translate }}</span>
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-
-        <mat-checkbox formControlName="autoConversion">
-          {{ 'calculator.inputs.auto_exchange' | translate }}
-        </mat-checkbox>
-      </mat-card-content>
-    </mat-card> -->
   </form>
 
   <deposit-summary

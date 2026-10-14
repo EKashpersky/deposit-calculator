@@ -129,6 +129,14 @@
       "limitation_range": "Top-ups from {{montha}} to {{monthb}} mo.",
       "months": "{{months}}mo."
     },
+    "currency_dialog": {
+      "search": "Find a currency",
+      "current": "Current currency",
+      "convert": "Convert",
+      "empty": "Nothing found",
+      "rate": "1 {{ symbol }} = {{ rate }} {{ currentSymbol }}",
+      "preview": "1 {{ symbol }} = {{ rate }} {{ currentSymbol }} · deposit ≈ {{ amount }}"
+    },
     "result": {
       "inputs": "Inputs data",
       "duration": "Duration",

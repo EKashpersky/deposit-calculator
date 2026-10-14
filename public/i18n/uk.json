@@ -129,6 +129,14 @@
       "limitation_range": "Поповнення з {{montha}}-го по {{monthb}}-й міс",
       "months": "{{months}}міс."
     },
+    "currency_dialog": {
+      "search": "Знайти валюту",
+      "current": "Поточна валюта",
+      "convert": "Конвертувати",
+      "empty": "Нічого не знайдено",
+      "rate": "1 {{ symbol }} = {{ rate }} {{ currentSymbol }}",
+      "preview": "1 {{ symbol }} = {{ rate }} {{ currentSymbol }} · внесок ≈ {{ amount }}"
+    },
     "result": {
       "inputs": "Вхідні дані",
       "duration": "Термін",

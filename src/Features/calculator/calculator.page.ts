@@ -24,10 +24,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { debounceTime, filter, map, Subject, takeUntil } from 'rxjs';
+import { debounceTime, filter, firstValueFrom, map, Subject, takeUntil } from 'rxjs';
 
 import { DepositSummaryComponent } from '@features/deposit-summary';
 import {
@@ -52,6 +53,10 @@ import {
   Duration,
   TaxTiming,
 } from './model';
+import {
+  SelectCurrencyDialogData,
+  SelectCurrencyModal,
+} from './select-currency.modal';
 
 
 
@@ -124,6 +129,7 @@ export class CalculatorPage {
 
 
   private _logger: LoggerShape;
+  private _dialog = inject(MatDialog);
 
   private _inflation = signal<number>(0);
 
@@ -326,12 +332,69 @@ export class CalculatorPage {
     this._depositBridge.updateDeposit(this.deposit());
   }
 
+  public openCurrencyDialog() {
+    const current = this.deposit().currency();
+    const dialogRef = this._dialog.open<SelectCurrencyModal, SelectCurrencyDialogData, CurrencyShape>(
+      SelectCurrencyModal,
+      {
+        data: {
+          currencies: this.currencies(),
+          currency: current,
+          principal: this.calculatorForm.controls.principal.value,
+        },
+      }
+    );
+
+    return firstValueFrom(dialogRef.afterClosed()).then((currency) => {
+      if (!currency || currency.code === current.code) {
+        return;
+      }
+
+      const principal = this._convertAmount(
+        this.calculatorForm.controls.principal.value,
+        current.code,
+        currency.code,
+      );
+      const monthlyDeposit = this._convertAmount(
+        this.calculatorForm.controls.monthlyDeposit.value,
+        current.code,
+        currency.code,
+      );
+
+      this._inflation.set(this._currencyInflation.getOneSafe(currency.code));
+      this._deposit.update(deposit => deposit.setCurrency(currency));
+      this.calculatorForm.patchValue({
+        principal,
+        monthlyDeposit,
+        currency,
+      }, { emitEvent: false });
+      this._recalculateResult();
+    });
+  }
+
   public close() {
     /// Implies this._route is /dashboard/:deposit-name/calculator
     this._router.navigate(['../../'], { relativeTo: this._route })
   }
 
 
+
+  private _convertAmount(
+    amount: number,
+    from: CurrencyShape['code'],
+    to: CurrencyShape['code'],
+  ) {
+    if (amount <= 0 || from === to) {
+      return amount;
+    }
+
+    return this._currencyConversion.convert(
+      amount,
+      from,
+      to,
+      CurrencyConvertSide.Equal,
+    );
+  }
 
   private _recalculateResult() {
     const {
