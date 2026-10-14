@@ -51,7 +51,8 @@
 
 // Common style for all screen sizes
 .panes {
-  transition-property: grid-template-columns;
+  column-gap: 0px;
+  transition-property: grid-template-columns, column-gap;
   @include transition('slow', 'spatial', 'standard');
 }
 
@@ -61,6 +62,7 @@
 
     &.is-open {
       grid-template-columns: minmax(460px, 100%) 66%;
+      column-gap: 16px;
     }
   }
 }
