@@ -24,7 +24,7 @@ import {
   MatSnackBarModule,
   MatSnackBarRef,
 } from '@angular/material/snack-bar';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 
@@ -38,7 +38,10 @@ import {
   TaxTiming,
 } from '@features/calculator/model';
 import {
+  CurrencyConverterService,
+  CurrencyConvertSide,
   CurrencyInflationService,
+  CurrencyRatesService,
   CurrencyService,
   CurrencyShape
 } from '@shared/Currency';
@@ -117,17 +120,21 @@ export class DashboardPage implements AfterViewInit {
     private _history: HistoryService,
     private _shortcuts: ShortcutsService,
     private _currency: CurrencyService,
+    private _currencyRates: CurrencyRatesService,
+    private _currencyConverter: CurrencyConverterService,
     private _currencyInflation: CurrencyInflationService,
     public pane: PaneManagerService,
     private _router: Router
   ) {
     this.selectedDeposit = signal('');
 
-    const collator = new Intl.Collator(void 0, { usage: 'sort', numeric: true });
     this.deposits = computed(() => {
-      return this._depositsManager.deposits().sort(
-        (a, b) => collator.compare(a.name(), b.name())
-      );
+      const userCurrency = this._currency.getPreferredOrFallbackCurrency();
+
+      return [...this._depositsManager.deposits()].sort((a, b) => {
+        return this._realNetInUserCurrency(b, userCurrency)
+          - this._realNetInUserCurrency(a, userCurrency);
+      });
     });
 
     effect(() => {
@@ -318,6 +325,27 @@ export class DashboardPage implements AfterViewInit {
   }
 
 
+
+  /// realNet in the user's currency, the same figure the card shows as the total.
+  private _realNetInUserCurrency(deposit: DepositModel, userCurrency: CurrencyShape) {
+    const amount = deposit.realNet();
+    const from = deposit.currency().code;
+
+    if (amount <= 0 || from === userCurrency.code) {
+      return amount;
+    }
+
+    if (!this._currencyRates.getRate(from) || !this._currencyRates.getRate(userCurrency.code)) {
+      return amount;
+    }
+
+    return this._currencyConverter.convert(
+      amount,
+      from,
+      userCurrency.code,
+      CurrencyConvertSide.Equal,
+    );
+  }
 
   private _syncDepositFrameWidth(): void {
     const panesEl = this._panes().nativeElement;
