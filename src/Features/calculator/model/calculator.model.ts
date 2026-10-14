@@ -25,7 +25,7 @@ export function validateDepositInput(
 ): void {
   if (principal < 0) {
     throw new Error(`Principal can't be negative`);
-  } else if (annualRate <= 0 || annualRate > 100) {
+  } else if (annualRate < 0 || annualRate > 100) {
     throw new Error(`Annual rate is out of range`);
   } else if (monthlyDeposit < 0) {
     throw new Error(`Monthly deposit can't be negative`);

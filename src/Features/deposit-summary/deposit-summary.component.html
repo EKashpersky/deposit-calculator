@@ -40,7 +40,7 @@
       <span> · </span>
       <span>
         <span>{{ 'calculator.result.taxed' | translate }} </span>
-        <span>{{ deposit().tax() | percent:'1.0-2' }}</span>
+        <span>{{ deposit().interest() > 0 ? deposit().tax() : 0 | percent:'1.0-2' }}</span>
       </span>
     </div>
 
