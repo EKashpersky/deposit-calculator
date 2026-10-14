@@ -47,6 +47,8 @@
   <div
     class="deposit-pane mat-bg-surface overflow-hidden min-w-0 rounded-3xl"
   >
-    <router-outlet (activate)="activate()" #outlet="outlet"></router-outlet>
+    <div class="deposit-frame">
+      <router-outlet (activate)="activate()" #outlet="outlet"></router-outlet>
+    </div>
   </div>
 </div>

@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
   computed,
+  DestroyRef,
   effect,
   ElementRef,
   inject,
@@ -97,10 +99,12 @@ function templateDeposit() {
     DepositCardComponent,
   ],
 })
-export class DashboardPage {
+export class DashboardPage implements AfterViewInit {
   private _depositsManager = inject(DepositsManagerService);
-  private _panes  = viewChild<ElementRef<HTMLElement>>('panes');
+  private _destroyRef = inject(DestroyRef);
+  private _panes = viewChild.required<ElementRef<HTMLElement>>('panes');
   private _snackRef: MatSnackBarRef<UndoSnackbarComponent> | null;
+  private _depositFrameWidth = -1;
 
   public selectedDeposit: WritableSignal<string>;
   public deposits: Signal<DepositModel[]>;
@@ -137,11 +141,33 @@ export class DashboardPage {
     this._snackRef = null;
   }
 
+  public ngAfterViewInit(): void {
+    const panesEl = this._panes().nativeElement;
+
+    this._syncDepositFrameWidth();
+
+    let rafId = 0;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => this._syncDepositFrameWidth());
+    });
+
+    /// Parent of .dynamic-width: its size changes with the viewport, not with
+    /// the max-width animation, so the frame width is measured once per resize.
+    const host = panesEl.closest('.dynamic-width');
+    observer.observe(host?.parentElement ?? panesEl);
+
+    this._destroyRef.onDestroy(() => {
+      cancelAnimationFrame(rafId);
+      observer.disconnect();
+    });
+  }
+
   public activate() {
     this.pane.openPane();
-    this.pane.bindPane(this._panes()!.nativeElement, (event: TransitionEvent) => {
+    this.pane.bindPane(this._panes().nativeElement, (event: TransitionEvent) => {
       /// If pane is opening
-      if (this._panes()!.nativeElement.classList.contains('is-open')) {
+      if (this._panes().nativeElement.classList.contains('is-open')) {
         return;
       }
 
@@ -153,7 +179,7 @@ export class DashboardPage {
       }
 
       return event.propertyName === 'grid-template-columns'
-          && event.target === this._panes()!.nativeElement;
+          && event.target === this._panes().nativeElement;
     });
 
     this.pane.onClose().then(() => {
@@ -284,5 +310,57 @@ export class DashboardPage {
     });
 
     return false;
+  }
+
+
+
+  private _syncDepositFrameWidth(): void {
+    const panesEl = this._panes().nativeElement;
+    const width = Math.round(this._measureOpenDepositPaneWidth());
+
+    if (width <= 0 || width === this._depositFrameWidth) {
+      return;
+    }
+
+    this._depositFrameWidth = width;
+    panesEl.style.setProperty('--deposit-frame-width', `${width}px`);
+  }
+
+  /// Width of .deposit-pane in the open layout, measured on a hidden copy so the
+  /// live panes, toolbar and footer keep their own transitions.
+  private _measureOpenDepositPaneWidth(): number {
+    const panesEl = this._panes().nativeElement;
+    const host = panesEl.closest('.dynamic-width') as HTMLElement | null;
+    const probe = panesEl.cloneNode(false) as HTMLElement;
+    const depositPane = document.createElement('div');
+
+    probe.classList.add('is-open');
+    probe.style.position = 'absolute';
+    probe.style.visibility = 'hidden';
+    probe.style.pointerEvents = 'none';
+    probe.style.transition = 'none';
+    probe.style.width = `${this._openPanesWidth(panesEl, host)}px`;
+    probe.append(document.createElement('div'), depositPane);
+
+    document.body.appendChild(probe);
+    const width = depositPane.getBoundingClientRect().width;
+    probe.remove();
+
+    return width;
+  }
+
+  /// Width .panes has when its .dynamic-width host is fully expanded.
+  private _openPanesWidth(panesEl: HTMLElement, host: HTMLElement | null): number {
+    const parent = host?.parentElement;
+    if (!host || !parent) {
+      return panesEl.clientWidth;
+    }
+
+    const hostStyle = getComputedStyle(host);
+    const padding =
+      (parseFloat(hostStyle.paddingLeft) || 0) +
+      (parseFloat(hostStyle.paddingRight) || 0);
+
+    return Math.max(0, parent.clientWidth - padding);
   }
 }
