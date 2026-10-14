@@ -99,7 +99,7 @@ function templateDeposit() {
 })
 export class DashboardPage {
   private _depositsManager = inject(DepositsManagerService);
-  private _panes  = viewChild<ElementRef>('panes');
+  private _panes  = viewChild<ElementRef<HTMLElement>>('panes');
   private _snackRef: MatSnackBarRef<UndoSnackbarComponent> | null;
 
   public selectedDeposit: WritableSignal<string>;
@@ -140,6 +140,11 @@ export class DashboardPage {
   public activate() {
     this.pane.openPane();
     this.pane.bindPane(this._panes()!.nativeElement, (event: TransitionEvent) => {
+      /// If pane is opening
+      if (this._panes()!.nativeElement.classList.contains('is-open')) {
+        return;
+      }
+
       const compact = matchMedia('(max-width: 1279px)').matches;
 
       if (compact) {
@@ -151,10 +156,9 @@ export class DashboardPage {
           && event.target === this._panes()!.nativeElement;
     });
 
-    // this.pane.onClose().then(() => {
-    //   consel
-    //   this.selectedDeposit.set('');
-    // });
+    this.pane.onClose().then(() => {
+      this.selectedDeposit.set('');
+    });
   }
 
   public openDeposit(depositName: string) {
