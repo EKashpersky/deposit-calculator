@@ -1,6 +1,6 @@
 {
   "name": "deposit-calculator",
-  "version": "0.14.0",
+  "version": "0.14.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
