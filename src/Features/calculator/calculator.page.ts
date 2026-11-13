@@ -182,8 +182,6 @@ export class CalculatorPage {
 
     this.currencies.set(this._currencyBank.getMappedRates());
 
-    console.log(this.currencies());
-
     /**
      * Form initialisation, along with wiring up recalculation on form update
     **/
