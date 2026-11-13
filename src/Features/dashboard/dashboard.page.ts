@@ -35,13 +35,12 @@ import {
   createDepositInput,
   DepositModel,
   Duration,
+  inflationIndexToRate,
   TaxTiming,
 } from '@features/calculator/model';
 import {
-  CurrencyConverterService,
-  CurrencyConvertSide,
-  CurrencyInflationService,
-  CurrencyRatesService,
+  CurrencyBankService,
+  CurrencyOpsService,
   CurrencyService,
   CurrencyShape
 } from '@shared/Currency';
@@ -120,9 +119,8 @@ export class DashboardPage implements AfterViewInit {
     private _history: HistoryService,
     private _shortcuts: ShortcutsService,
     private _currency: CurrencyService,
-    private _currencyRates: CurrencyRatesService,
-    private _currencyConverter: CurrencyConverterService,
-    private _currencyInflation: CurrencyInflationService,
+    private _currencyBank: CurrencyBankService,
+    private _currencyOps: CurrencyOpsService,
     public pane: PaneManagerService,
     private _router: Router
   ) {
@@ -235,8 +233,16 @@ export class DashboardPage implements AfterViewInit {
       }
 
       const depositInput = templateDeposit();
-      const inflation = this._currencyInflation.getOneSafe(currency.code);
-      const depositResult = calculateDeposit(depositInput, inflation);
+      const inflationYears = this._currencyBank.getRate(currency.code)!.inflation;
+      const depositResult = calculateDeposit(
+        depositInput,
+        inflationYears.length > 0 ? inflationIndexToRate(inflationYears[0].value) : 0,
+        inflationYears,
+        {
+          year: new Date().getFullYear(),
+          month: new Date().getMonth() + 1,
+        }
+      );
       const addDepositAction = this._depositsManager.addDeposit(
         new DepositModel(
           depositName,
@@ -335,15 +341,14 @@ export class DashboardPage implements AfterViewInit {
       return amount;
     }
 
-    if (!this._currencyRates.getRate(from) || !this._currencyRates.getRate(userCurrency.code)) {
+    if (!this._currencyBank.getRate(from) || !this._currencyBank.getRate(userCurrency.code)) {
       return amount;
     }
 
-    return this._currencyConverter.convert(
+    return this._currencyOps.exchangeMid(
       amount,
       from,
       userCurrency.code,
-      CurrencyConvertSide.Equal,
     );
   }
 

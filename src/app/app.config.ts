@@ -14,9 +14,8 @@ import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import {
-  CurrencyConverterService,
-  CurrencyInflationService,
-  CurrencyRatesService,
+  CurrencyBankService,
+  CurrencyOpsService,
   CurrencyService
 } from '@shared/Currency';
 import {
@@ -25,6 +24,7 @@ import {
 } from '@shared/deposits';
 import { HistoryService } from '@shared/history';
 import { ColoredConsoleDriver, LoggerService } from '@shared/logger';
+import { PaneManagerService } from '@shared/pane-manager.service';
 import { PreferencesService } from '@shared/preferences';
 import { ShortcutsService } from '@shared/shortcuts.service';
 import { StorageService } from '@shared/Storage';
@@ -32,7 +32,6 @@ import { ThemeService } from '@shared/theme.service';
 
 import { appStartup } from './app-startup';
 import { routes } from './app.routes';
-import { PaneManagerService } from '@shared/pane-manager.service';
 
 
 
@@ -78,9 +77,8 @@ export const appConfig: ApplicationConfig = {
     PreferencesService,
     DepositsManagerService,
     CurrencyService,
-    CurrencyInflationService,
-    CurrencyRatesService,
-    CurrencyConverterService,
+    CurrencyBankService,
+    CurrencyOpsService,
 
     DepositBridgeService,
     HistoryService,

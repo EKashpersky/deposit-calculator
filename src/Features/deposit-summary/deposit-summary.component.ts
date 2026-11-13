@@ -12,14 +12,13 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { CurrencyComponent } from '@components/currency';
 import { DepositModel } from '@features/calculator/model';
 import {
-  CurrencyConverterService,
-  CurrencyConvertSide,
-  CurrencyRatesService,
+  CurrencyOpsService,
   CurrencyService,
   CurrencyShape,
 } from '@shared/Currency';
 import { DurationPipe } from '@shared/duration.pipe';
 import { round } from '@utils/round';
+
 
 
 
@@ -48,8 +47,7 @@ export class DepositSummaryComponent {
 
   public constructor(
     private _currency: CurrencyService,
-    private _converter: CurrencyConverterService,
-    private _currencyRates: CurrencyRatesService,
+    private _currencyOps: CurrencyOpsService,
   ) {
     this.depositInUserCurrency = signal(-1);
     this.depositCurrencyRate   = signal(-1);
@@ -65,23 +63,18 @@ export class DepositSummaryComponent {
         return;
       }
 
-      const crossRate = this._currencyRates.crossRate(
+      const crossRate = this._currencyOps.crossRate(
         deposit.currency().code,
         this.userCurrency.code
       );
 
       this.depositCurrencyRate.set(round(crossRate, 4));
 
-      const depositCurrencyRate = this._currencyRates.getRate(
-        this.deposit().currency().code
-      );
-
       this.depositInUserCurrency.set(
-        this._converter.convert(
+        this._currencyOps.exchangeMid(
           this.deposit().realNet(),
-          depositCurrencyRate!.code,
+          this.deposit().currency().code,
           this.userCurrency.code,
-          CurrencyConvertSide.Equal
         )
       );
     });

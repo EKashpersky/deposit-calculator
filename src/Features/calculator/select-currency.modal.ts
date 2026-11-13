@@ -14,9 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import {
-  CurrencyConverterService,
-  CurrencyConvertSide,
-  CurrencyRatesService,
+  CurrencyBankService,
+  CurrencyOpsService,
   CurrencyShape,
 } from '@shared/Currency';
 import { round } from '@utils/round';
@@ -135,8 +134,8 @@ export class SelectCurrencyModal {
 
 
   public constructor(
-    private _converter: CurrencyConverterService,
-    private _rates: CurrencyRatesService,
+    private _currencyBank: CurrencyBankService,
+    private _currencyOps: CurrencyOpsService,
     private _translate: TranslateService,
   ) {
     const data = inject<SelectCurrencyDialogData>(MAT_DIALOG_DATA);
@@ -164,14 +163,16 @@ export class SelectCurrencyModal {
       return this._translate.instant('calculator.currency_dialog.current');
     }
 
-    if (!this._rates.getRate(currency.code) || !this._rates.getRate(this.current.code)) {
+    if (!this._currencyBank.getRate(currency.code)
+      || !this._currencyBank.getRate(this.current.code)
+    ) {
       return '';
     }
 
     const rate = new Intl.NumberFormat(this._translate.currentLang()!, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 4,
-    }).format(round(this._rates.crossRate(currency.code, this.current.code), 4));
+    }).format(round(this._currencyOps.crossRate(currency.code, this.current.code), 4));
 
     if (this.principal <= 0) {
       return this._translate.instant('calculator.currency_dialog.rate', {
@@ -182,11 +183,10 @@ export class SelectCurrencyModal {
     }
 
     const amount = formatCurrency(
-      this._converter.convert(
+      this._currencyOps.exchangeMid(
         this.principal,
         this.current.code,
         currency.code,
-        CurrencyConvertSide.Equal,
       ),
       this._translate.currentLang()!,
       currency.symbol,

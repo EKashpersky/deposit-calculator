@@ -17,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,7 +25,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -32,9 +32,8 @@ import { debounceTime, filter, firstValueFrom, map, Subject, takeUntil } from 'r
 
 import { DepositSummaryComponent } from '@features/deposit-summary';
 import {
-  CurrencyConverterService,
-  CurrencyConvertSide,
-  CurrencyInflationService,
+  CurrencyBankService,
+  CurrencyOpsService,
   CurrencyService,
   CurrencyShape,
   getDefaultCurrency,
@@ -57,6 +56,15 @@ import {
   SelectCurrencyDialogData,
   SelectCurrencyModal,
 } from './select-currency.modal';
+import { CurrencyCodeEnum, CurrencySymbolEnum } from '@config/supported-currencies';
+
+function equivalentInflation(net: number, realNet: number, termMonths: number): number {
+  if (termMonths === 0 || realNet === 0) {
+    return 0;
+  }
+
+  return Math.pow(net / realNet, 12 / termMonths) - 1;
+}
 
 
 
@@ -137,8 +145,8 @@ export class CalculatorPage {
 
   public constructor(
     private _currency: CurrencyService,
-    private _currencyConversion: CurrencyConverterService,
-    private _currencyInflation: CurrencyInflationService,
+    private _currencyBank: CurrencyBankService,
+    private _currencyOps: CurrencyOpsService,
     private _depositBridge: DepositBridgeService,
     private _fb: FormBuilder,
     private _route: ActivatedRoute,
@@ -209,20 +217,16 @@ export class CalculatorPage {
     this.calculatorForm.controls.currency.valueChanges
     .subscribe(currency => {
       if (this.calculatorForm.controls.autoConversion.value) {
-        this._inflation.set(this._currencyInflation.getOneSafe(currency.code));
-
-        const principal = this._currencyConversion.convert(
+        const principal = this._currencyOps.exchangeMid(
           this._deposit().principal(),
           this._deposit().currency().code,
           currency.code,
-          CurrencyConvertSide.Equal,
         );
 
-        const monthlyDeposit = this._currencyConversion.convert(
+        const monthlyDeposit = this._currencyOps.exchangeMid(
           this._deposit().monthlyDeposit(),
           this._deposit().currency().code,
           currency.code,
-          CurrencyConvertSide.Equal,
         );
 
         this._deposit.update(
@@ -284,10 +288,6 @@ export class CalculatorPage {
     ).subscribe(data => {
       this._deposit.set(data);
 
-      this._inflation.set(
-        this._currencyInflation.getOneSafe(this.deposit().currency().code)
-      );
-
       this.duration.set(data.input().duration);
 
       const input = data.input();
@@ -298,10 +298,16 @@ export class CalculatorPage {
         x => x.value === input.accrualFrequency
       )!;
 
+      const currencies = this._currencyBank.rates.value();
+      const currency   = currencies!.find(
+        currency => currency.currency.a3c === depositCurrencyCode
+      )!;
+
       this.calculatorForm.patchValue({
-        currency: this.currencies().find(
-          currency => currency.code === depositCurrencyCode
-        )!,
+        currency: {
+          code: currency.currency.a3c as CurrencyCodeEnum,
+          symbol: currency.currency.symbol as CurrencySymbolEnum,
+        },
         autoConversion: data.autoConversion(),
 
         principal: input.principal,
@@ -361,7 +367,6 @@ export class CalculatorPage {
         currency.code,
       );
 
-      this._inflation.set(this._currencyInflation.getOneSafe(currency.code));
       this._deposit.update(deposit => deposit.setCurrency(currency));
       this.calculatorForm.patchValue({
         principal,
@@ -388,12 +393,7 @@ export class CalculatorPage {
       return amount;
     }
 
-    return this._currencyConversion.convert(
-      amount,
-      from,
-      to,
-      CurrencyConvertSide.Equal,
-    );
+    return this._currencyOps.exchangeMid(amount, from, to);
   }
 
   private _recalculateResult() {
@@ -441,9 +441,30 @@ export class CalculatorPage {
       return;
     }
 
+    const today = new Date();
+    const currency = this.calculatorForm.controls.currency.value;
+    const inflationYears = this._currencyBank.getRate(currency.code)?.inflation ?? [];
 
+    let depositResult;
 
-    const depositResult = calculateDeposit(depositInput, this._inflation());
+    try {
+      depositResult = calculateDeposit(
+        depositInput,
+        this._inflation(),
+        inflationYears,
+        {
+          year: today.getFullYear(),
+          month: today.getMonth() + 1,
+        }
+      );
+    } catch (e) {
+      this._logger.e((e as Error).message);
+
+      return;
+    }
+
+    const termMonths = depositInput.duration.durationInMonths();
+    this._inflation.set(equivalentInflation(depositResult.net, depositResult.realNet, termMonths));
 
     this._deposit.set(
       new DepositModel(

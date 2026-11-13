@@ -27,7 +27,9 @@
   class="flex flex-col gap-6 dynamic-width min-w-70 w-full grow px-4"
   [ngClass]="{ 'is-wide': pane.opened() }"
 >
-  <router-outlet></router-outlet>
+  @if (appLoaded()) {
+    <router-outlet></router-outlet>
+  }
 </main>
 
 <footer class="w-full flex flex-col items-center mt-[80px] py-[28px]">

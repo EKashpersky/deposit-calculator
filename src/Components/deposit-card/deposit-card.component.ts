@@ -1,4 +1,4 @@
-import { CurrencyPipe, NgTemplateOutlet, PercentPipe, NgClass } from '@angular/common';
+import { CurrencyPipe, NgClass, NgTemplateOutlet, PercentPipe } from '@angular/common';
 import {
   Component,
   effect,
@@ -14,11 +14,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { MatButtonModule } from "@angular/material/button";
+import { CurrencyCodeEnum } from '@config/supported-currencies';
 import { DepositModel } from '@features/calculator/model';
 import {
-  CurrencyConverterService,
-  CurrencyConvertSide,
-  CurrencyRatesService,
+  CurrencyBankService,
+  CurrencyOpsService,
   CurrencyService,
   CurrencyShape,
   getDefaultCurrency,
@@ -66,8 +66,8 @@ export class DepositCardComponent {
 
   public constructor(
     private _currency: CurrencyService,
-    private _currencyRates: CurrencyRatesService,
-    private _converter: CurrencyConverterService,
+    private _currencyBank: CurrencyBankService,
+    private _currencyOps: CurrencyOpsService,
   ) {
     this._depositAmount       = signal(-1);
     this._depositCurrencyRate = signal(-1);
@@ -82,23 +82,18 @@ export class DepositCardComponent {
       if (deposit.currency().code !== userCurrency.code) {
         this._depositCurrency.set(userCurrency);
 
-        const crossRate = this._currencyRates.crossRate(
+        const crossRate = this._currencyOps.crossRate(
           deposit.currency().code,
           userCurrency.code
         );
 
         this._depositCurrencyRate.set(round(crossRate, 2));
 
-        const depositCurrencyRate = this._currencyRates.getRate(
-          this.deposit().currency().code
-        );
-
         this._depositAmount.set(
-          this._converter.convert(
+          this._currencyOps.exchangeMid(
             this.deposit().realNet(),
-            depositCurrencyRate!.code,
+            this.deposit().currency().code,
             userCurrency.code,
-            CurrencyConvertSide.Equal
           )
         );
       } else {

@@ -6,7 +6,7 @@ import {
 } from '@config/supported-currencies';
 
 import { CurrencyShape } from './currency.model';
-import { CurrencyRatesService } from './currency-rates.service';
+import { CurrencyOpsService } from './currency-ops.service';
 
 
 
@@ -25,14 +25,14 @@ export class CurrencyService {
 
 
 
-  public constructor(private _currencyRates: CurrencyRatesService) { }
+  public constructor(private _currencyRates: CurrencyOpsService) { }
 
   public getCurrenciesWithRates() {
     return this._currencyRates.rates().map((currencyRate) => {
       return {
-        code: currencyRate.code,
-        symbol: CurrencySymbolEnum[currencyRate.code],
-      }
+        code: currencyRate.currency.a3c as CurrencyCodeEnum,
+        symbol: currencyRate.currency.symbol as CurrencySymbolEnum,
+      };
     });
   }
 

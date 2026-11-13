@@ -39,6 +39,10 @@ export class DepositModel {
     this._currency       = currency;
     this._autoConversion = autoConversion;
 
+    if (currency === undefined) {
+      debugger;
+    }
+
     this._input  = input;
     this._result = result;
   }
@@ -55,7 +59,7 @@ export class DepositModel {
   }
 
   public setCurrency(currency: CurrencyShape) {
-    this._currency = currency
+    this._currency = currency;
     return this;
   }
 

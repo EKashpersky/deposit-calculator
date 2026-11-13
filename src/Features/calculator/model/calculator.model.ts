@@ -1,3 +1,5 @@
+import { RateInflationYear } from 'dc-api-types';
+
 import { round } from '@utils/round';
 
 import {
@@ -120,22 +122,75 @@ export function computeInterest(input: DepositInput) {
   );
 }
 
+/** 108 → 0.08, 103.3 → 0.033, 100 → 0. Index base is 100. */
+export function inflationIndexToRate(index: number): number {
+  return index / 100 - 1;
+}
+
+/**
+ * startMonth is 1..12. Rates are calendar years, not "year 1 of the deposit".
+ * value is an index with base 100 (108 is 8%). A year the deposit touches
+ * and has no rate is a hole, not 0%.
+ */
+export function inflateToPresentByYears(
+  nominal: number,
+  startYear: number,
+  startMonth: number,
+  termMonths: number,
+  rates: readonly RateInflationYear[],
+): number {
+  if (termMonths === 0 || rates.length === 0) {
+    return nominal;
+  }
+
+  const rateOf = new Map(rates.map(entry => [entry.year, entry.value]));
+  let factor = 1;
+  let year = startYear;
+  let month = startMonth;
+  let left = termMonths;
+
+  while (left > 0) {
+    const monthsLeftInYear = 12 - month + 1;
+    const chunk = Math.min(left, monthsLeftInYear);
+    const rate = rateOf.get(year);
+
+    if (rate === undefined) {
+      throw new Error(`No inflation for ${year}`);
+    }
+
+    factor *= Math.pow(1 + inflationIndexToRate(rate), chunk / 12);
+    left -= chunk;
+    year += 1;
+    month = 1;
+  }
+
+  return nominal / factor;
+}
+
 export function calculateDeposit(
   depositInput: DepositInput,
   inflationRate: number,
+  inflationYears: readonly RateInflationYear[],
+  startedAt: { year: number; month: number },
 ): DepositResult {
-  const nominal = computeInterest(depositInput)
-  const realNet  = inflateToPresent(
-    nominal.net,
-    inflationRate,
-    depositInput.duration.durationInMonths()
-  );
+  const nominal = computeInterest(depositInput);
+  const termMonths = depositInput.duration.durationInMonths();
+
+  const realNet = inflationYears.length > 0
+    ? inflateToPresentByYears(
+        nominal.net,
+        startedAt.year,
+        startedAt.month,
+        termMonths,
+        inflationYears,
+      )
+    : inflateToPresent(nominal.net, inflationRate, termMonths);
 
   return DepositResult.build(
     round(nominal.deposited, 2),
     round(nominal.interest, 2),
     round(nominal.taxed, 2),
     round(nominal.net, 2),
-    round(realNet, 2)
+    round(realNet, 2),
   );
 }

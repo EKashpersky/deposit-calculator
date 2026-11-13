@@ -1,4 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,12 +21,10 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { environment } from '@environment/development';
 
-import { CurrencyApiService } from '@api/currency-api.service';
 import { SUPPORTED_LANGUAGES } from '@config/supported-languages';
 import { PreferencesDialog } from '@features/preferences';
 import {
-  CurrencyInflationService,
-  CurrencyRatesService,
+  CurrencyBankService,
   CurrencyService,
 } from '@shared/Currency';
 import { DepositBridgeService, DepositsManagerService } from '@shared/deposits';
@@ -34,7 +33,6 @@ import { PaneManagerService } from '@shared/pane-manager.service';
 import { PreferencesService } from '@shared/preferences';
 import { ShortcutsService } from '@shared/shortcuts.service';
 import { ThemeEnum, ThemeService } from '@shared/theme.service';
-import { CommonModule } from '@angular/common';
 
 
 
@@ -43,8 +41,6 @@ import { CommonModule } from '@angular/common';
   providers: [
     MatIconRegistry,
     BreakpointObserver,
-
-    CurrencyApiService,
   ],
   imports: [
     RouterOutlet,
@@ -74,14 +70,13 @@ export class App {
 
   public readonly appVersion = signal('');
 
-  public readonly fontsLoaded = signal(false);
+  public readonly appLoaded = signal(false);
 
 
 
   public constructor(
     private _currency: CurrencyService,
-    private _currencyInflation: CurrencyInflationService,
-    private _currencyRates: CurrencyRatesService,
+    private _currencyBank: CurrencyBankService,
     private _depositBridge: DepositBridgeService,
     private _depositsManager: DepositsManagerService,
     private _dialog: MatDialog,
@@ -99,32 +94,40 @@ export class App {
     this.githubUrl    = 'https://github.com/ekashpersky/deposit-calculator';
     this.linkedInUrl  = 'https://linkedin.com/in/ekashpersky';
 
-    Promise.allSettled([
+    const fontsLoaded = Promise.allSettled([
       document.fonts.ready,
       document.fonts.load('18px "Material Symbols Outlined"'),
-    ]).then(() => {
-      const loader = document.querySelector('body .boot-loader');
+    ]);
 
+    const currencyBankLoaded = new Promise<void>(resolve => {
+      effect(() => {
+        if (this._currencyBank.rates.hasValue()) {
+          resolve();
+        }
+      });
+    });
+
+    /**
+     * Determines if the app is loaded. Removes fullscreen loader and unblocks
+     * routing
+    **/
+    Promise.all([
+      fontsLoaded,
+      currencyBankLoaded,
+    ]).then(() => {
+      const loader = document.querySelector('body .boot-loader')!;
       this._renderer.addClass(loader, 'leave');
 
-      setTimeout(() => {
+      this.appLoaded.set(true);
+
+      loader.addEventListener('transitionend', () => {
         this._renderer.removeChild(document.body, loader);
-      }, 350);
+      }, { once: true });
     });
 
     this._currency.changePreferredCurrency(
       this._currency.getPreferredOrFallbackCurrency()
     );
-
-    const currencyApi = inject(CurrencyApiService);
-
-    currencyApi.getCurrencyRates().then((rates) => {
-      this._currencyRates.setRates(rates);
-    });
-
-    currencyApi.getCurrenciesInflation().then(inflations => {
-      this._currencyInflation.setBatch(inflations);
-    });
 
     this._depositBridge.deposit.subscribe((deposit) => {
       if (deposit) {
@@ -179,7 +182,7 @@ export class App {
       data: {
         i18nTitle: 'preferences_dialog.title',
         i18nAction: 'preferences_dialog.create',
-        currencies: this._currency.getCurrenciesWithRates(),
+        currencies: this._currencyBank.mappedRates(),
         preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
         languages: SUPPORTED_LANGUAGES,
         language: this._translate.currentLang(),
@@ -187,27 +190,25 @@ export class App {
       },
     });
 
+    /// Update ui on preferred currency change
     effect(() => {
       this._currency.changePreferredCurrency(
         dialogRef.componentInstance.preferredCurrency()
       );
     }, { injector: this._injector });
 
+    /// Update ui on language change
     effect(() => {
       this._translate.use(dialogRef.componentInstance.language().locale);
     }, { injector: this._injector });
   }
 
   public openLinkedIn() {
-    const linkedInUrl = 'https://linkedin.com/in/ekashpersky';
-
-    window.open(linkedInUrl, '_blank', 'noopener,noreferrer');
+    window.open(this.linkedInUrl, '_blank', 'noopener,noreferrer');
   }
 
   public openGithub() {
-    const githubUrl = 'https://github.com/ekashpersky/deposit-calculator';
-
-    window.open(githubUrl, '_blank', 'noopener,noreferrer');
+    window.open(this.githubUrl, '_blank', 'noopener,noreferrer');
   }
 
   private _applyTheme(theme: ThemeEnum) {

@@ -16,7 +16,6 @@
     "module": "preserve",
 
     "paths": {
-      "@api/*":         [ "./src/Api/*" ],
       "@config/*":      [ "./src/config/*" ],
       "@components/*":  [ "./src/Components/*" ],
       "@environment":   [ "./src/environment" ],
