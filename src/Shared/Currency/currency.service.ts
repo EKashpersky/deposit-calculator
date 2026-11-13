@@ -6,7 +6,6 @@ import {
 } from '@config/supported-currencies';
 
 import { CurrencyShape } from './currency.model';
-import { CurrencyOpsService } from './currency-ops.service';
 
 
 
@@ -25,16 +24,7 @@ export class CurrencyService {
 
 
 
-  public constructor(private _currencyRates: CurrencyOpsService) { }
-
-  public getCurrenciesWithRates() {
-    return this._currencyRates.rates().map((currencyRate) => {
-      return {
-        code: currencyRate.currency.a3c as CurrencyCodeEnum,
-        symbol: currencyRate.currency.symbol as CurrencySymbolEnum,
-      };
-    });
-  }
+  public constructor() { }
 
   public getPreferredOrFallbackCurrency() {
     let preferredCurrency = this._preferredCurrency();
@@ -45,6 +35,8 @@ export class CurrencyService {
 
     return preferredCurrency;
   }
+
+
 
   public changePreferredCurrency(currency: CurrencyShape) {
     this._preferredCurrency.set(currency);

@@ -1,7 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { CurrencyCodeEnum } from '@config/supported-currencies';
-import { CurrencyRateView } from 'dc-api-types';
 import { CurrencyBankService } from './currency-bank.service';
 
 
@@ -14,9 +13,6 @@ export enum CurrencyConvertSide {
 
 @Injectable()
 export class CurrencyOpsService {
-  private _rates = signal<CurrencyRateView[]>([]);
-  public readonly rates = this._rates.asReadonly();
-
   public constructor(private _currencyBank: CurrencyBankService) { }
 
   public crossRate(from: CurrencyCodeEnum, to: CurrencyCodeEnum): number {

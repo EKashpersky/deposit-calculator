@@ -221,7 +221,7 @@ export class DashboardPage implements AfterViewInit {
           i18nAction: 'dashboard.deposit_dialog.create',
           depositName: '',
           depositNames,
-          currencies: this._currency.getCurrenciesWithRates(),
+          currencies: this._currencyBank.getMappedRates(),
           preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
         },
       })
@@ -270,7 +270,7 @@ export class DashboardPage implements AfterViewInit {
           i18nAction: 'dashboard.deposit_dialog.edit',
           depositName: deposit.name(),
           depositNames,
-          currencies: this._currency.getCurrenciesWithRates(),
+          currencies: this._currencyBank.getMappedRates(),
           preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
         },
       });

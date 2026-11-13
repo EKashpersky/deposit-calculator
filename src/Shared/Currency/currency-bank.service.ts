@@ -8,6 +8,7 @@ import {
   CurrencyCodeEnum,
   CurrencySymbolEnum
 } from '@config/supported-currencies';
+
 import { CurrencyShape } from './currency.model';
 
 
@@ -75,7 +76,7 @@ export class CurrencyBankService {
     );
   }
 
-  public mappedRates() {
+  public getMappedRates() {
     return this._mappedRates();
   }
 

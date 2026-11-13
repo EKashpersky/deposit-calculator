@@ -28,13 +28,19 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { debounceTime, filter, firstValueFrom, map, Subject, takeUntil } from 'rxjs';
+import {
+  debounceTime,
+  filter,
+  firstValueFrom,
+  map,
+  Subject,
+  takeUntil
+} from 'rxjs';
 
 import { DepositSummaryComponent } from '@features/deposit-summary';
 import {
   CurrencyBankService,
   CurrencyOpsService,
-  CurrencyService,
   CurrencyShape,
   getDefaultCurrency,
 } from '@shared/Currency';
@@ -56,7 +62,8 @@ import {
   SelectCurrencyDialogData,
   SelectCurrencyModal,
 } from './select-currency.modal';
-import { CurrencyCodeEnum, CurrencySymbolEnum } from '@config/supported-currencies';
+
+
 
 function equivalentInflation(net: number, realNet: number, termMonths: number): number {
   if (termMonths === 0 || realNet === 0) {
@@ -144,7 +151,6 @@ export class CalculatorPage {
 
 
   public constructor(
-    private _currency: CurrencyService,
     private _currencyBank: CurrencyBankService,
     private _currencyOps: CurrencyOpsService,
     private _depositBridge: DepositBridgeService,
@@ -174,7 +180,9 @@ export class CalculatorPage {
       return { value, label: `calculator.tax_timing.${i}` };
     });
 
-    this.currencies.set(this._currency.getCurrenciesWithRates());
+    this.currencies.set(this._currencyBank.getMappedRates());
+
+    console.log(this.currencies());
 
     /**
      * Form initialisation, along with wiring up recalculation on form update
@@ -298,15 +306,14 @@ export class CalculatorPage {
         x => x.value === input.accrualFrequency
       )!;
 
-      const currencies = this._currencyBank.rates.value();
-      const currency   = currencies!.find(
-        currency => currency.currency.a3c === depositCurrencyCode
+      const currency = this.currencies().find(
+        currency => currency.code === depositCurrencyCode
       )!;
 
       this.calculatorForm.patchValue({
         currency: {
-          code: currency.currency.a3c as CurrencyCodeEnum,
-          symbol: currency.currency.symbol as CurrencySymbolEnum,
+          code: currency.code,
+          symbol: currency.symbol,
         },
         autoConversion: data.autoConversion(),
 

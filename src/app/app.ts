@@ -182,7 +182,7 @@ export class App {
       data: {
         i18nTitle: 'preferences_dialog.title',
         i18nAction: 'preferences_dialog.create',
-        currencies: this._currencyBank.mappedRates(),
+        currencies: this._currencyBank.getMappedRates(),
         preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
         languages: SUPPORTED_LANGUAGES,
         language: this._translate.currentLang(),
