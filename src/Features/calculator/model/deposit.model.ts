@@ -39,10 +39,6 @@ export class DepositModel {
     this._currency       = currency;
     this._autoConversion = autoConversion;
 
-    if (currency === undefined) {
-      debugger;
-    }
-
     this._input  = input;
     this._result = result;
   }
