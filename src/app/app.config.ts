@@ -5,6 +5,7 @@ import {
   provideBrowserGlobalErrorListeners
 } from '@angular/core';
 import { MAT_ICON_DEFAULT_OPTIONS } from '@angular/material/icon';
+import { provideServiceWorker } from '@angular/service-worker';
 import { provideRouter } from '@angular/router';
 import {
   lumberjackLogDriverToken,
@@ -32,7 +33,6 @@ import { ThemeService } from '@shared/theme.service';
 
 import { appStartup } from './app-startup';
 import { routes } from './app.routes';
-
 
 
 export const appConfig: ApplicationConfig = {
@@ -84,5 +84,9 @@ export const appConfig: ApplicationConfig = {
     HistoryService,
     ShortcutsService,
     PaneManagerService,
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ]
 };

@@ -91,7 +91,7 @@ export class App {
   ) {
     this._injector = inject(Injector);
 
-    this.githubUrl    = 'https://github.com/ekashpersky/deposit-calculator';
+    this.githubUrl    = 'https://github.com/ekashpersky';
     this.linkedInUrl  = 'https://linkedin.com/in/ekashpersky';
 
     const fontsLoaded = Promise.allSettled([
