@@ -22,6 +22,7 @@
 "currency": {
       "AED": "UAE Dirham",
       "AMD": "Armenian Dram",
+      "ARS": "Argentine Peso",
       "AUD": "Australian Dollar",
       "AZN": "Azerbaijani Manat",
       "BRL": "Brazilian Real",
@@ -46,8 +47,10 @@
       "MDL": "Moldovan Leu",
       "MXN": "Mexican Peso",
       "MYR": "Malaysian Ringgit",
+      "NGN": "Nigerian Naira",
       "NOK": "Norwegian Krone",
       "NZD": "New Zealand Dollar",
+      "PKR": "Pakistani Rupee",
       "PLN": "Polish Zloty",
       "RON": "Romanian Leu",
       "SEK": "Swedish Krona",
