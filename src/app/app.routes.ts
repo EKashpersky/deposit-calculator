@@ -4,9 +4,9 @@ import {
   Routes
 } from '@angular/router';
 
-import { DepositResolver } from '@features/calculator/deposit.resolver';
+import { CalculatorGuard, DepositResolver } from '@features/calculator';
 import { canDeactivateCalculator } from '@features/dashboard/calculator-cd';
-import { DepositsManagerService } from '@shared/deposits';
+
 
 
 
@@ -20,10 +20,11 @@ export const routes: Routes = [
       {
         path: ':name/calculator',
         loadComponent: () => import('../Features/calculator/calculator.page').then(m => m.CalculatorPage),
-        providers: [ DepositResolver, DepositsManagerService ],
         resolve: {
           calculator: (route: ActivatedRouteSnapshot) => inject(DepositResolver).resolve(route),
         },
+
+        canActivate: [ CalculatorGuard ],
 
         canDeactivate: [ canDeactivateCalculator ]
       }

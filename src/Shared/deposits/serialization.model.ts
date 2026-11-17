@@ -2,7 +2,6 @@ import {
   DepositInput,
   DepositModel,
   Duration,
-  TaxTiming
 } from '@features/calculator/model';
 import { DomainSerializer } from '@shared/Storage';
 
@@ -29,7 +28,7 @@ export class DepositSerializer implements DomainSerializer<DepositModel, Deposit
         deposit.input.depositingMonthEnd,
         deposit.input.depositAtMonthStart
       ),
-      deposit.result
+      null
     );
   }
 
@@ -56,7 +55,6 @@ export class DepositSerializer implements DomainSerializer<DepositModel, Deposit
         depositingMonthEnd: deposit.input().depositingMonthEnd,
         depositAtMonthStart: deposit.input().depositAtMonthStart,
       },
-      result: deposit.result(),
     }
   }
 }

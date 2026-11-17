@@ -22,6 +22,7 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { environment } from '@environment/development';
 
 import { SUPPORTED_LANGUAGES } from '@config/supported-languages';
+import { calculateDeposit, inflationIndexToRate } from '@features/calculator/model';
 import { PreferencesDialog } from '@features/preferences';
 import {
   CurrencyBankService,
@@ -33,6 +34,8 @@ import { PaneManagerService } from '@shared/pane-manager.service';
 import { PreferencesService } from '@shared/preferences';
 import { ShortcutsService } from '@shared/shortcuts.service';
 import { ThemeEnum, ThemeService } from '@shared/theme.service';
+
+import { AppService } from './app.service';
 
 
 
@@ -70,8 +73,6 @@ export class App {
 
   public readonly appVersion = signal('');
 
-  public readonly appLoaded = signal(false);
-
 
 
   public constructor(
@@ -88,6 +89,7 @@ export class App {
     private _title: Title,
     private _translate: TranslateService,
     public pane: PaneManagerService,
+    public readonly app: AppService,
   ) {
     this._injector = inject(Injector);
 
@@ -99,11 +101,37 @@ export class App {
       document.fonts.load('18px "Material Symbols Outlined"'),
     ]);
 
-    const currencyBankLoaded = new Promise<void>(resolve => {
+    /**
+     * This takes care of two things
+     * 1. Initialising deposits with results
+     * 2. Ensure we've got the rates and inflation for initial calculations
+    **/
+    const depositsInitialised = new Promise<void>(resolve => {
       effect(() => {
-        if (this._currencyBank.rates.hasValue()) {
-          resolve();
+        if (!this._currencyBank.rates.hasValue()) {
+          return;
         }
+
+        this._depositsManager.deposits().forEach(deposit => {
+          const inflationYears = this._currencyBank.getRate(
+            deposit.currency().code
+          )!.inflation;
+          const depositResult = calculateDeposit(
+            deposit.input(),
+            inflationYears.length > 0 ? inflationIndexToRate(inflationYears[0].value) : 0,
+            inflationYears,
+            {
+              year: new Date().getFullYear(),
+              month: new Date().getMonth() + 1,
+            }
+          );
+
+          deposit.setResult(depositResult);
+
+          this._depositsManager.updateDeposit(deposit);
+        });
+
+        resolve();
       });
     });
 
@@ -113,12 +141,12 @@ export class App {
     **/
     Promise.all([
       fontsLoaded,
-      currencyBankLoaded,
+      depositsInitialised
     ]).then(() => {
       const loader = document.querySelector('body .boot-loader')!;
       this._renderer.addClass(loader, 'leave');
 
-      this.appLoaded.set(true);
+      this.app.markAsLoaded();
 
       loader.addEventListener('transitionend', () => {
         this._renderer.removeChild(document.body, loader);

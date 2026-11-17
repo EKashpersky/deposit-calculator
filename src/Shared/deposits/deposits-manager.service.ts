@@ -39,7 +39,14 @@ export class DepositsManagerService {
   }
 
   public fromName(name: string) {
-    return this._depositStorage!.getItem(name);
+    return new Promise<DepositModel | null>((resolve) => {
+      let deposit = this.deposits().find(x => x.name() === name) || null;
+      if (deposit !== null) {
+        resolve(deposit);
+      } else {
+        this._depositStorage!.getItem(name).then(deposit => resolve(deposit));
+      }
+    });
   }
 
   public addDepositsBulk(deposits: DepositModel[]) {

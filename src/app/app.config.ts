@@ -5,8 +5,8 @@ import {
   provideBrowserGlobalErrorListeners
 } from '@angular/core';
 import { MAT_ICON_DEFAULT_OPTIONS } from '@angular/material/icon';
-import { provideServiceWorker } from '@angular/service-worker';
 import { provideRouter } from '@angular/router';
+import { provideServiceWorker } from '@angular/service-worker';
 import {
   lumberjackLogDriverToken,
   provideLumberjack,
@@ -14,6 +14,7 @@ import {
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
+import { CalculatorGuard, DepositResolver } from '@features/calculator';
 import {
   CurrencyBankService,
   CurrencyOpsService,
@@ -33,6 +34,7 @@ import { ThemeService } from '@shared/theme.service';
 
 import { appStartup } from './app-startup';
 import { routes } from './app.routes';
+import { AppService } from './app.service';
 
 
 export const appConfig: ApplicationConfig = {
@@ -79,6 +81,10 @@ export const appConfig: ApplicationConfig = {
     CurrencyService,
     CurrencyBankService,
     CurrencyOpsService,
+
+    DepositResolver,
+    AppService,
+    CalculatorGuard,
 
     DepositBridgeService,
     HistoryService,

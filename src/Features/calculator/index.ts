@@ -1,2 +1,3 @@
 export * from './calculator.page';
-export * from './calculator.routes';
+export * from './deposit.resolver';
+export * from './calculator.guard';

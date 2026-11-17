@@ -36,5 +36,4 @@ export interface DepositPOJO {
   readonly currency: CurrencyShape;
   readonly autoConversion: boolean;
   readonly input: DepositInputPOJO;
-  readonly result: DepositResultPOJO;
 }

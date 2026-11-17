@@ -331,7 +331,7 @@ export class CalculatorPage {
           value: input.duration.duration(),
           scale: input.duration.scale(),
         },
-      }, { emitEvent: true });
+      }, { emitEvent: false });
     });
   }
 

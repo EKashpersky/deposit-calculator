@@ -27,7 +27,7 @@
   class="flex flex-col gap-6 dynamic-width min-w-70 w-full grow px-4"
   [ngClass]="{ 'is-wide': pane.opened() }"
 >
-  @if (appLoaded()) {
+  @if (app.appLoaded()) {
     <router-outlet></router-outlet>
   }
 </main>

@@ -33,14 +33,14 @@ export class DepositModel {
     currency: CurrencyShape,
     autoConversion: boolean,
     input: DepositInput,
-    result: DepositResult
+    result: DepositResult | null
   ) {
     this._name           = name;
     this._currency       = currency;
     this._autoConversion = autoConversion;
 
     this._input  = input;
-    this._result = result;
+    this._result = result || DepositResult.Empty();
   }
 
   /**
@@ -61,6 +61,11 @@ export class DepositModel {
 
   public setName(name: string) {
     this._name = name;
+  }
+
+  public setResult( result: DepositResult ) {
+    this._result = result;
+    return this;
   }
 
   public input() {
