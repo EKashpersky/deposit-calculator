@@ -14,7 +14,8 @@ import {
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
-import { CalculatorGuard, DepositResolver } from '@features/calculator';
+import { CalculatorGuard } from '@features/calculator/calculator.guard';
+import { DepositResolver } from '@features/calculator/deposit.resolver';
 import {
   CurrencyBankService,
   CurrencyOpsService,
