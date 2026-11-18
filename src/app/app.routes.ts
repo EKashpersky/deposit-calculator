@@ -4,7 +4,8 @@ import {
   Routes
 } from '@angular/router';
 
-import { CalculatorGuard, DepositResolver } from '@features/calculator';
+import { CalculatorGuard } from '@features/calculator/calculator.guard';
+import { DepositResolver } from '@features/calculator/deposit.resolver';
 import { canDeactivateCalculator } from '@features/dashboard/calculator-cd';
 
 
