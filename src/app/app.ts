@@ -12,8 +12,6 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Title } from '@angular/platform-browser';
 import { RouterLink, RouterOutlet } from '@angular/router';
@@ -51,8 +49,6 @@ import { AppService } from './app.service';
 
     MatButtonModule,
     MatIconModule,
-    MatMenuModule,
-    MatSidenavModule,
     MatToolbarModule,
 
     TranslatePipe,
@@ -79,7 +75,6 @@ export class App {
     private _currencyBank: CurrencyBankService,
     private _depositBridge: DepositBridgeService,
     private _depositsManager: DepositsManagerService,
-    private _dialog: MatDialog,
     private _history: HistoryService,
     private _preferences: PreferencesService,
     private _renderer: Renderer2,
@@ -205,9 +200,11 @@ export class App {
   }
 
   public openPreferences() {
-    import('@features/preferences/preferences-dialog.component')
-    .then(({ PreferencesDialog }) => {
-      const dialogRef = this._dialog.open(PreferencesDialog, {
+    Promise.all([
+      import('@angular/material/dialog'),
+      import('@features/preferences/preferences-dialog.component'),
+    ]).then(([{ MatDialog }, { PreferencesDialog }]) => {
+      const dialogRef = this._injector.get(MatDialog).open(PreferencesDialog, {
         data: {
           i18nTitle: 'preferences_dialog.title',
           i18nAction: 'preferences_dialog.create',

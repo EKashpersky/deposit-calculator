@@ -15,7 +15,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -102,7 +101,6 @@ import { ThemeEnum, ThemeService } from '@shared/theme.service';
     MatTooltipModule,
     MatSelectModule,
     MatListModule,
-    MatMenuModule,
     MatButtonModule,
     TranslatePipe,
   ],
