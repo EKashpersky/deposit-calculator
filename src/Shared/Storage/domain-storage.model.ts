@@ -1,15 +1,14 @@
-import { LocalSpaceInstance } from 'localspace';
-
 import { DomainSerializer } from './domain-serializer.model';
+import { KeyValueStore } from './key-value-store.model';
 
 
 
 export class DomainStorage<Model, Pojo> {
-  private _storage: LocalSpaceInstance;
+  private _storage: KeyValueStore;
   private _serializer: DomainSerializer<Model, Pojo>;
 
   public constructor(
-    storage: LocalSpaceInstance,
+    storage: KeyValueStore,
     serializer: DomainSerializer<Model, Pojo>
   ) {
     this._storage    = storage;

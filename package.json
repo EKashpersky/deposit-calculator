@@ -26,7 +26,6 @@
     "@ngx-translate/core": "^18.0.0",
     "@ngx-translate/http-loader": "^18.0.0",
     "dc-api-types": "github:ekashpersky/dc-api-types#1.1.2",
-    "localspace": "^1.1.1",
     "rxjs": "~7.8.0",
     "tinykeys": "^4.0.0",
     "tslib": "^2.3.0"

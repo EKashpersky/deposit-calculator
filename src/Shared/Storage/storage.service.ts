@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import localspace from 'localspace';
 
-import { APP_DB_NAME, APP_DB_VERSION } from '@config/storage';
+import { APP_DB_NAME } from '@config/storage';
+
+import { KeyValueStore } from './key-value-store.model';
+import { LocalStorageStore } from './local-storage.store';
 
 
 
@@ -9,12 +11,7 @@ import { APP_DB_NAME, APP_DB_VERSION } from '@config/storage';
 export class StorageService {
   public constructor() {}
 
-  public createInstance(storeName: string) {
-    return localspace.createInstance({
-      name: APP_DB_NAME,
-      storeName,
-      version: APP_DB_VERSION,
-      driver: localspace.LOCALSTORAGE
-    });
+  public createInstance(storeName: string): KeyValueStore {
+    return new LocalStorageStore(APP_DB_NAME, storeName);
   }
 }
