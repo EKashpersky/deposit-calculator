@@ -23,7 +23,6 @@ import { environment } from '@environment/development';
 
 import { SUPPORTED_LANGUAGES } from '@config/supported-languages';
 import { calculateDeposit, inflationIndexToRate } from '@features/calculator/model';
-import { PreferencesDialog } from '@features/preferences';
 import {
   CurrencyBankService,
   CurrencyService,
@@ -206,29 +205,32 @@ export class App {
   }
 
   public openPreferences() {
-    const dialogRef = this._dialog.open(PreferencesDialog, {
-      data: {
-        i18nTitle: 'preferences_dialog.title',
-        i18nAction: 'preferences_dialog.create',
-        currencies: this._currencyBank.getMappedRates(),
-        preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
-        languages: SUPPORTED_LANGUAGES,
-        language: this._translate.currentLang(),
-        theme: this._theme
-      },
+    import('@features/preferences/preferences-dialog.component')
+    .then(({ PreferencesDialog }) => {
+      const dialogRef = this._dialog.open(PreferencesDialog, {
+        data: {
+          i18nTitle: 'preferences_dialog.title',
+          i18nAction: 'preferences_dialog.create',
+          currencies: this._currencyBank.getMappedRates(),
+          preferredCurrency: this._currency.getPreferredOrFallbackCurrency(),
+          languages: SUPPORTED_LANGUAGES,
+          language: this._translate.currentLang(),
+          theme: this._theme
+        },
+      });
+
+      /// Update ui on preferred currency change
+      effect(() => {
+        this._currency.changePreferredCurrency(
+          dialogRef.componentInstance.preferredCurrency()
+        );
+      }, { injector: this._injector });
+
+      /// Update ui on language change
+      effect(() => {
+        this._translate.use(dialogRef.componentInstance.language().locale);
+      }, { injector: this._injector });
     });
-
-    /// Update ui on preferred currency change
-    effect(() => {
-      this._currency.changePreferredCurrency(
-        dialogRef.componentInstance.preferredCurrency()
-      );
-    }, { injector: this._injector });
-
-    /// Update ui on language change
-    effect(() => {
-      this._translate.use(dialogRef.componentInstance.language().locale);
-    }, { injector: this._injector });
   }
 
   public openLinkedIn() {
